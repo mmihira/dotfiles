@@ -75,13 +75,6 @@ endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! KEY REMAPPING
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-let mapleader = "\<Space>"
-
-" NERDTree
-nnoremap <leader>n :NERDTreeToggle<CR>
-nnoremap <leader>f :NERDTreeFind<CR>
-
 " Unite
 nnoremap <C-l> :Unite file file_rec/async file_mru <CR>
 nnoremap <C-k> :Unite buffer<CR>
@@ -90,21 +83,31 @@ nnoremap <C-k> :Unite buffer<CR>
 nnoremap <C-i> :b# <CR>
 nnoremap <C-o> :bnext<CR>
 
-" Reassign Macro
-noremap <Leader>q q
-nnoremap q <Nop> 
-
 " Stop mistakingly causing text to lowercase
 nnoremap q: <Nop>
 "nnoremap Vu <Nop>
 vnoremap u <Nop>
 
+
+" !! LEADER REMAPS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let mapleader = "\<Space>"
+" NERDTree
+nnoremap <leader>n :NERDTreeToggle<CR>
+nnoremap <leader>f :NERDTreeFind<CR>
+" Reassign Macro
+noremap <Leader>z q<CR>
+nnoremap q <Nop> 
+" Remap exit
+noremap <Leader>q :q<CR>
 " Switch splits 
 noremap <Leader>m <C-w>w
-
 " Fugitive Vim
 noremap <Leader>gs :Gstatus <CR> <C-w>T
 noremap <Leader>gd :Gdiff <CR>
+" Remap cancel highlight
+nnoremap <Leader>8 :noh<CR>
+vnoremap <Leader>8 :noh<CR>
 
 :imap jj <Esc>
 :cmap jj <Esc>
@@ -198,7 +201,8 @@ if executable('ag')
 endif
 
 " Fuzzy file search
-call unite#filters#matcher_default#use(['matcher_fuzzy'])
+call unite#custom#source('line,file,file/new,buffer,file_rec,file_mru',
+	\ 'matchers', 'matcher_fuzzy')
 
 " !! SLIM FILE DETECT
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
