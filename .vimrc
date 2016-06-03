@@ -78,6 +78,7 @@ endif
 " Unite
 nnoremap <C-l> :Unite file file_rec/async file_mru <CR>
 nnoremap <C-k> :Unite buffer<CR>
+nnoremap <C-j> :Unite line<CR>
 
 " Quick Buffer Access
 nnoremap <C-i> :b# <CR>
@@ -108,6 +109,8 @@ noremap <Leader>gd :Gdiff <CR>
 " Remap cancel highlight
 nnoremap <Leader>8 :noh<CR>
 vnoremap <Leader>8 :noh<CR>
+" Remap cancel highlight
+nnoremap <Leader>2 :w<CR>
 
 :imap jj <Esc>
 :cmap jj <Esc>
