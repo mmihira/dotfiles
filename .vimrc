@@ -76,9 +76,10 @@ endif
 " !! KEY REMAPPING
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Unite
-nnoremap <C-l> :Unite file file_rec/async file_mru <CR>
+nnoremap <C-l> :Unite file file_rec/async <CR>
 nnoremap <C-k> :Unite buffer<CR>
 nnoremap <C-j> :Unite line<CR>
+nnoremap <C-m> :Unite file_mru<CR>
 
 " Quick Buffer Access
 nnoremap <C-i> :b# <CR>
