@@ -122,8 +122,8 @@ nnoremap <Leader>0 :GundoToggle <CR>
 " !! CUSTOM COMMANDS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-command Sfd set guifont=Droid\ Sans\ Mono\ 10
-command Sfl set guifont=Droid\ Sans\ Mono\ 13
+command! Sfd set guifont=Droid\ Sans\ Mono\ 10
+command! Sfl set guifont=Droid\ Sans\ Mono\ 13
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
