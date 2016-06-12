@@ -113,6 +113,8 @@ vnoremap <Leader>8 :noh<CR>
 " Remap cancel highlight
 nnoremap <Leader>2 :w<CR>
 
+nnoremap <Leader>0 :GundoToggle <CR>
+
 :imap jj <Esc>
 :cmap jj <Esc>
 
@@ -156,7 +158,7 @@ Plugin  'isRuslan/vim-es6'
 Plugin  'vimwiki/vimwiki'
 Plugin  'flazz/vim-colorschemes'
 Plugin  'airblade/vim-gitgutter'
-
+Plugin  'sjl/gundo.vim'
 
 " All of your Plugins must be added before the following line
 syntax enable
