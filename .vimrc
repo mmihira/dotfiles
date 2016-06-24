@@ -109,9 +109,11 @@ noremap <Leader>gs :Gstatus <CR> <C-w>T
 noremap <Leader>gd :Gdiff <CR>
 " Remap cancel highlight
 nnoremap <Leader>8 :noh<CR>
-vnoremap <Leader>8 :noh<CR>
-" Remap cancel highlight
+" Remap save
 nnoremap <Leader>2 :w<CR>
+" Remap paste from + buffer
+nnoremap <Leader>= "+gP
+
 
 nnoremap <Leader>0 :GundoToggle <CR>
 
