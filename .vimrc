@@ -161,6 +161,8 @@ Plugin  'vimwiki/vimwiki'
 Plugin  'flazz/vim-colorschemes'
 Plugin  'airblade/vim-gitgutter'
 Plugin  'sjl/gundo.vim'
+Plugin  'crusoexia/vim-javascript-lib'
+Plugin  'pangloss/vim-javascript'
 
 " All of your Plugins must be added before the following line
 syntax enable
