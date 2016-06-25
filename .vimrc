@@ -75,10 +75,10 @@ vnoremap u <Nop>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let mapleader = "\<Space>"
 " NERDTree
-nnoremap <leader>n :NERDTreeToggle<CR>
-nnoremap <leader>f :NERDTreeFind<CR>
-" Reassign Macro
-noremap <Leader>z q<CR>
+nnoremap <leader>nn :NERDTreeToggle<CR>
+nnoremap <leader>nf :NERDTreeFind<CR>
+" Reassign macro key
+noremap <Leader>! q<CR>
 nnoremap q <Nop> 
 " Remap exit
 noremap <Leader>q :q<CR>
@@ -93,9 +93,10 @@ nnoremap <Leader>8 :noh<CR>
 nnoremap <Leader>2 :w<CR>
 " Remap paste from + buffer
 nnoremap <Leader>= "+gP
-
-
 nnoremap <Leader>0 :GundoToggle <CR>
+" Jump to anywhere you want with minimal keystrokes, with just one key binding." `s{char}{label}`
+nmap s <Plug>(easymotion-overwin-f)
+
 
 :imap jj <Esc>
 :cmap jj <Esc>
@@ -125,11 +126,11 @@ call vundle#begin()
 " :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
 
 " let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
-Plugin 'scrooloose/nerdtree'
+Plugin  'gmarik/Vundle.vim'
+Plugin  'scrooloose/nerdtree'
 " Plugin 'Valloric/YouCompleteMe'
-Plugin 'mileszs/ack.vim'
-Plugin 'slim-template/vim-slim'
+Plugin  'mileszs/ack.vim'
+Plugin  'slim-template/vim-slim'
 Plugin  'tpope/vim-fugitive'
 Plugin  'Shougo/unite.vim'
 Plugin  'Shougo/neomru.vim'
@@ -143,6 +144,7 @@ Plugin  'airblade/vim-gitgutter'
 Plugin  'sjl/gundo.vim'
 Plugin  'crusoexia/vim-javascript-lib'
 Plugin  'pangloss/vim-javascript'
+Plugin  'easymotion/vim-easymotion'
 
 " All of your Plugins must be added before the following line
 syntax enable
@@ -216,3 +218,10 @@ au BufRead,BufNewFile *.es6 set filetype=javascript
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:vimwiki_list = [{'path': '~/Dropbox/vim_wiki',
                        \ 'path_html': '~/Dropbox/vim_wiki_html/'}]
+
+" !! EASYMOTION SETUP
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+
+" Turn on case insensitive feature
+let g:EasyMotion_smartcase = 1
