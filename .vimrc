@@ -28,7 +28,6 @@ set hlsearch    " Highlight after search finished
 set smartindent " Auto detect indenting
 set expandtab   " Make tab spaces
 set cursorline  " Highligh the line the cursor is on
-"set autowrite		" Automatically save before commands like :next and :make
 set hidden		  " Hide buffers when they are abandoned
 set mouse=c		  " Disable the mouse
 set backupdir=~/.tmp " Save swp and tmp files to a different place
@@ -45,28 +44,19 @@ filetype plugin indent on
 " Set so we can highlight functions in java
 let g:java_highlight_functions = "true"
 
-""Default color scheme
+"Default color scheme
 set background=dark
 if has("gui_running")
-    color MDark
+    color monokaiImproved
     set guioptions-=m  "remove menu bar
     set guioptions-=T  "remove toolbar
     set guioptions-=r  "remove right-hand scroll bar
     set guioptions-=L  "remove left-hand scroll bar
     set guifont=Droid\ Sans\ Mono\ 13
 else
-    "color distinguished
-    ":colorscheme desertink
-    "colorscheme desert256
     set t_Co=256    " Override terminal colors
     color jellybeans
 endif
-
-
-" Uncomment the next line to make Vim more Vi-compatible
-" NOTE: debian.vim sets 'nocompatible'.  Setting 'compatible' changes numerous
-" options, so any other options should be set AFTER setting 'compatible'.
-"set compatible
 
 if has("syntax")
   syntax on
