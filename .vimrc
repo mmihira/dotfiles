@@ -93,9 +93,10 @@ nnoremap <Leader>8 :noh<CR>
 nnoremap <Leader>2 :w<CR>
 " Remap paste from + buffer
 nnoremap <Leader>= "+gP
+" Gundo map
 nnoremap <Leader>0 :GundoToggle <CR>
 " Jump to anywhere you want with minimal keystrokes, with just one key binding." `s{char}{label}`
-nmap s <Plug>(easymotion-overwin-f)
+nmap s <Plug>(easymotion-bd-f)
 
 
 :imap jj <Esc>
@@ -222,6 +223,5 @@ let g:vimwiki_list = [{'path': '~/Dropbox/vim_wiki',
 " !! EASYMOTION SETUP
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
-
 " Turn on case insensitive feature
 let g:EasyMotion_smartcase = 1
