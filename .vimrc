@@ -97,6 +97,10 @@ nnoremap <Leader>= "+gP
 nnoremap <Leader>0 :GundoToggle <CR>
 " Jump to anywhere you want with minimal keystrokes, with just one key binding." `s{char}{label}`
 nmap s <Plug>(easymotion-bd-f)
+" Remap copy one line to system buffer
+nnoremap <Leader>cc V"+yyv <CR>
+vnoremap <Leader>cc "+yyv <CR>
+vnoremap <Leader>cs "0y :Ack! <C-r>0
 
 
 :imap jj <Esc>
