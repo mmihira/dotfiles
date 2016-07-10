@@ -229,3 +229,14 @@ let g:vimwiki_list = [{'path': '~/Dropbox/vim_wiki',
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
 " Turn on case insensitive feature
 let g:EasyMotion_smartcase = 1
+
+" !! ACK VIM
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Use ag for text search
+if executable('ag')
+  let g:ackprg = 'ag --follow --nocolor --nogroup --hidden
+                  \ --ignore-dir={log,tmp,.git,tags}'
+endif
+" Ack is same as Ack!
+cnoreabbrev Ack Ack!
+
