@@ -100,7 +100,10 @@ nmap s <Plug>(easymotion-bd-f)
 " Remap copy one line to system buffer
 nnoremap <Leader>cc V"+yyv <CR>
 vnoremap <Leader>cc "+yyv <CR>
+" Search for highlighted text in dir
 vnoremap <Leader>cs "0y :Ack! <C-r>0
+" Replace highlighted text buffer global
+vnoremap <Leader>r "0y :%s/<C-r>0
 
 
 :imap jj <Esc>
