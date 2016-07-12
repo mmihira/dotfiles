@@ -198,6 +198,8 @@ if executable('ag')
 endif
 
 " Fuzzy file search
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
+call unite#filters#sorter_default#use(['sorter_rank'])
 call unite#custom#source('line,file,file/new,buffer,file_rec,file_mru',
 	\ 'matchers', 'matcher_fuzzy')
 
