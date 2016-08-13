@@ -83,17 +83,15 @@ vnoremap <Leader>cs "0y :Ack! <C-r>0
 " Replace highlighted text buffer global
 vnoremap <Leader>r "0y :%s/<C-r>0
 
-
 :imap jj <Esc>
 :cmap jj <Esc>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! CUSTOM COMMANDS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 command! Sfd set guifont=Droid\ Sans\ Mono\ 10
 command! Sfl set guifont=Droid\ Sans\ Mono\ 13
-
+command! Spwd cd %:p:h
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! BUNDLE SETUP
