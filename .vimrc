@@ -31,28 +31,6 @@ filetype plugin indent on
 " To ignore plugin indent changes, instead use:
 "filetype plugin on
 
-" Font,Visual, etc..
-" Set so we can highlight functions in java
-let g:java_highlight_functions = "true"
-
-"Default color scheme
-set background=dark
-if has("gui_running")
-    color monokaiImproved
-    set guioptions-=m  "remove menu bar
-    set guioptions-=T  "remove toolbar
-    set guioptions-=r  "remove right-hand scroll bar
-    set guioptions-=L  "remove left-hand scroll bar
-    set guifont=Droid\ Sans\ Mono\ 13
-else
-    set t_Co=256    " Override terminal colors
-    color jellybeans
-endif
-
-if has("syntax")
-  syntax on
-endif
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! KEY REMAPPING
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -79,10 +57,10 @@ nnoremap <leader>nn :NERDTreeToggle<CR>
 nnoremap <leader>nf :NERDTreeFind<CR>
 " Reassign macro key
 noremap <Leader>! q<CR>
-nnoremap q <Nop> 
+nnoremap q <Nop>
 " Remap exit
 noremap <Leader>q :q<CR>
-" Switch splits 
+" Switch splits
 noremap <Leader>m <C-w>w
 " Fugitive Vim
 noremap <Leader>gs :Gstatus <CR> <C-w>T
@@ -245,3 +223,34 @@ endif
 " Ack is same as Ack!
 cnoreabbrev Ack Ack!
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" !! COLOURSCHEME
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Font,Visual, etc..
+" Set so we can highlight functions in java
+let g:java_highlight_functions = "true"
+let g:monokai_gui_italic = 1
+
+"Default color scheme
+set background=dark
+if has("gui_running")
+    color monokaiImproved
+    set guioptions-=m  "remove menu bar
+    set guioptions-=T  "remove toolbar
+    set guioptions-=r  "remove right-hand scroll bar
+    set guioptions-=L  "remove left-hand scroll bar
+    set guifont=Droid\ Sans\ Mono\ 13
+elseif has('nvim')
+  set t_Co=256    " Override terminal colors
+  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+  colorscheme monokai-chris
+else
+    set t_Co=256    " Override terminal colors
+    color jellybeans
+endif
+
+if has("syntax")
+  syntax on
+endif
