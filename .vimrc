@@ -41,13 +41,13 @@ nnoremap <C-j> :Unite bookmark file_mru<CR>
 
 " Quick Buffer Access
 nnoremap <C-i> :b# <CR>
-nnoremap <C-o> :bnext<CR>
 
 " Stop mistakingly causing text to lowercase
 nnoremap q: <Nop>
 "nnoremap Vu <Nop>
 vnoremap u <Nop>
 
+nnoremap <silent> <F4> :let @+=expand("%")<CR>
 
 " !! LEADER REMAPS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -131,6 +131,12 @@ Plugin  'sjl/gundo.vim'
 Plugin  'crusoexia/vim-javascript-lib'
 Plugin  'pangloss/vim-javascript'
 Plugin  'easymotion/vim-easymotion'
+Plugin  'szw/vim-maximizer'
+
+" Color Schemes
+Plugin  'flazz/vim-colorschemes'
+Plugin  'freeo/vim-kalisi'
+Plugin  'altercation/vim-colors-solarized'
 
 " All of your Plugins must be added before the following line
 syntax enable
