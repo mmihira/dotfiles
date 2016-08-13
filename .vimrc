@@ -123,7 +123,6 @@ Plugin  'tpope/vim-surround'
 Plugin  'tpope/vim-rails'
 Plugin  'isRuslan/vim-es6'
 Plugin  'vimwiki/vimwiki'
-Plugin  'flazz/vim-colorschemes'
 Plugin  'airblade/vim-gitgutter'
 Plugin  'sjl/gundo.vim'
 Plugin  'crusoexia/vim-javascript-lib'
@@ -146,6 +145,11 @@ call vundle#end()            " required
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 :source ~/.vim/scripts/plugin/matchit.vim
 :source ~/.vim/scripts/plugin/setcolors.vim
+
+" save file on loss of focus
+autocmd FocusLost * :wa
+" remove trailing whitespace
+autocmd FocusLost,BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -226,6 +230,10 @@ if executable('ag')
 endif
 " Ack is same as Ack!
 cnoreabbrev Ack Ack!
+
+" !! VIM MAXIMISER
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:maximizer_set_default_mapping = 1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! COLOURSCHEME
