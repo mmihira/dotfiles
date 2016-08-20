@@ -16,13 +16,15 @@ set ignorecase  " Do case insensitive matching
 set smartcase		" Do smart case matching
 set incsearch		" Incremental search
 set hlsearch    " Highlight after search finished
-set smartindent " Auto detect indenting
+"set smartindent " Auto detect indenting
+set foldmethod=manual " Makes vim faster
 set expandtab   " Make tab spaces
 set cursorline  " Highligh the line the cursor is on
 set hidden		  " Hide buffers when they are abandoned
 set mouse=c		  " Disable the mouse
 set backupdir=~/.tmp " Save swp and tmp files to a different place
 set directory=~/.tmp " Save swp and tmp files to a different place
+set ttyfast
 
 filetype on
 " Uncomment the following to have Vim load indentation rules and plugins
