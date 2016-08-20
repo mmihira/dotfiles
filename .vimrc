@@ -194,6 +194,9 @@ call unite#filters#sorter_default#use(['sorter_rank'])
 call unite#custom#source('line,file,file/new,buffer,file_rec,file_mru',
 	\ 'matchers', 'matcher_fuzzy')
 
+" Speed up NEOMRU
+let g:neomru#do_validate = 0
+
 " !! SLIM FILE DETECT
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 autocmd BufNewFile,BufRead *.slim set ft=slim
