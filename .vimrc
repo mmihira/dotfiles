@@ -51,6 +51,9 @@ vnoremap u <Nop>
 
 nnoremap <silent> <F4> :let @+=expand("%")<CR>
 
+" Map line matching omnicomplete
+inoremap <C-l> <C-x><C-l>
+
 " !! LEADER REMAPS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let mapleader = "\<Space>"
