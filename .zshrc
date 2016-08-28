@@ -87,3 +87,5 @@ alias bers="bundle exec rspec"
 alias ber="bundle exec rake"
 alias br="bin/rake"
 alias brs="bin/rspec"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
