@@ -87,5 +87,6 @@ alias bers="bundle exec rspec"
 alias ber="bundle exec rake"
 alias br="bin/rake"
 alias brs="bin/rspec"
+alias go="gnome-open"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

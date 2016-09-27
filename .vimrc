@@ -25,6 +25,7 @@ set mouse=c		  " Disable the mouse
 set backupdir=~/.tmp " Save swp and tmp files to a different place
 set directory=~/.tmp " Save swp and tmp files to a different place
 set ttyfast
+set autowrite
 
 filetype on
 " Uncomment the following to have Vim load indentation rules and plugins
@@ -73,7 +74,7 @@ noremap <Leader>gd :Gdiff <CR>
 " Remap cancel highlight
 nnoremap <Leader>8 :noh<CR>
 " Remap save
-nnoremap <Leader>2 :w<CR>
+nnoremap <Leader>f :w<CR>
 " Remap paste from + buffer
 nnoremap <Leader>= "+gP
 " Gundo map
@@ -134,6 +135,7 @@ Plugin  'crusoexia/vim-javascript-lib'
 Plugin  'pangloss/vim-javascript'
 Plugin  'easymotion/vim-easymotion'
 Plugin  'szw/vim-maximizer'
+Plugin  'tpope/vim-commentary'
 
 " Color Schemes
 Plugin  'flazz/vim-colorschemes'
@@ -149,12 +151,11 @@ call vundle#end()            " required
 " !! CUSTOM SCRIPTS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 :source ~/.vim/scripts/plugin/matchit.vim
-:source ~/.vim/scripts/plugin/setcolors.vim
 
 " save file on loss of focus
-autocmd FocusLost * :wa
+:au FocusLost * :wa
 " remove trailing whitespace
-autocmd FocusLost,BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
+:au FocusLost,BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
