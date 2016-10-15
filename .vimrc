@@ -39,7 +39,6 @@ filetype plugin indent on
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Unite
 nnoremap <C-l> :Unite file file_rec/async <CR>
-nnoremap <C-k> :Unite buffer<CR>
 nnoremap <C-j> :Unite bookmark file_mru<CR>
 
 " Quick Buffer Access
@@ -155,13 +154,14 @@ call vundle#end()            " required
 " save file on loss of focus
 :au FocusLost * :wa
 " remove trailing whitespace
-:au FocusLost,BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
+" :au FocusLost,BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! PLUGIN CONFIGURATION
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+B
 
 " !! UNITE
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
