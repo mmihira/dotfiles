@@ -93,3 +93,10 @@ alias go="gnome-open"
 
 export NVM_DIR="/home/mihira/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+
+export MAMMON_UPDATE_PATH=~/Downloads
+
+# Rust
+export PATH="$HOME/.cargo/bin:$PATH"
+
+

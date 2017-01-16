@@ -24,15 +24,9 @@ set hidden		  " Hide buffers when they are abandoned
 set mouse=c		  " Disable the mouse
 set backupdir=~/.tmp " Save swp and tmp files to a different place
 set directory=~/.tmp " Save swp and tmp files to a different place
-set ttyfast
+"set ttyfast
 set autowrite
-
-filetype on
-" Uncomment the following to have Vim load indentation rules and plugins
-" according to the detected filetype. Needed for VUNDLE
-filetype plugin indent on
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
+filetype off
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! KEY REMAPPING
@@ -115,36 +109,43 @@ call vundle#begin()
 " :PluginSearch foo - searches for foo; append `!` to refresh local cache
 " :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
 
-" let Vundle manage Vundle, required
 Plugin  'gmarik/Vundle.vim'
 Plugin  'scrooloose/nerdtree'
 " Plugin 'Valloric/YouCompleteMe'
 Plugin  'mileszs/ack.vim'
-Plugin  'slim-template/vim-slim'
-Plugin  'tpope/vim-fugitive'
 Plugin  'Shougo/unite.vim'
 Plugin  'Shougo/neomru.vim'
 Plugin  'Shougo/vimproc.vim'
 Plugin  'tpope/vim-surround'
-Plugin  'tpope/vim-rails'
-Plugin  'isRuslan/vim-es6'
 Plugin  'vimwiki/vimwiki'
-Plugin  'airblade/vim-gitgutter'
 Plugin  'sjl/gundo.vim'
-Plugin  'crusoexia/vim-javascript-lib'
-Plugin  'pangloss/vim-javascript'
 Plugin  'easymotion/vim-easymotion'
 Plugin  'szw/vim-maximizer'
 Plugin  'tpope/vim-commentary'
+
+" Git
+Plugin  'airblade/vim-gitgutter'
+Plugin  'tpope/vim-fugitive'
+
+" Frame Work Plugins
+Plugin  'tpope/vim-rails'
+
+" Syntax Plugins
+Plugin  'rust-lang/rust.vim'
+Plugin  'slim-template/vim-slim'
+Plugin  'isRuslan/vim-es6'
+Plugin  'pangloss/vim-javascript'
+Plugin  'crusoexia/vim-javascript-lib'
 
 " Color Schemes
 Plugin  'flazz/vim-colorschemes'
 Plugin  'freeo/vim-kalisi'
 Plugin  'altercation/vim-colors-solarized'
 
-" All of your Plugins must be added before the following line
+call vundle#end()
+
 syntax enable
-call vundle#end()            " required
+filetype plugin indent on
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
