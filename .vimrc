@@ -17,15 +17,15 @@ set smartcase		" Do smart case matching
 set incsearch		" Incremental search
 set hlsearch    " Highlight after search finished
 "set smartindent " Auto detect indenting
-set foldmethod=manual " Makes vim faster
 set expandtab   " Make tab spaces
 set cursorline  " Highligh the line the cursor is on
 set hidden		  " Hide buffers when they are abandoned
 set mouse=c		  " Disable the mouse
 set backupdir=~/.tmp " Save swp and tmp files to a different place
 set directory=~/.tmp " Save swp and tmp files to a different place
-"set ttyfast
+set nofoldenable " Don't use folding
 set autowrite
+"set ttyfast
 filetype off
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -35,19 +35,19 @@ filetype off
 nnoremap <C-l> :Unite file file_rec/async <CR>
 nnoremap <C-k> :Unite buffer<CR>
 nnoremap <C-j> :Unite bookmark file_mru<CR>
-
 " Quick Buffer Access
 nnoremap <C-i> :b# <CR>
-
 " Stop mistakingly causing text to lowercase
 nnoremap q: <Nop>
 "nnoremap Vu <Nop>
 vnoremap u <Nop>
 
 nnoremap <silent> <F4> :let @+=expand("%")<CR>
-
 " Map line matching omnicomplete
 inoremap <C-l> <C-x><C-l>
+" JJ
+:imap jj <Esc>
+:cmap jj <Esc>
 
 " !! LEADER REMAPS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -82,9 +82,6 @@ vnoremap <Leader>cc "+yyv <CR>
 vnoremap <Leader>cs "0y :Ack! <C-r>0
 " Replace highlighted text buffer global
 vnoremap <Leader>r "0y :%s/<C-r>0
-
-:imap jj <Esc>
-:cmap jj <Esc>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! CUSTOM COMMANDS
@@ -270,8 +267,8 @@ if has("gui_running")
 elseif has('nvim')
   set t_Co=256    " Override terminal colors
   let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-  let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-  colorscheme monokai-chris
+  let $NVIM_TUI_ENABLE_CURSOR_SHAPE=0
+  color monokaiImproved
 else
     set t_Co=256    " Override terminal colors
     color jellybeans

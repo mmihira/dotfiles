@@ -88,6 +88,7 @@ alias ber="bundle exec rake"
 alias br="bin/rake"
 alias brs="bin/rspec"
 alias go="gnome-open"
+alias vim=nvim
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -95,6 +96,7 @@ export NVM_DIR="/home/mihira/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
 export MAMMON_UPDATE_PATH=~/Downloads
+export MAMMON_DATABASE="~/Dropbox/Finance/mammon"
 
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
