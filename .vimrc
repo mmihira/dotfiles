@@ -7,6 +7,7 @@ runtime! debian.vim
 set hidden      " Allow navigating to buffers without saving
 set rnu         " Set relative numbering
 set nu          " Set numbering
+set ruler       " Show line numbering
 set number      " Ensure we see line numbers
 set tabstop=2
 set shiftwidth=2
@@ -49,6 +50,9 @@ inoremap <C-l> <C-x><C-l>
 :imap jj <Esc>
 :cmap jj <Esc>
 
+" Jump to anywhere you want with minimal keystrokes, with just one key binding." `s{char}{label}`
+nmap s <Plug>(easymotion-bd-f)
+
 " !! LEADER REMAPS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let mapleader = "\<Space>"
@@ -60,8 +64,10 @@ noremap <Leader>! q<CR>
 nnoremap q <Nop>
 " Remap exit
 noremap <Leader>q :q<CR>
+tnoremap ;;q <C-\><C-n>:q<CR>
 " Switch splits
 noremap <Leader>m <C-w>w
+tnoremap ;;a <C-\><C-n><C-w>w
 " Fugitive Vim
 noremap <Leader>gs :Gstatus <CR> <C-w>T
 noremap <Leader>gd :Gdiff <CR>
@@ -73,8 +79,6 @@ nnoremap <Leader>f :w<CR>
 nnoremap <Leader>= "+gP
 " Gundo map
 nnoremap <Leader>0 :GundoToggle <CR>
-" Jump to anywhere you want with minimal keystrokes, with just one key binding." `s{char}{label}`
-nmap s <Plug>(easymotion-bd-f)
 " Remap copy one line to system buffer
 nnoremap <Leader>cc V"+yyv <CR>
 vnoremap <Leader>cc "+yyv <CR>
@@ -82,6 +86,9 @@ vnoremap <Leader>cc "+yyv <CR>
 vnoremap <Leader>cs "0y :Ack! <C-r>0
 " Replace highlighted text buffer global
 vnoremap <Leader>r "0y :%s/<C-r>0
+" Vim-Test
+nnoremap <silent> <Leader>t :TestNearest<CR>
+nnoremap <silent> <Leader>T :TestFile<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! CUSTOM COMMANDS
@@ -138,6 +145,12 @@ Plugin  'crusoexia/vim-javascript-lib'
 Plugin  'flazz/vim-colorschemes'
 Plugin  'freeo/vim-kalisi'
 Plugin  'altercation/vim-colors-solarized'
+
+if has('nvim')
+  Plugin  'neomake/neomake'
+  Plugin  'kassio/neoterm'
+  Plugin  'janko-m/vim-test'
+end
 
 call vundle#end()
 
@@ -246,6 +259,14 @@ let g:maximizer_set_default_mapping = 1
 let g:gitgutter_realtime = 0
 let g:gitgutter_eager = 0
 
+" !! VIM TEST
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let test#strategy = "neoterm"
+
+" !! VIMTERM
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:neoterm_size = "15"
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! COLOURSCHEME
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -258,20 +279,20 @@ let g:monokai_gui_italic = 1
 "Default color scheme
 set background=dark
 if has("gui_running")
-    color monokaiImproved
-    set guioptions-=m  "remove menu bar
-    set guioptions-=T  "remove toolbar
-    set guioptions-=r  "remove right-hand scroll bar
-    set guioptions-=L  "remove left-hand scroll bar
-    set guifont=Droid\ Sans\ Mono\ 13
+  color monokaiImproved
+  set guioptions-=m  "remove menu bar
+  set guioptions-=T  "remove toolbar
+  set guioptions-=r  "remove right-hand scroll bar
+  set guioptions-=L  "remove left-hand scroll bar
+  set guifont=Droid\ Sans\ Mono\ 13
 elseif has('nvim')
-  set t_Co=256    " Override terminal colors
   let $NVIM_TUI_ENABLE_TRUE_COLOR=1
   let $NVIM_TUI_ENABLE_CURSOR_SHAPE=0
+  set guifont=Droid\ Sans\ Mono\ 13
   color monokaiImproved
 else
-    set t_Co=256    " Override terminal colors
-    color jellybeans
+  set t_Co=256    " Override terminal colors
+  color jellybeans
 endif
 
 if has("syntax")
