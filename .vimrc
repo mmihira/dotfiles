@@ -86,6 +86,8 @@ vnoremap <Leader>cc "+yyv <CR>
 vnoremap <Leader>cs "0y :Ack! <C-r>0
 " Replace highlighted text buffer global
 vnoremap <Leader>r "0y :%s/<C-r>0
+" Run the run.sh script
+nnoremap <Leader>r :Run <CR>
 " Vim-Test
 nnoremap <silent> <Leader>t :TestNearest<CR>
 nnoremap <silent> <Leader>T :TestFile<CR>
@@ -96,6 +98,12 @@ nnoremap <silent> <Leader>T :TestFile<CR>
 command! Sfd set guifont=Droid\ Sans\ Mono\ 10
 command! Sfl set guifont=Droid\ Sans\ Mono\ 13
 command! Spwd cd %:p:h
+
+function Run()
+  let combined = join(['T', '../run.sh ', expand('%:t')])
+  :exe combined
+endfunction
+command! Run :call Run()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! BUNDLE SETUP
@@ -115,7 +123,6 @@ call vundle#begin()
 
 Plugin  'gmarik/Vundle.vim'
 Plugin  'scrooloose/nerdtree'
-" Plugin 'Valloric/YouCompleteMe'
 Plugin  'mileszs/ack.vim'
 Plugin  'Shougo/unite.vim'
 Plugin  'Shougo/neomru.vim'
@@ -291,7 +298,7 @@ elseif has('nvim')
   set guifont=Droid\ Sans\ Mono\ 13
   color monokaiImproved
 else
-  set t_Co=256    " Override terminal colors
+  set t_Co=256       " Override terminal colors
   color jellybeans
 endif
 
