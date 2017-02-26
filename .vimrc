@@ -86,11 +86,14 @@ vnoremap <Leader>cc "+yyv <CR>
 vnoremap <Leader>cs "0y :Ack! <C-r>0
 " Replace highlighted text buffer global
 vnoremap <Leader>r "0y :%s/<C-r>0
+
+""""" NeoTerm Leader map """""
 " Run the run.sh script
 nnoremap <Leader>r :Run <CR>
 " Vim-Test
 nnoremap <silent> <Leader>t :TestNearest<CR>
 nnoremap <silent> <Leader>T :TestFile<CR>
+nnoremap <silent> <Leader>C :T clear<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! CUSTOM COMMANDS
@@ -100,6 +103,7 @@ command! Sfl set guifont=Droid\ Sans\ Mono\ 13
 command! Spwd cd %:p:h
 
 function Run()
+  :w
   let combined = join(['T', '~/c/rust_ex/rust_run.sh ', expand('%:p')])
   :exe combined
 endfunction
