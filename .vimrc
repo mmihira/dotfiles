@@ -100,7 +100,7 @@ command! Sfl set guifont=Droid\ Sans\ Mono\ 13
 command! Spwd cd %:p:h
 
 function Run()
-  let combined = join(['T', '../run.sh ', expand('%:t')])
+  let combined = join(['T', '~/c/rust_ex/rust_run.sh ', expand('%:p')])
   :exe combined
 endfunction
 command! Run :call Run()
