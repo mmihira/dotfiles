@@ -110,75 +110,57 @@ endfunction
 command! Run :call Run()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" !! BUNDLE SETUP
+" !! PluginSetup
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
+call plug#begin('~/.vim/plugged')
 
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-
-Plugin  'gmarik/Vundle.vim'
-Plugin  'scrooloose/nerdtree'
-Plugin  'mileszs/ack.vim'
-Plugin  'Shougo/unite.vim'
-Plugin  'Shougo/neomru.vim'
-Plugin  'Shougo/vimproc.vim'
-Plugin  'tpope/vim-surround'
-Plugin  'vimwiki/vimwiki'
-Plugin  'sjl/gundo.vim'
-Plugin  'easymotion/vim-easymotion'
-Plugin  'szw/vim-maximizer'
-Plugin  'tpope/vim-commentary'
+Plug  'gmarik/Vundle.vim'
+Plug  'scrooloose/nerdtree'
+Plug  'mileszs/ack.vim'
+Plug  'Shougo/unite.vim'
+Plug  'Shougo/neomru.vim'
+Plug  'Shougo/vimproc.vim'
+Plug  'tpope/vim-surround'
+Plug  'vimwiki/vimwiki'
+Plug  'sjl/gundo.vim'
+Plug  'easymotion/vim-easymotion'
+Plug  'szw/vim-maximizer'
+Plug  'tpope/vim-commentary'
 
 " Git
-Plugin  'airblade/vim-gitgutter'
-Plugin  'tpope/vim-fugitive'
+Plug  'airblade/vim-gitgutter'
+Plug  'tpope/vim-fugitive'
 
-" Frame Work Plugins
-Plugin  'tpope/vim-rails'
+" Framework Plugs
+Plug  'tpope/vim-rails'
+Plug  'vim-scripts/ruby-matchit'
 
-" Syntax Plugins
-Plugin  'rust-lang/rust.vim'
-Plugin  'slim-template/vim-slim'
-Plugin  'isRuslan/vim-es6'
-Plugin  'pangloss/vim-javascript'
-Plugin  'crusoexia/vim-javascript-lib'
+" Syntax Plugs
+Plug  'rust-lang/rust.vim'
+Plug  'slim-template/vim-slim'
+Plug  'isRuslan/vim-es6'
+Plug  'pangloss/vim-javascript'
+Plug  'crusoexia/vim-javascript-lib'
 
 " Color Schemes
-Plugin  'flazz/vim-colorschemes'
-Plugin  'freeo/vim-kalisi'
-Plugin  'altercation/vim-colors-solarized'
+Plug  'mhartington/oceanic-next'
+Plug  'neomake/neomake'
+Plug  'kassio/neoterm'
+Plug  'janko-m/vim-test'
 
-if has('nvim')
-  Plugin  'neomake/neomake'
-  Plugin  'kassio/neoterm'
-  Plugin  'janko-m/vim-test'
-end
+call plug#end()
 
-call vundle#end()
-
-syntax enable
 filetype plugin indent on
-
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! CUSTOM SCRIPTS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-:source ~/.vim/scripts/plugin/matchit.vim
 
 " save file on loss of focus
 :au FocusLost * :wa
 " remove trailing whitespace
 :au FocusLost,BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
-
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! PLUGIN CONFIGURATION
@@ -281,31 +263,24 @@ let g:neoterm_size = "15"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! COLOURSCHEME
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" let g:java_highlight_functions = "true"
 
-" Font,Visual, etc..
-" Set so we can highlight functions in java
-let g:java_highlight_functions = "true"
-let g:monokai_gui_italic = 1
+syntax enable
 
-"Default color scheme
-set background=dark
 if has("gui_running")
-  color monokaiImproved
   set guioptions-=m  "remove menu bar
   set guioptions-=T  "remove toolbar
   set guioptions-=r  "remove right-hand scroll bar
   set guioptions-=L  "remove left-hand scroll bar
   set guifont=Droid\ Sans\ Mono\ 13
 elseif has('nvim')
-  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-  let $NVIM_TUI_ENABLE_CURSOR_SHAPE=0
-  set guifont=Droid\ Sans\ Mono\ 13
-  color monokaiImproved
+  " set termguicolors
+  colorscheme OceanicNext
+  " let $NVIM_TUI_ENABLE_CURSOR_SHAPE=0
 else
-  set t_Co=256       " Override terminal colors
   color jellybeans
 endif
 
-if has("syntax")
-  syntax on
-endif
+" if has("syntax")
+"   syntax on
+" endif
