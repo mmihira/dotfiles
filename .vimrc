@@ -120,7 +120,7 @@ Plug  'scrooloose/nerdtree'
 Plug  'mileszs/ack.vim'
 Plug  'Shougo/unite.vim'
 Plug  'Shougo/neomru.vim'
-Plug  'Shougo/vimproc.vim'
+Plug  'Shougo/vimproc.vim', {'do' : 'make'}
 Plug  'tpope/vim-surround'
 Plug  'vimwiki/vimwiki'
 Plug  'sjl/gundo.vim'
@@ -145,6 +145,8 @@ Plug  'crusoexia/vim-javascript-lib'
 
 " Color Schemes
 Plug  'mhartington/oceanic-next'
+Plug  'w0ng/vim-hybrid'
+
 Plug  'neomake/neomake'
 Plug  'kassio/neoterm'
 Plug  'janko-m/vim-test'
