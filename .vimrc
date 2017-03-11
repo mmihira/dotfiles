@@ -21,7 +21,8 @@ set hlsearch    " Highlight after search finished
 set expandtab   " Make tab spaces
 set cursorline  " Highligh the line the cursor is on
 set hidden		  " Hide buffers when they are abandoned
-set mouse=c		  " Disable the mouse
+set mouse=""		" Disable the mouse
+set mousetime=1 " double click problem
 set backupdir=~/.tmp " Save swp and tmp files to a different place
 set directory=~/.tmp " Save swp and tmp files to a different place
 set nofoldenable " Don't use folding
@@ -104,7 +105,7 @@ command! Spwd cd %:p:h
 
 function Run()
   :w
-  let combined = join(['T', '~/c/rust_ex/rust_run.sh ', expand('%:p')])
+  let combined = join(['T', '~/bin/rust_run.sh ', expand('%:p')])
   :exe combined
 endfunction
 command! Run :call Run()
