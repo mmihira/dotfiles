@@ -79,7 +79,7 @@ nnoremap <Leader>f :w<CR>
 " Remap paste from + buffer
 nnoremap <Leader>= "+gP
 " Gundo map
-nnoremap <Leader>0 :GundoToggle <CR>
+nnoremap <Leader>0 :MundoToggle<CR>
 " Remap copy one line to system buffer
 nnoremap <Leader>cc V"+yyv <CR>
 vnoremap <Leader>cc "+yyv <CR>
@@ -116,18 +116,27 @@ command! Run :call Run()
 
 call plug#begin('~/.vim/plugged')
 
-Plug  'gmarik/Vundle.vim'
+" Builds and testing
+Plug  'neomake/neomake'
+Plug  'janko-m/vim-test'
+
+" Terminal
+Plug  'kassio/neoterm'
+
+" Code Helpers
+Plug  'tpope/vim-surround'
+Plug  'tpope/vim-commentary'
+Plug  'simnalamburt/vim-mundo'
+
+" Search and Navigation
 Plug  'scrooloose/nerdtree'
-Plug  'mileszs/ack.vim'
 Plug  'Shougo/unite.vim'
 Plug  'Shougo/neomru.vim'
 Plug  'Shougo/vimproc.vim', {'do' : 'make'}
-Plug  'tpope/vim-surround'
-Plug  'vimwiki/vimwiki'
-Plug  'sjl/gundo.vim'
+Plug  'mileszs/ack.vim'
+
+" Movement/
 Plug  'easymotion/vim-easymotion'
-Plug  'szw/vim-maximizer'
-Plug  'tpope/vim-commentary'
 
 " Git
 Plug  'airblade/vim-gitgutter'
@@ -144,13 +153,13 @@ Plug  'isRuslan/vim-es6'
 Plug  'pangloss/vim-javascript'
 Plug  'crusoexia/vim-javascript-lib'
 
+" Display
+Plug  'szw/vim-maximizer'
+
 " Color Schemes
 Plug  'mhartington/oceanic-next'
 Plug  'w0ng/vim-hybrid'
 
-Plug  'neomake/neomake'
-Plug  'kassio/neoterm'
-Plug  'janko-m/vim-test'
 
 call plug#end()
 
