@@ -90,6 +90,8 @@ alias brs="bin/rspec"
 alias go="gnome-open"
 alias vim=nvim
 
+export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export NVM_DIR="/home/mihira/.nvm"
@@ -100,5 +102,3 @@ export MAMMON_DATABASE="~/Dropbox/Finance/mammon"
 
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
-
-
