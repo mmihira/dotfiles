@@ -44,7 +44,6 @@ nnoremap q: <Nop>
 "nnoremap Vu <Nop>
 vnoremap u <Nop>
 
-nnoremap <silent> <F4> :let @+=expand("%")<CR>
 " Map line matching omnicomplete
 inoremap <C-l> <C-x><C-l>
 " JJ
@@ -87,6 +86,8 @@ vnoremap <Leader>cc "+yyv <CR>
 vnoremap <Leader>cs "0y :Ack! <C-r>0
 " Replace highlighted text buffer global
 vnoremap <Leader>r "0y :%s/<C-r>0
+" Copy file path to buffer
+nnoremap <silent> <leader>cp :let @+ = expand('%:p')<CR>
 
 """"" NeoTerm Leader map """""
 " Run the run.sh script
@@ -95,7 +96,6 @@ nnoremap <Leader>r :Run <CR>
 nnoremap <silent> <Leader>t :TestNearest<CR>
 nnoremap <silent> <Leader>T :TestFile<CR>
 nnoremap <silent> <Leader>C :T clear<CR>
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! CUSTOM COMMANDS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -134,6 +134,9 @@ Plug  'Shougo/unite.vim'
 Plug  'Shougo/neomru.vim'
 Plug  'Shougo/vimproc.vim', {'do' : 'make'}
 Plug  'mileszs/ack.vim'
+
+" Productivity
+Plug 'vimwiki/vimwiki'
 
 " Movement/
 Plug  'easymotion/vim-easymotion'
@@ -236,8 +239,10 @@ au BufRead,BufNewFile *.es6 set filetype=javascript
 
 " !! VIM-WIKI MAPPINGS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:vimwiki_list = [{'path': '~/Dropbox/vim_wiki',
+let g:vimwiki_list = [{'path': '~/Dropbox/VimWiki',
                        \ 'path_html': '~/Dropbox/vim_wiki_html/'}]
+
+let g:vimwiki_default_mappings='0'
 
 " !! EASYMOTION SETUP
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
