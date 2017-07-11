@@ -96,6 +96,12 @@ nnoremap <Leader>r :Run <CR>
 nnoremap <silent> <Leader>t :TestNearest<CR>
 nnoremap <silent> <Leader>T :TestFile<CR>
 nnoremap <silent> <Leader>C :T clear<CR>
+
+
+""""" Rust Specific maps """""
+" Insert println!
+autocmd FileType rust noremap <silent> <Leader>rp iprintln!("{}", )<Esc>^
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! CUSTOM COMMANDS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
