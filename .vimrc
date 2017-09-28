@@ -115,7 +115,7 @@ command! Spwd cd %:p:h
 
 function Run()
   :w
-  let combined = join(['T', '~/bin/rust_run.sh ', expand('%:p')])
+  let combined = join(['T', '~/bin/nvim_run.sh ', expand('%:p')])
   :exe combined
 endfunction
 command! Run :call Run()
@@ -265,7 +265,7 @@ let g:EasyMotion_smartcase = 1
 " Use ag for text search
 if executable('ag')
   let g:ackprg = 'ag --follow --nocolor --nogroup --hidden
-                  \ --ignore-dir={log,tmp,.git,tags}'
+                  \ --ignore-dir={log,tmp,.git,tags,node_modules}'
 endif
 " Ack is same as Ack!
 cnoreabbrev Ack Ack!
