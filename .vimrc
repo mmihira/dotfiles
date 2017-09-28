@@ -100,7 +100,11 @@ nnoremap <silent> <Leader>C :T clear<CR>
 
 """"" Rust Specific maps """""
 " Insert println!
-autocmd FileType rust noremap <silent> <Leader>rp iprintln!("{}", )<Esc>^
+autocmd FileType rust noremap <silent> <Leader>rp iprintln!("{:?}", )<Esc>^
+
+""""" Python specific maps """""
+" Pry
+autocmd FileType python command! Pry :normal i import code; code.interact(local=dict(globals(), **locals()))<Esc>^
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! CUSTOM COMMANDS
