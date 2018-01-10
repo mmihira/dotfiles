@@ -1,5 +1,12 @@
 runtime! debian.vim
 
+" Setup plug if not allready
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! BASE VIM SETTINGS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -26,7 +33,7 @@ set mousetime=1 " double click problem
 set backupdir=~/.tmp " Save swp and tmp files to a different place
 set directory=~/.tmp " Save swp and tmp files to a different place
 set nofoldenable " Don't use folding
-set autowrite
+set backupcopy=yes
 "set ttyfast
 filetype off
 
@@ -182,8 +189,6 @@ filetype plugin indent on
 " !! CUSTOM SCRIPTS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" save file on loss of focus
-:au FocusLost * :wa
 " remove trailing whitespace
 :au FocusLost,BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 
@@ -287,6 +292,12 @@ let test#strategy = "neoterm"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:neoterm_size = "15"
 
+" !! MUNDO
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Enable persistent undo so that undo history persists across vim sessions
+set undofile
+set undodir=~/.vim/undo
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! COLOURSCHEME
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -302,8 +313,8 @@ if has("gui_running")
   set guifont=Droid\ Sans\ Mono\ 13
 elseif has('nvim')
   " set termguicolors
+  set guicursor=
   colorscheme OceanicNext
-  " let $NVIM_TUI_ENABLE_CURSOR_SHAPE=0
 else
   color jellybeans
 endif
