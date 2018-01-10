@@ -102,3 +102,4 @@ export MAMMON_DATABASE="~/Dropbox/Finance/mammon"
 
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
+source ~/.ssh/env_keys.sh
