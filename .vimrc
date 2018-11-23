@@ -67,7 +67,7 @@ let mapleader = "\<Space>"
 nnoremap <leader>nn :NERDTreeToggle<CR>
 nnoremap <leader>nf :NERDTreeFind<CR>
 " Reassign macro key
-noremap <Leader>! q<CR>
+nnoremap <Leader>z q<CR>
 nnoremap q <Nop>
 " Remap exit
 noremap <Leader>q :q<CR>
@@ -109,6 +109,12 @@ nnoremap <silent> <Leader>C :T clear<CR>
 " Insert println!
 autocmd FileType rust noremap <silent> <Leader>rp iprintln!("{:?}", )<Esc>^
 
+" Rust Racer
+au FileType rust nmap gd <Plug>(rust-def)
+au FileType rust nmap gs <Plug>(rust-def-split)
+au FileType rust nmap gx <Plug>(rust-def-vertical)
+au FileType rust nmap <leader>gd <Plug>(rust-doc)
+
 """"" Python specific maps """""
 " Pry
 autocmd FileType python command! Pry :normal i import code; code.interact(local=dict(globals(), **locals()))<Esc>^
@@ -122,6 +128,7 @@ command! Spwd cd %:p:h
 
 function Run()
   :w
+  call neoterm#open()
   let combined = join(['T', '~/bin/nvim_run.sh ', expand('%:p')])
   :exe combined
 endfunction
@@ -144,6 +151,8 @@ Plug  'kassio/neoterm'
 Plug  'tpope/vim-surround'
 Plug  'tpope/vim-commentary'
 Plug  'simnalamburt/vim-mundo'
+Plug  'racer-rust/vim-racer'
+Plug  'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 " Search and Navigation
 Plug  'scrooloose/nerdtree'
@@ -151,9 +160,6 @@ Plug  'Shougo/unite.vim'
 Plug  'Shougo/neomru.vim'
 Plug  'Shougo/vimproc.vim', {'do' : 'make'}
 Plug  'mileszs/ack.vim'
-
-" Productivity
-Plug 'vimwiki/vimwiki'
 
 " Movement/
 Plug  'easymotion/vim-easymotion'
@@ -172,6 +178,7 @@ Plug  'slim-template/vim-slim'
 Plug  'isRuslan/vim-es6'
 Plug  'pangloss/vim-javascript'
 Plug  'crusoexia/vim-javascript-lib'
+Plug  'mattn/emmet-vim'
 
 " Display
 Plug  'szw/vim-maximizer'
@@ -246,6 +253,10 @@ autocmd BufReadPost *
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 au BufRead,BufNewFile *.es6 set filetype=javascript
 
+" !! DETECT EJS ( Express templates )
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+au BufRead,BufNewFile *.ejs setf javascript.jsx
+
 " !! NERD TREE MAPPINGS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Load NERDTree on startup
@@ -270,7 +281,7 @@ let g:EasyMotion_smartcase = 1
 " Use ag for text search
 if executable('ag')
   let g:ackprg = 'ag --follow --nocolor --nogroup --hidden
-                  \ --ignore-dir={log,tmp,.git,tags,node_modules}'
+                  \ --ignore-dir={log,dist,tmp,.git,tags,node_modules}'
 endif
 " Ack is same as Ack!
 cnoreabbrev Ack Ack!
@@ -297,6 +308,18 @@ let g:neoterm_size = "15"
 " Enable persistent undo so that undo history persists across vim sessions
 set undofile
 set undodir=~/.vim/undo
+
+" !! DEOPLETE
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Use deoplete.
+let g:deoplete#enable_at_startup = 1
+
+
+" !! RACER RUST
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" show the complete function definition (e.g. its arguments and return type)
+" experimetnal completer feature
+let g:racer_experimental_completer = 1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! COLOURSCHEME

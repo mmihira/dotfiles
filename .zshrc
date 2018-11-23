@@ -87,7 +87,6 @@ alias bers="bundle exec rspec"
 alias ber="bundle exec rake"
 alias br="bin/rake"
 alias brs="bin/rspec"
-alias go="gnome-open"
 alias vim=nvim
 
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
@@ -103,3 +102,4 @@ export MAMMON_DATABASE="~/Dropbox/Finance/mammon"
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
 source ~/.ssh/env_keys.sh
+export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
