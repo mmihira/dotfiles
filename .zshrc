@@ -51,7 +51,7 @@ eval "$(fasd --init auto)"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git rails ruby chruby)
+plugins=(git)
 
 # User configuration
 # export PATH="/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
@@ -88,6 +88,8 @@ alias ber="bundle exec rake"
 alias br="bin/rake"
 alias brs="bin/rspec"
 alias vim=nvim
+alias nvim=nvim.appimage
+alias xo="xdg-open $1"
 
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
@@ -95,11 +97,13 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 export NVM_DIR="/home/mihira/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 export MAMMON_UPDATE_PATH=~/Downloads
 export MAMMON_DATABASE="~/Dropbox/Finance/mammon"
 
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/bin:$PATH"
 source ~/.ssh/env_keys.sh
 export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
