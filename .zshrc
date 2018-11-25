@@ -105,5 +105,6 @@ export MAMMON_DATABASE="~/Dropbox/Finance/mammon"
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 source ~/.ssh/env_keys.sh
 export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
