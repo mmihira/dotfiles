@@ -186,7 +186,8 @@ Plug  'szw/vim-maximizer'
 " Color Schemes
 Plug  'mhartington/oceanic-next'
 Plug  'w0ng/vim-hybrid'
-
+Plug  'morhetz/gruvbox'
+Plug 'phanviet/vim-monokai-pro'
 
 call plug#end()
 
@@ -325,6 +326,9 @@ let g:racer_experimental_completer = 1
 " !! COLOURSCHEME
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " let g:java_highlight_functions = "true"
+let g:gruvbox_contrast_dark = "hard"
+let g:gruvbox_invert_selection = 0
+let g:gruvbox_invert_selection = 0
 
 syntax enable
 
@@ -335,9 +339,12 @@ if has("gui_running")
   set guioptions-=L  "remove left-hand scroll bar
   set guifont=Droid\ Sans\ Mono\ 13
 elseif has('nvim')
-  " set termguicolors
+  set termguicolors
   set guicursor=
-  colorscheme OceanicNext
+  set background=dark
+
+  " colorscheme OceanicNext
+  colorscheme gruvbox
 else
   color jellybeans
 endif
