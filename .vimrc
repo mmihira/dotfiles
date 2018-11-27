@@ -122,15 +122,20 @@ autocmd FileType python command! Pry :normal i import code; code.interact(local=
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! CUSTOM COMMANDS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-command! Sfd set guifont=Droid\ Sans\ Mono\ 10
-command! Sfl set guifont=Droid\ Sans\ Mono\ 13
 command! Spwd cd %:p:h
 
 function Run()
   :w
-  call neoterm#open()
-  let combined = join(['T', '~/bin/nvim_run.sh ', expand('%:p')])
-  :exe combined
+  if g:neoterm.has_any()
+    let combined = join(['T', '~/bin/nvim_run.sh ', expand('%:p')])
+    :exe combined
+  else
+    :vert Topen
+    :exe "normal \<C-w>\h"
+    :exe "normal \<C-w>\L"
+    let combined = join(['T', '~/bin/nvim_run.sh ', expand('%:p')])
+    :exe combined
+  end
 endfunction
 command! Run :call Run()
 
@@ -302,7 +307,8 @@ let test#strategy = "neoterm"
 
 " !! VIMTERM
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:neoterm_size = "15"
+" let g:neoterm_size = "15"
+let g:neoterm_autoscroll = 1
 
 " !! MUNDO
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
