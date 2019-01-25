@@ -102,9 +102,13 @@ export NVM_DIR="/home/mihira/.nvm"
 export MAMMON_UPDATE_PATH=~/Downloads
 export MAMMON_DATABASE="~/Dropbox/Finance/mammon"
 
-# Rust
 export PATH="$HOME/.cargo/bin:$PATH"
-export PATH="$HOME/bin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
 source ~/.ssh/env_keys.sh
 export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
+
+export PATH="$HOME/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$(yarn global bin):$PATH"
+
+export PATH=$PATH:/usr/local/go/bin
+export GOPATH="/home/mihira/c/go"
