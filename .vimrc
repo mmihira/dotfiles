@@ -35,6 +35,9 @@ set directory=~/.tmp " Save swp and tmp files to a different place
 set nofoldenable " Don't use folding
 set backupcopy=yes
 "set ttyfast
+set path=.,src,node_modules                                             " Add paths to gf command
+set suffixesadd=.js,.jsx                                                " Specify you can open using gf command
+set includeexpr=substitute(v:fname,'::\\(.*\\)','\\1\/index\.js','')    " Open javascript files when index is not specified (Fix, not working)
 filetype off
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -95,6 +98,8 @@ vnoremap <Leader>cs "0y :Ack! <C-r>0
 vnoremap <Leader>r "0y :%s/<C-r>0
 " Copy file path to buffer
 nnoremap <silent> <leader>cp :let @+ = expand('%:p')<CR>
+" Ale fix
+nnoremap <Leader>lf :ALEFix<CR>
 
 """"" NeoTerm Leader map """""
 " Run the run.sh script
@@ -103,7 +108,6 @@ nnoremap <Leader>r :Run <CR>
 nnoremap <silent> <Leader>t :TestNearest<CR>
 nnoremap <silent> <Leader>T :TestFile<CR>
 nnoremap <silent> <Leader>C :T clear<CR>
-
 
 """"" Rust Specific maps """""
 " Insert println!
@@ -146,7 +150,6 @@ command! Run :call Run()
 call plug#begin('~/.vim/plugged')
 
 " Builds and testing
-Plug  'neomake/neomake'
 Plug  'janko-m/vim-test'
 
 " Terminal
@@ -184,6 +187,8 @@ Plug  'isRuslan/vim-es6'
 Plug  'pangloss/vim-javascript'
 Plug  'crusoexia/vim-javascript-lib'
 Plug  'mattn/emmet-vim'
+Plug  'w0rp/ale', { 'do': 'yarn global add prettier' }
+Plug  'carlitux/deoplete-ternjs', { 'do': 'yarn global add tern' }
 
 " Display
 Plug  'szw/vim-maximizer'
@@ -268,7 +273,6 @@ au BufRead,BufNewFile *.ejs setf javascript.jsx
 " Load NERDTree on startup
 " autocmd vimenter * NERDTree
 
-
 " !! VIM-WIKI MAPPINGS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:vimwiki_list = [{'path': '~/Dropbox/VimWiki',
@@ -321,6 +325,9 @@ set undodir=~/.vim/undo
 " Use deoplete.
 let g:deoplete#enable_at_startup = 1
 
+" !! ALE
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:ale_fixers = {'javascript': ['prettier', 'eslint'], 'sass': ['prettier', 'eslint']}
 
 " !! RACER RUST
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
