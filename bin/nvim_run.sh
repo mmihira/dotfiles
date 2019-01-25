@@ -60,7 +60,7 @@ if [ $(echo "$PWD" | grep '/home/mihira/c' -c) -eq '0' ]; then
 fi
 
 # Determine what kind of file
-type=$(echo "$1" | sed -r 's/(.*)(\.rs|\.py|\.java|\.js|\.sh)/\2/g')
+type=$(echo "$1" | sed -r 's/(.*)(\.rs|\.py|\.java|\.js|\.sh|\.go)/\2/g')
 
 ########################################################################
 # Bash run script
@@ -173,6 +173,23 @@ if [ "$type" == '.rs' ]; then
 fi
 
 ########################################################################
+# Golang
+########################################################################
+if [ "$type" == '.go' ]; then
+  # Check if a src directory exists
+  # up until $GOPATH
+  cacheArg="$1"
+  path=$(echo "$cacheArg" | sed 's/\/\w\+\.go//g')
+  buildName=$(echo "$path" | sed 's/.*\/\(\w\+\)/\1/g')
+  runFound='1'
+  if [ "$runFound" -eq '1' ]; then
+    (cd $path; echo $path; go install; "$GOPATH/bin/$buildName")
+  else
+    echo "Could not find run.sh!"
+  fi
+fi
+
+
 # Java
 ########################################################################
 if [ "$type" == '.java' ]; then
