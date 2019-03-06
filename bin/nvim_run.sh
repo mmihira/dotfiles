@@ -80,6 +80,7 @@ if [ "$type" == '.js' ]; then
   exe_name=$(echo "$1" | sed 's/\.js//g' | sed 's/\/.*\///g')
   ( cd $base_file_path;
     eval_header_fs "$exe_name.js";
+    node "$exe_name.js";
   )
   exit 0
 fi
@@ -179,28 +180,31 @@ if [ "$type" == '.go' ]; then
   # Check if a src directory exists
   # up until $GOPATH
   cacheArg="$1"
+  # path is the path to file which the script was run on
   path=$(echo "$cacheArg" | sed 's/\/\w\+\.go//g')
+  # buildName is the directory containing the go file
+  # go install will by default compile to a exec with name buildName
   buildName=$(echo "$path" | sed 's/.*\/\(\w\+\)/\1/g')
   runFound='1'
   if [ "$runFound" -eq '1' ]; then
-    (cd $path; echo $path; go install; "$GOPATH/bin/$buildName")
+    (cd $path; echo $path; bin_name=$(go list); go install;  if [ $? -eq 0 ]; then "$GOPATH/bin/$bin_name"; else echo "Build failure"; fi)
   else
-    echo "Could not find run.sh!"
+    echo "Could not find go package"
   fi
 fi
 
-
+########################################################################
 # Java
 ########################################################################
 if [ "$type" == '.java' ]; then
-  # Check if  a run file exists
+  # Check if pom files exists
   # up until /home/mihira/c
   path=$(echo "$1" | sed 's/\/\w\+\.java//g')
-  runFound='0'
+  pomFile='0'
   while [[ $path != /home/mihira/c ]];
   do
-    if [[ -n $(find "$path" -maxdepth 1 -mindepth 1 -name 'run.sh' | head -n 1) ]]; then
-      runFound='1'
+    if [[ -n $(find "$path" -maxdepth 1 -mindepth 1 -name 'pom.xml' | head -n 1) ]]; then
+      pomFile='1'
       break
     fi
     path="$(dirname "$path")"
@@ -208,9 +212,10 @@ if [ "$type" == '.java' ]; then
     if [[ $path == / ]];then break; fi
   done
 
-  if [ "$runFound" -eq '1' ]; then
-    (cd $path; echo $path; ./run.sh)
+  if [ "$pomFile" -eq '1' ]; then
+    (cd $path; echo $path; mvn package)
+    (eval_header_fs "$1";)
   else
-    echo "Could not find run.sh!"
+    echo "Could not find pom.xml!"
   fi
 fi
