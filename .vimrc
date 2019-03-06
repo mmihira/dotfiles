@@ -10,34 +10,35 @@ endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! BASE VIM SETTINGS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-set hidden      " Allow navigating to buffers without saving
-set rnu         " Set relative numbering
-set nu          " Set numbering
-set ruler       " Show line numbering
-set number      " Ensure we see line numbers
+set hidden            " Allow navigating to buffers without saving
+set rnu               " Set relative numbering
+set nu                " Set numbering
+set ruler             " Show line numbering
+set number            " Ensure we see line numbers
 set tabstop=2
 set shiftwidth=2
-set showcmd		  " Show (partial) command in status line.
-set showmatch		" Show matching brackets.
-set ignorecase  " Do case insensitive matching
-set smartcase		" Do smart case matching
-set incsearch		" Incremental search
-set hlsearch    " Highlight after search finished
-"set smartindent " Auto detect indenting
-set expandtab   " Make tab spaces
-set cursorline  " Highligh the line the cursor is on
-set hidden		  " Hide buffers when they are abandoned
-set mouse=""		" Disable the mouse
-set mousetime=1 " double click problem
-set backupdir=~/.tmp " Save swp and tmp files to a different place
-set directory=~/.tmp " Save swp and tmp files to a different place
-set nofoldenable " Don't use folding
+set showcmd		        " Show (partial) command in status line.
+set showmatch		      " Show matching brackets.
+set ignorecase        " Do case insensitive matching
+set smartcase		      " Do smart case matching
+set incsearch		      " Incremental search
+set hlsearch          " Highlight after search finished
+"set smartindent      " Auto detect indenting
+set expandtab         " Make tab spaces
+set cursorline        " Highligh the line the cursor is on
+set hidden		        " Hide buffers when they are abandoned
+set mouse=""		      " Disable the mouse
+set mousetime=1       " double click problem
+set backupdir=~/.tmp  " Save swp and tmp files to a different place
+set directory=~/.tmp  " Save swp and tmp files to a different place
+set nofoldenable      " Don't use folding
 set backupcopy=yes
+set updatetime=1000   " Hold time before file written to disk in ms
 "set ttyfast
 set path=.,src,node_modules                                             " Add paths to gf command
 set suffixesadd=.js,.jsx                                                " Specify you can open using gf command
 set includeexpr=substitute(v:fname,'::\\(.*\\)','\\1\/index\.js','')    " Open javascript files when index is not specified (Fix, not working)
+set completeopt-=preview
 filetype off
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -80,7 +81,7 @@ noremap <Leader>m <C-w>w
 tnoremap ;;a <C-\><C-n><C-w>w
 " Fugitive Vim
 noremap <Leader>gs :Gstatus <CR> <C-w>T
-noremap <Leader>gd :Gdiff <CR>
+au FileType go noremap <Leader>gd :GoDef <CR>
 " Remap cancel highlight
 nnoremap <Leader>8 :noh<CR>
 " Remap save
@@ -143,6 +144,8 @@ function Run()
 endfunction
 command! Run :call Run()
 
+command! Jsi :ImportJSFix
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! PluginSetup
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -183,12 +186,15 @@ Plug  'vim-scripts/ruby-matchit'
 " Syntax Plugs
 Plug  'rust-lang/rust.vim'
 Plug  'slim-template/vim-slim'
-Plug  'isRuslan/vim-es6'
 Plug  'pangloss/vim-javascript'
-Plug  'crusoexia/vim-javascript-lib'
 Plug  'mattn/emmet-vim'
+Plug  'othree/javascript-libraries-syntax.vim'
 Plug  'w0rp/ale', { 'do': 'yarn global add prettier' }
 Plug  'carlitux/deoplete-ternjs', { 'do': 'yarn global add tern' }
+Plug  'fatih/vim-go'
+Plug  'zchee/deoplete-go', { 'do': 'make' }
+Plug  'stamblerre/gocode', { 'rtp': 'nvim', 'do': '~/.vim/plugged/gocode/nvim/symlink.sh' }
+Plug  'mxw/vim-jsx'
 
 " Display
 Plug  'szw/vim-maximizer'
@@ -197,7 +203,7 @@ Plug  'szw/vim-maximizer'
 Plug  'mhartington/oceanic-next'
 Plug  'w0ng/vim-hybrid'
 Plug  'morhetz/gruvbox'
-Plug 'phanviet/vim-monokai-pro'
+Plug  'phanviet/vim-monokai-pro'
 
 call plug#end()
 
@@ -268,6 +274,11 @@ au BufRead,BufNewFile *.es6 set filetype=javascript
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 au BufRead,BufNewFile *.ejs setf javascript.jsx
 
+
+" !! Go specific always define
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+au CursorHold *.go :GoInfo
+
 " !! NERD TREE MAPPINGS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Load NERDTree on startup
@@ -327,7 +338,9 @@ let g:deoplete#enable_at_startup = 1
 
 " !! ALE
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:ale_fixers = {'javascript': ['prettier', 'eslint'], 'sass': ['prettier', 'eslint']}
+let g:ale_fixers = { 'java': ['javac'], 'go': ['gofmt'], 'javascript': ['prettier', 'eslint'], 'sass': ['prettier', 'eslint'] }
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 0
 
 " !! RACER RUST
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -342,6 +355,11 @@ let g:racer_experimental_completer = 1
 let g:gruvbox_contrast_dark = "hard"
 let g:gruvbox_invert_selection = 0
 let g:gruvbox_invert_selection = 0
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" !! VIM GO
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:go_fmt_autosave = 0
 
 syntax enable
 
