@@ -118,11 +118,21 @@ autocmd FileType rust noremap <silent> <Leader>rp iprintln!("{:?}", )<Esc>^
 au FileType rust nmap gd <Plug>(rust-def)
 au FileType rust nmap gs <Plug>(rust-def-split)
 au FileType rust nmap gx <Plug>(rust-def-vertical)
-au FileType rust nmap <leader>gd <Plug>(rust-doc)
 
 """"" Python specific maps """""
 " Pry
 autocmd FileType python command! Pry :normal i import code; code.interact(local=dict(globals(), **locals()))<Esc>^
+
+""""" Javascript specific maps """""
+" For my common react-redux-saga filestructure
+" Go to src/action/types.js
+autocmd FileType javascript,jsx,scss,css,json nmap <leader>gt :e./src/actions/types.js<CR>
+" Go to actions in NERDTree
+autocmd FileType javascript,jsx,scss,css,json nmap <leader>ga :NERDTreeFind src/actions<CR>
+" Go to reducers in NERDTree
+autocmd FileType javascript,jsx,scss,css,json nmap <leader>gr :NERDTreeFind src/reducers<CR>
+" Go to features in NERDTree
+autocmd FileType javascript,jsx,scss,css,json nmap <leader>gf :NERDTreeFind src/features<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! CUSTOM COMMANDS
