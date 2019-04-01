@@ -53,6 +53,18 @@ eval_header_fs () {
   unset IFS
 }
 
+# Check if file has // VIMTRUN~#! like headers
+has_header_fs () {
+  IFS=$'\n'
+  arr=($(sed -n /'\/\/ VIMTRUN#!'/p "$1"))
+  if [ ${#arr[@]} -ne 0 ]; then
+    has_header_fs_res=1
+  else
+    has_header_fs_res=0
+  fi
+  unset IFS
+}
+
 
 if [ $(echo "$PWD" | grep '/home/mihira/c' -c) -eq '0' ]; then
   echo 'This script only works in the coding directory'
@@ -179,15 +191,29 @@ fi
 if [ "$type" == '.go' ]; then
   # Check if a src directory exists
   # up until $GOPATH
-  cacheArg="$1"
+  filepath="$1"
   # path is the path to file which the script was run on
-  path=$(echo "$cacheArg" | sed 's/\/\w\+\.go//g')
+  path=$(echo "$filepath" | sed 's/\/\w\+\.go//g')
   # buildName is the directory containing the go file
   # go install will by default compile to a exec with name buildName
   buildName=$(echo "$path" | sed 's/.*\/\(\w\+\)/\1/g')
   runFound='1'
   if [ "$runFound" -eq '1' ]; then
-    (cd $path; echo $path; bin_name=$(go list); go install;  if [ $? -eq 0 ]; then "$GOPATH/bin/$bin_name"; else echo "Build failure"; fi)
+    ( cd $path;
+      echo $path;
+      bin_name=$(go list);
+      go install;
+      if [ $? -eq 0 ]; then
+        has_header_fs "$filepath"
+        if [ $has_header_fs_res -eq 1 ]; then
+          eval_header_fs "$filepath"
+        else
+          "$GOPATH/bin/$bin_name";
+        fi
+      else
+        echo "Build failure";
+      fi
+    )
   else
     echo "Could not find go package"
   fi
