@@ -7,8 +7,6 @@ export ZSH=/home/mihira/.oh-my-zsh
 # time that oh-my-zsh is loaded.
 ZSH_THEME="lambda"
 
-eval "$(fasd --init auto)"
-
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
 
@@ -91,6 +89,8 @@ alias vim=nvim
 alias nvim=nvim.appimage
 alias xo="xdg-open $1"
 
+eval "$(fasd --init auto)"
+
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -113,3 +113,6 @@ export PATH="$(yarn global bin):$PATH"
 export PATH=$PATH:/usr/local/go/bin
 export GOPATH="/home/mihira/c/go"
 export PATH=$PATH:$GOPATH/bin
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /tmp/mc mc
