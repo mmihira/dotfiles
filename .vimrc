@@ -78,7 +78,7 @@ noremap <Leader>q :q<CR>
 tnoremap ;;q <C-\><C-n>:q<CR>
 " Switch splits
 noremap <Leader>m <C-w>w
-tnoremap ;;a <C-\><C-n><C-w>w
+tnoremap ;;a <C-\><C-n>
 " Fugitive Vim
 noremap <Leader>gs :Gstatus <CR> <C-w>T
 au FileType go noremap <Leader>gd :GoDef <CR>
@@ -133,6 +133,8 @@ autocmd FileType javascript,jsx,scss,css,json nmap <leader>ga :NERDTreeFind src/
 autocmd FileType javascript,jsx,scss,css,json nmap <leader>gr :NERDTreeFind src/reducers<CR>
 " Go to features in NERDTree
 autocmd FileType javascript,jsx,scss,css,json nmap <leader>gf :NERDTreeFind src/features<CR>
+" Go to sagas in NERDTree
+autocmd FileType javascript,jsx,scss,css,json nmap <leader>gs :NERDTreeFind src/sagas<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! CUSTOM COMMANDS
@@ -181,6 +183,9 @@ Plug  'Shougo/unite.vim'
 Plug  'Shougo/neomru.vim'
 Plug  'Shougo/vimproc.vim', {'do' : 'make'}
 Plug  'mileszs/ack.vim'
+" Need ripgrep for this
+Plug  'https://github.com/alok/notational-fzf-vim'
+Plug  'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
 " Movement/
 Plug  'easymotion/vim-easymotion'
@@ -214,6 +219,7 @@ Plug  'mhartington/oceanic-next'
 Plug  'w0ng/vim-hybrid'
 Plug  'morhetz/gruvbox'
 Plug  'phanviet/vim-monokai-pro'
+Plug  'lifepillar/vim-solarized8'
 
 call plug#end()
 
@@ -284,10 +290,15 @@ au BufRead,BufNewFile *.es6 set filetype=javascript
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 au BufRead,BufNewFile *.ejs setf javascript.jsx
 
+" !! VIM JSX
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" temporary fix for JSX: https://github.com/pangloss/vim-javascript/issues/955#issuecomment-356350901
+let g:jsx_ext_required = 0
+let g:javascript_plugin_flow = 1
 
 " !! Go specific always define
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-au CursorHold *.go :GoInfo
+" au CursorHold *.go :GoInfo
 
 " !! NERD TREE MAPPINGS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -330,7 +341,7 @@ let g:gitgutter_eager = 0
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let test#strategy = "neoterm"
 
-" !! VIMTERM
+" !! NEOTERM
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " let g:neoterm_size = "15"
 let g:neoterm_autoscroll = 1
@@ -348,7 +359,7 @@ let g:deoplete#enable_at_startup = 1
 
 " !! ALE
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:ale_fixers = { 'java': ['javac'], 'go': ['gofmt'], 'javascript': ['prettier', 'eslint'], 'sass': ['prettier', 'eslint'] }
+let g:ale_fixers = { 'go': ['gofmt'], 'javascript': ['prettier', 'eslint'], 'scss': ['prettier', 'eslint'], 'rust': ['rustc'] }
 let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 0
 
@@ -367,6 +378,11 @@ let g:gruvbox_invert_selection = 0
 let g:gruvbox_invert_selection = 0
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" !! NOTATIONAL
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:nv_search_paths = ['/home/mihira/Dropbox/notes']
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! VIM GO
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:go_fmt_autosave = 0
@@ -383,9 +399,11 @@ elseif has('nvim')
   set termguicolors
   set guicursor=
   set background=dark
-
-  " colorscheme OceanicNext
   colorscheme gruvbox
+  " colorscheme OceanicNext
+
+  " set background=light
+  " colorscheme solarized8_high
 else
   color jellybeans
 endif
