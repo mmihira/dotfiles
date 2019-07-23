@@ -174,7 +174,6 @@ Plug  'kassio/neoterm'
 Plug  'tpope/vim-surround'
 Plug  'tpope/vim-commentary'
 Plug  'simnalamburt/vim-mundo'
-Plug  'racer-rust/vim-racer'
 Plug  'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 " Search and Navigation
@@ -209,7 +208,8 @@ Plug  'carlitux/deoplete-ternjs', { 'do': 'yarn global add tern' }
 Plug  'fatih/vim-go'
 Plug  'zchee/deoplete-go', { 'do': 'make' }
 Plug  'stamblerre/gocode', { 'rtp': 'nvim', 'do': '~/.vim/plugged/gocode/nvim/symlink.sh' }
-Plug  'mxw/vim-jsx'
+Plug  'MaxMEllon/vim-jsx-pretty'
+Plug  'elixir-editors/vim-elixir'
 
 " Display
 Plug  'szw/vim-maximizer'
@@ -359,7 +359,7 @@ let g:deoplete#enable_at_startup = 1
 
 " !! ALE
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:ale_fixers = { 'go': ['gofmt'], 'javascript': ['prettier', 'eslint'], 'scss': ['prettier', 'eslint'], 'rust': ['rustc'] }
+let g:ale_fixers = { 'go': ['gofmt'], 'javascript': ['prettier', 'eslint'], 'scss': ['prettier', 'eslint'], 'rust': ['rustc'], 'json': ['prettier'], 'elixir': ['mix_format'] }
 let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 0
 
