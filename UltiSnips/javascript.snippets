@@ -1,0 +1,54 @@
+snippet sw "Switch statement" b
+switch ($1) {
+	case $2:
+		break;
+	default:
+		break;
+}
+endsnippet
+
+snippet rf "React Fragment" b
+<React.Fragment>
+$1
+</React.Fragment>
+endsnippet
+
+snippet conClass "Connected Class" b
+import React from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import act from 'actions';
+import * as types from 'actions/types';
+import {
+	mapDispatchCreator,
+	propTypeActionCreator
+} from 'lib/redux/mapDispatchCreator';
+
+class $1 extends React.Component {
+	constructor (props) {
+		super(props);
+	}
+
+
+	render () {
+		return (
+			<div>
+			</div>
+		);
+	}
+}
+
+const mapStateToProps = state => {
+	const { } = state;
+	return {};
+};
+
+$1.propTypes = {
+	...propTypeActionCreator(act)
+};
+
+export default connect(
+	mapStateToProps,
+	mapDispatchCreator(act)
+)($1);
+endsnippet

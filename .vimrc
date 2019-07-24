@@ -41,13 +41,23 @@ set includeexpr=substitute(v:fname,'::\\(.*\\)','\\1\/index\.js','')    " Open j
 set completeopt-=preview
 filetype off
 
+" Settings for coc-vim
+set cmdheight=2
+set updatetime=300
+set shortmess+=c
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! KEY REMAPPING
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Unite
-nnoremap <C-l> :Unite file file_rec/async <CR>
-nnoremap <C-k> :Unite buffer<CR>
-nnoremap <C-j> :Unite bookmark file_mru<CR>
+" nnoremap <C-l> :Unite file file_rec/async <CR>
+nnoremap <C-k> :CocList --normal buffers <CR>
+" nnoremap <C-j> :Unite bookmark file_mru<CR>
 " Quick Buffer Access
 nnoremap <C-i> :b# <CR>
 " Stop mistakingly causing text to lowercase
@@ -174,17 +184,19 @@ Plug  'kassio/neoterm'
 Plug  'tpope/vim-surround'
 Plug  'tpope/vim-commentary'
 Plug  'simnalamburt/vim-mundo'
-Plug  'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" GO LS: go get -u github.com/sourcegraph/go-langserver
+" :CocInstall coc-lists
+" :CocInstall coc-json
+" :CocInstall coc-tsserver
+Plug  'neoclide/coc.nvim', {'branch': 'release' }
+Plug  'SirVer/ultisnips'
 
 " Search and Navigation
 Plug  'scrooloose/nerdtree'
-Plug  'Shougo/unite.vim'
-Plug  'Shougo/neomru.vim'
-Plug  'Shougo/vimproc.vim', {'do' : 'make'}
 Plug  'mileszs/ack.vim'
-" Need ripgrep for this
-Plug  'https://github.com/alok/notational-fzf-vim'
+Plug  'https://github.com/alok/notational-fzf-vim' " Need ripgrep for this
 Plug  'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug  'junegunn/vim-peekaboo'
 
 " Movement/
 Plug  'easymotion/vim-easymotion'
@@ -204,10 +216,7 @@ Plug  'pangloss/vim-javascript'
 Plug  'mattn/emmet-vim'
 Plug  'othree/javascript-libraries-syntax.vim'
 Plug  'w0rp/ale', { 'do': 'yarn global add prettier' }
-Plug  'carlitux/deoplete-ternjs', { 'do': 'yarn global add tern' }
 Plug  'fatih/vim-go'
-Plug  'zchee/deoplete-go', { 'do': 'make' }
-Plug  'stamblerre/gocode', { 'rtp': 'nvim', 'do': '~/.vim/plugged/gocode/nvim/symlink.sh' }
 Plug  'MaxMEllon/vim-jsx-pretty'
 Plug  'elixir-editors/vim-elixir'
 
@@ -236,43 +245,24 @@ filetype plugin indent on
 " !! PLUGIN CONFIGURATION
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" !! UNITE
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-call unite#custom#profile('default', 'context', {
-            \ 'start_insert'      : 0,
-            \ 'no_quit'           : 1,
-            \ 'keep_focus'        : 1,
-            \ 'force_redraw'      : 1,
-	          \ 'direction'        : 'botright',
-            \ 'no_empty'          : 1,
-            \ 'toggle'            : 1,
-            \ 'vertical_preview'  : 1,
-            \ 'winheight'         : 20,
-            \ 'prompt'            : '▸ ',
-            \ 'prompt_focus'      : 1,
-            \ 'candidate_icon'    : '  ▫ ',
-            \ 'marked_icon'       : '  ▪ ',
-            \ 'no_hide_icon'      : 1
-        \ })
-
 " Use ag for search
-if executable('ag')
-  let g:unite_source_grep_command = 'ag'
-  let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
-  let g:unite_source_grep_recursive_opt = ''
-    let g:unite_source_rec_async_command =
-        \ ['ag', '--follow', '--nocolor', '--nogroup',
-        \  '--hidden', '-g', '']
-endif
+" if executable('ag')
+"   let g:unite_source_grep_command = 'ag'
+"   let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
+"   let g:unite_source_grep_recursive_opt = ''
+"     let g:unite_source_rec_async_command =
+"         \ ['ag', '--follow', '--nocolor', '--nogroup',
+"         \  '--hidden', '-g', '']
+" endif
 
-" Fuzzy file search
-call unite#filters#matcher_default#use(['matcher_fuzzy'])
-call unite#filters#sorter_default#use(['sorter_rank'])
-call unite#custom#source('line,file,file/new,buffer,file_rec,file_mru',
-	\ 'matchers', 'matcher_fuzzy')
+" " Fuzzy file search
+" call unite#filters#matcher_default#use(['matcher_fuzzy'])
+" call unite#filters#sorter_default#use(['sorter_rank'])
+" call unite#custom#source('line,file,file/new,buffer,file_rec,file_mru',
+" 	\ 'matchers', 'matcher_fuzzy')
 
-" Speed up NEOMRU
-let g:neomru#do_validate = 0
+" " Speed up NEOMRU
+" let g:neomru#do_validate = 0
 
 " !! SLIM FILE DETECT
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -304,13 +294,6 @@ let g:javascript_plugin_flow = 1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Load NERDTree on startup
 " autocmd vimenter * NERDTree
-
-" !! VIM-WIKI MAPPINGS
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:vimwiki_list = [{'path': '~/Dropbox/VimWiki',
-                       \ 'path_html': '~/Dropbox/vim_wiki_html/'}]
-
-let g:vimwiki_default_mappings='0'
 
 " !! EASYMOTION SETUP
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -352,11 +335,6 @@ let g:neoterm_autoscroll = 1
 set undofile
 set undodir=~/.vim/undo
 
-" !! DEOPLETE
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Use deoplete.
-let g:deoplete#enable_at_startup = 1
-
 " !! ALE
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:ale_fixers = { 'go': ['gofmt'], 'javascript': ['prettier', 'eslint'], 'scss': ['prettier', 'eslint'], 'rust': ['rustc'], 'json': ['prettier'], 'elixir': ['mix_format'] }
@@ -386,6 +364,12 @@ let g:nv_search_paths = ['/home/mihira/Dropbox/notes']
 " !! VIM GO
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:go_fmt_autosave = 0
+let g:go_code_completion_enabled = 1
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" !! ULTI SNIPS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips']
 
 syntax enable
 

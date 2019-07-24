@@ -1,0 +1,20 @@
+{
+  "suggest.autoTrigger": "always",
+  "list.source.grep.command": "ag",
+  "list.normalMappings": {
+    "o": "action:open",
+    "v": "action:vsplit"
+  },
+  "languageserver": {
+    "golang": {
+      "command": "go-langserver",
+      "filetypes": ["go"],
+      "initializationOptions": {
+        "gocodeCompletionEnabled": true,
+        "funcSnippetEnabled": true,
+        "diagnosticsEnabled": true,
+        "lintTool": "golint"
+      }
+    }
+  }
+}
