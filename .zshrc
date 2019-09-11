@@ -114,5 +114,9 @@ export PATH=$PATH:/usr/local/go/bin
 export GOPATH="/home/mihira/c/go"
 export PATH=$PATH:$GOPATH/bin
 
+# Lombok
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /tmp/mc mc
+alias mux="tmuxinator"
