@@ -91,7 +91,6 @@ noremap <Leader>m <C-w>w
 tnoremap ;;a <C-\><C-n>
 " Fugitive Vim
 noremap <Leader>gs :Gstatus <CR> <C-w>T
-au FileType go noremap <Leader>gd :GoDef <CR>
 " Remap cancel highlight
 nnoremap <Leader>8 :noh<CR>
 " Remap save
@@ -145,6 +144,15 @@ autocmd FileType javascript,jsx,scss,css,json nmap <leader>gr :NERDTreeFind src/
 autocmd FileType javascript,jsx,scss,css,json nmap <leader>gf :NERDTreeFind src/features<CR>
 " Go to sagas in NERDTree
 autocmd FileType javascript,jsx,scss,css,json nmap <leader>gs :NERDTreeFind src/sagas<CR>
+
+""""" GoLang specific maps """""
+au FileType go noremap <Leader>gd :GoDef <CR>
+au FileType go noremap <Leader>gi :GoInfo <CR>
+au FileType go noremap <Leader>gl :GoDeclsDir <CR>
+
+""""" Coc Autocommands """""
+autocmd ColorScheme highlight CocErrorHighlight ctermfg=DarkGrey guifg=#FAE2E2
+autocmd ColorScheme highlight CocWarningHighlight ctermfg=Red  guifg=#FBE6A2
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! CUSTOM COMMANDS
@@ -222,6 +230,7 @@ Plug  'elixir-editors/vim-elixir'
 
 " Display
 Plug  'szw/vim-maximizer'
+Plug  'liuchengxu/eleline.vim'
 
 " Color Schemes
 Plug  'mhartington/oceanic-next'
@@ -241,28 +250,6 @@ filetype plugin indent on
 " remove trailing whitespace
 :au FocusLost,BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" !! PLUGIN CONFIGURATION
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-" Use ag for search
-" if executable('ag')
-"   let g:unite_source_grep_command = 'ag'
-"   let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
-"   let g:unite_source_grep_recursive_opt = ''
-"     let g:unite_source_rec_async_command =
-"         \ ['ag', '--follow', '--nocolor', '--nogroup',
-"         \  '--hidden', '-g', '']
-" endif
-
-" " Fuzzy file search
-" call unite#filters#matcher_default#use(['matcher_fuzzy'])
-" call unite#filters#sorter_default#use(['sorter_rank'])
-" call unite#custom#source('line,file,file/new,buffer,file_rec,file_mru',
-" 	\ 'matchers', 'matcher_fuzzy')
-
-" " Speed up NEOMRU
-" let g:neomru#do_validate = 0
 
 " !! SLIM FILE DETECT
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -323,6 +310,8 @@ let g:gitgutter_eager = 0
 " !! VIM TEST
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let test#strategy = "neoterm"
+let test#go#go#options = "-v"
+let test#go#gotest#options = "-v"
 
 " !! NEOTERM
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -358,7 +347,7 @@ let g:gruvbox_invert_selection = 0
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! NOTATIONAL
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:nv_search_paths = ['/home/mihira/Dropbox/notes']
+let g:nv_search_paths = ['/home/mihira/Dropbox/notes', '/home/mihira/Dropbox/Knowledge']
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! VIM GO
@@ -370,6 +359,7 @@ let g:go_code_completion_enabled = 1
 " !! ULTI SNIPS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips']
+
 
 syntax enable
 
@@ -385,12 +375,15 @@ elseif has('nvim')
   set background=dark
   colorscheme gruvbox
   " colorscheme OceanicNext
-
   " set background=light
   " colorscheme solarized8_high
 else
   color jellybeans
 endif
+
+highlight CocErrorHighlight ctermfg=DarkGrey guifg=#735DD0
+highlight CocErrorSign ctermfg=DarkGrey guifg=#EC4C47
+highlight CocWarningHighlight ctermfg=Red  guifg=#FBE6A2
 
 " if has("syntax")
 "   syntax on
