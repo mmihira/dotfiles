@@ -7,14 +7,11 @@
   },
   "languageserver": {
     "golang": {
-      "command": "go-langserver",
-      "filetypes": ["go"],
-      "initializationOptions": {
-        "gocodeCompletionEnabled": true,
-        "funcSnippetEnabled": true,
-        "diagnosticsEnabled": true,
-        "lintTool": "golint"
-      }
+      "command": "gopls",
+      "rootPatterns": ["go.mod", ".vim/", ".git/", ".hg/"],
+      "filetypes": ["go"]
     }
-  }
+  },
+  "eslint.quiet": true,
+  "java.jdt.ls.vmargs": "-javaagent:/home/mihira/c/Lombok/lombok-edge.jar -Xbootclasspath/a:/home/mihira/c/Lombok/lombok-edge.jar"
 }
