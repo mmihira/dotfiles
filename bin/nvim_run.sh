@@ -72,7 +72,7 @@ if [ $(echo "$PWD" | grep '/home/mihira/c' -c) -eq '0' ]; then
 fi
 
 # Determine what kind of file
-type=$(echo "$1" | sed -r 's/(.*)(\.rs|\.py|\.java|\.js|\.sh|\.go)/\2/g')
+type=$(echo "$1" | sed -r 's/(.*)(\.rs|\.py|\.java|\.js|\.sh|\.go|\.ts)/\2/g')
 
 ########################################################################
 # Bash run script
@@ -85,7 +85,7 @@ if [ "$type" == '.sh' ]; then
 fi
 
 ########################################################################
-# Node
+# Javascript
 ########################################################################
 if [ "$type" == '.js' ]; then
   base_file_path=$(echo "$1" | sed 's/\/\w\+\.js//g')
@@ -93,6 +93,22 @@ if [ "$type" == '.js' ]; then
   ( cd $base_file_path;
     eval_header_fs "$exe_name.js";
     node "$exe_name.js";
+  )
+  exit 0
+fi
+
+########################################################################
+# Tyepscript
+########################################################################
+if [ "$type" == '.ts' ]; then
+  base_file_path=$(echo "$1" | sed 's/\/\w\+\.ts//g')
+  exe_name=$(echo "$1" | sed 's/\.ts//g' | sed 's/\/.*\///g')
+  ( cd $base_file_path;
+    eval_header_fs "$exe_name.ts";
+    if [ -d /tmp/tscOut/ ]; then rm -Rf /tmp/tscOut; fi
+    mkdir -p /tmp/tscOut
+    tsc --outDir /tmp/tscOut "$exe_name".ts;
+    node /tmp/tscOut/"$exe_name.js"
   )
   exit 0
 fi
