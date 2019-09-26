@@ -72,7 +72,7 @@ inoremap <C-l> <C-x><C-l>
 :cmap jj <Esc>
 
 " Jump to anywhere you want with minimal keystrokes, with just one key binding." `s{char}{label}`
-nmap s <Plug>(easymotion-bd-f)
+nmap <leader>s <Plug>(easymotion-bd-f)
 
 " !! LEADER REMAPS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -148,7 +148,7 @@ autocmd FileType javascript,jsx,scss,css,json nmap <leader>gs :NERDTreeFind src/
 """"" GoLang specific maps """""
 au FileType go noremap <Leader>gd :GoDef <CR>
 au FileType go noremap <Leader>gi :GoInfo <CR>
-au FileType go noremap <Leader>gl :GoDeclsDir <CR>
+au FileType go noremap <Leader>gl :GoDecls <CR>
 
 """"" Coc Autocommands """""
 autocmd ColorScheme highlight CocErrorHighlight ctermfg=DarkGrey guifg=#FAE2E2
@@ -198,6 +198,7 @@ Plug  'simnalamburt/vim-mundo'
 " :CocInstall coc-tsserver
 Plug  'neoclide/coc.nvim', {'branch': 'release' }
 Plug  'SirVer/ultisnips'
+" To get this working go the ~/.vim/plugged/vim-javacomplete2/libs/ and mvn compile
 
 " Search and Navigation
 Plug  'scrooloose/nerdtree'
@@ -227,6 +228,7 @@ Plug  'w0rp/ale', { 'do': 'yarn global add prettier' }
 Plug  'fatih/vim-go'
 Plug  'MaxMEllon/vim-jsx-pretty'
 Plug  'elixir-editors/vim-elixir'
+Plug  'leafgarland/typescript-vim'
 
 " Display
 Plug  'szw/vim-maximizer'
@@ -326,7 +328,7 @@ set undodir=~/.vim/undo
 
 " !! ALE
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:ale_fixers = { 'go': ['gofmt'], 'javascript': ['prettier', 'eslint'], 'scss': ['prettier', 'eslint'], 'rust': ['rustc'], 'json': ['prettier'], 'elixir': ['mix_format'] }
+let g:ale_fixers = { 'go': ['gofmt'], 'javascript': ['prettier', 'eslint'], 'scss': ['prettier', 'eslint'], 'rust': ['rustc'], 'json': ['prettier'], 'elixir': ['mix_format'], 'typescript': ['prettier', 'eslint'] }
 let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 0
 
@@ -354,6 +356,8 @@ let g:nv_search_paths = ['/home/mihira/Dropbox/notes', '/home/mihira/Dropbox/Kno
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:go_fmt_autosave = 0
 let g:go_code_completion_enabled = 1
+let g:go_def_mode='gopls'
+let g:go_info_mode='gopls'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! ULTI SNIPS
