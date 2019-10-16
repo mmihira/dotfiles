@@ -45,21 +45,15 @@ filetype off
 set cmdheight=2
 set updatetime=300
 set shortmess+=c
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! KEY REMAPPING
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Unite
-" nnoremap <C-l> :Unite file file_rec/async <CR>
 nnoremap <C-k> :CocList --normal buffers <CR>
-" nnoremap <C-j> :Unite bookmark file_mru<CR>
+nnoremap <C-l> :CocList -I --normal grep <CR>
 " Quick Buffer Access
-nnoremap <C-i> :b# <CR>
+" nnoremap <C-i> :b# <CR>
 " Stop mistakingly causing text to lowercase
 nnoremap q: <Nop>
 "nnoremap Vu <Nop>
@@ -73,6 +67,10 @@ inoremap <C-l> <C-x><C-l>
 
 " Jump to anywhere you want with minimal keystrokes, with just one key binding." `s{char}{label}`
 nmap <leader>s <Plug>(easymotion-bd-f)
+
+" Hold down alt+shift+>/< to change width
+" nmap <Esc>> :vertical res +1<Enter>
+" nmap <Esc>< :vertical res -1<Enter>
 
 " !! LEADER REMAPS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -144,11 +142,19 @@ autocmd FileType javascript,jsx,scss,css,json nmap <leader>gr :NERDTreeFind src/
 autocmd FileType javascript,jsx,scss,css,json nmap <leader>gf :NERDTreeFind src/features<CR>
 " Go to sagas in NERDTree
 autocmd FileType javascript,jsx,scss,css,json nmap <leader>gs :NERDTreeFind src/sagas<CR>
+" Go to Implementation
+autocmd FileType javascript,js,jsx,tss nmap <silent> <leader>gi <Plug>(coc-implementation)
+autocmd FileType javascript,js,jsx,tss nmap <silent> <leader>gd <Plug>(coc-definition)
 
 """"" GoLang specific maps """""
+autocmd FileType go setlocal tabstop=4
+autocmd FileType go setlocal shiftwidth=4
 au FileType go noremap <Leader>gd :GoDef <CR>
 au FileType go noremap <Leader>gi :GoInfo <CR>
 au FileType go noremap <Leader>gl :GoDecls <CR>
+au FileType go noremap <Leader>dd :GoDoc <CR>
+au FileType go noremap <Leader>gf :GoFillStruct <CR>
+au FileType go noremap <Leader>ge :GoIfErr <CR>
 
 """"" Coc Autocommands """""
 autocmd ColorScheme highlight CocErrorHighlight ctermfg=DarkGrey guifg=#FAE2E2
@@ -174,7 +180,7 @@ function Run()
 endfunction
 command! Run :call Run()
 
-command! Jsi :ImportJSFix
+command! Tmin :res -20
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! PluginSetup
@@ -192,7 +198,6 @@ Plug  'kassio/neoterm'
 Plug  'tpope/vim-surround'
 Plug  'tpope/vim-commentary'
 Plug  'simnalamburt/vim-mundo'
-" GO LS: go get -u github.com/sourcegraph/go-langserver
 " :CocInstall coc-lists
 " :CocInstall coc-json
 " :CocInstall coc-tsserver
@@ -232,7 +237,7 @@ Plug  'leafgarland/typescript-vim'
 
 " Display
 Plug  'szw/vim-maximizer'
-Plug  'liuchengxu/eleline.vim'
+Plug   'itchyny/lightline.vim'
 
 " Color Schemes
 Plug  'mhartington/oceanic-next'
@@ -248,10 +253,8 @@ filetype plugin indent on
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! CUSTOM SCRIPTS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 " remove trailing whitespace
 :au FocusLost,BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
-
 
 " !! SLIM FILE DETECT
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -274,10 +277,6 @@ au BufRead,BufNewFile *.ejs setf javascript.jsx
 " temporary fix for JSX: https://github.com/pangloss/vim-javascript/issues/955#issuecomment-356350901
 let g:jsx_ext_required = 0
 let g:javascript_plugin_flow = 1
-
-" !! Go specific always define
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" au CursorHold *.go :GoInfo
 
 " !! NERD TREE MAPPINGS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -341,7 +340,6 @@ let g:racer_experimental_completer = 1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! COLOURSCHEME
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" let g:java_highlight_functions = "true"
 let g:gruvbox_contrast_dark = "hard"
 let g:gruvbox_invert_selection = 0
 let g:gruvbox_invert_selection = 0
@@ -355,15 +353,18 @@ let g:nv_search_paths = ['/home/mihira/Dropbox/notes', '/home/mihira/Dropbox/Kno
 " !! VIM GO
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:go_fmt_autosave = 0
-let g:go_code_completion_enabled = 1
+let g:go_code_completion_enabled = 0
 let g:go_def_mode='gopls'
 let g:go_info_mode='gopls'
+let g:go_doc_popup_window = 1
+
+" Go specific always define
+" au CursorHold *.go :GoInfo
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! ULTI SNIPS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips']
-
 
 syntax enable
 
