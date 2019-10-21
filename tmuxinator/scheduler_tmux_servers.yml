@@ -1,6 +1,6 @@
 # /home/mihira/.config/tmuxinator/orca_tmux.yml
 
-name: orca_tmux
+name: scheduler_tmux_servers
 root: ~/
 
 # Optional tmux socket
@@ -40,23 +40,20 @@ root: ~/
 # attach: false
 
 windows:
-  - ui-vim:
-      - cd ~/c/growl-ui/src
-      - vim
   - api-server:
       layout: even-horizontal
       panes:
         - pane_with_multiple_commands:
-            - cd ~/c/growl-api
-            - yarn run startintegrationnoauth
+            - cd ~/c/schedulermq-api/images
+            - docker-compose down -v && docker-compose up
         - pane_with_multiple_commands:
-            - cd ~/c/growl_nginx
-            - ./run.sh
+            - cd ~/c/schedulermq-api/src/
+            - air -c .air.conf
   - ui-server:
       layout: even-horizontal
       panes:
         - pane_with_multiple_commands:
-            - cd ~/c/growl-ui/src
+            - cd ~/c/schedulermq-ui/
             - yarn run start
         - pane_with_multiple_commands:
-            - cd ~/
+            - cd ~/c/schedulermq-ui

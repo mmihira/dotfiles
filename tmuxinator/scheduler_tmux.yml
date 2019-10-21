@@ -1,6 +1,6 @@
 # /home/mihira/.config/tmuxinator/orca_tmux.yml
 
-name: orca_tmux
+name: scheduler_tmux
 root: ~/
 
 # Optional tmux socket

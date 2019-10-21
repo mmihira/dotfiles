@@ -1,6 +1,6 @@
 # /home/mihira/.config/tmuxinator/orca_tmux.yml
 
-name: orca_tmux
+name: orca_full
 root: ~/
 
 # Optional tmux socket
@@ -41,22 +41,36 @@ root: ~/
 
 windows:
   - ui-vim:
-      - cd ~/c/growl-ui/src
+      - cd ~/c/proto-orca
+      - vim
+  - external-api-vim:
+      - cd ~/c/orca-external-api/src
       - vim
   - api-server:
       layout: even-horizontal
       panes:
         - pane_with_multiple_commands:
-            - cd ~/c/growl-api
-            - yarn run startintegrationnoauth
+            - rm -rf ~/.m2/repository/au/org/orcabattery/orca-backend-proto
+            - cd ~/c/orca_proxy_v2
+            - ./build_run.sh
         - pane_with_multiple_commands:
-            - cd ~/c/growl_nginx
-            - ./run.sh
+            - cd ~/c/orca-backend-proto/
+            - mvn clean package
+            - java -jar ~/c/orca-backend-proto/target/orca-backend-proto-0.0.1-SNAPSHOT.jar
+  - auth-server:
+      layout: even-horizontal
+      panes:
+        - pane_with_multiple_commands:
+            - cd ~/c/orca-auth
+            - mvn clean package
+            - java -jar ~/c/orca-auth/target/auth-0.0.1-SNAPSHOT.jar
+        - pane_with_multiple_commands:
+            - cd ~/c/orca-auth
   - ui-server:
       layout: even-horizontal
       panes:
         - pane_with_multiple_commands:
-            - cd ~/c/growl-ui/src
+            - cd ~/c/proto-orca
             - yarn run start
         - pane_with_multiple_commands:
-            - cd ~/
+            - cd ~/c/proto-orca

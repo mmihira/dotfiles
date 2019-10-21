@@ -1,6 +1,6 @@
 # /home/mihira/.config/tmuxinator/orca_tmux.yml
 
-name: orca_tmux
+name: orca_vim
 root: ~/
 
 # Optional tmux socket
@@ -41,22 +41,8 @@ root: ~/
 
 windows:
   - ui-vim:
-      - cd ~/c/growl-ui/src
+      - cd ~/c/proto-orca
       - vim
-  - api-server:
-      layout: even-horizontal
-      panes:
-        - pane_with_multiple_commands:
-            - cd ~/c/growl-api
-            - yarn run startintegrationnoauth
-        - pane_with_multiple_commands:
-            - cd ~/c/growl_nginx
-            - ./run.sh
-  - ui-server:
-      layout: even-horizontal
-      panes:
-        - pane_with_multiple_commands:
-            - cd ~/c/growl-ui/src
-            - yarn run start
-        - pane_with_multiple_commands:
-            - cd ~/
+  - external-api-vim:
+      - cd ~/c/orca-external-api/src
+      - vim
