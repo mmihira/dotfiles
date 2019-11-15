@@ -1,0 +1,59 @@
+name: orca_tmux_dev_docker_logs
+root: ~/
+
+# Optional tmux socket
+# socket_name: foo
+
+# Note that the pre and post options have been deprecated and will be replaced by
+# project hooks.
+
+# Project hooks
+# Runs on project start, always
+# on_project_start: command
+# Run on project start, the first time
+# on_project_first_start: command
+# Run on project start, after the first time
+# on_project_restart: command
+# Run on project exit ( detaching from tmux session )
+# on_project_exit: command
+# Run on project stop
+# on_project_stop: command
+
+# Runs in each window and pane before window/pane specific commands. Useful for setting up interpreter versions.
+# pre_window: rbenv shell 2.0.0-p247
+
+# Pass command line options to tmux. Useful for specifying a different tmux.conf.
+# tmux_options: -f ~/.tmux.mac.conf
+
+# Change the command to call tmux.  This can be used by derivatives/wrappers like byobu.
+# tmux_command: byobu
+
+# Specifies (by name or index) which window will be selected on project startup. If not set, the first window is used.
+# startup_window: editor
+
+# Specifies (by index) which pane of the specified window will be selected on project startup. If not set, the first pane is used.
+# startup_pane: 1
+
+# Controls whether the tmux session should be attached to automatically. Defaults to true.
+# attach: false
+
+windows:
+  - api-server:
+      layout: b3cf,135x104,0,0[136x34,0,0{66x34,0,0,1,69x34,67,0,2},136x35,0,35{39x35,0,35,3,48x35,40,35,73,47x35,89,35,4},136x34,0,71{38x34,0,71,5,48x34,39,71,6,48x34,88,71,7}]
+      panes:
+        - pane_with_multiple_commands:
+            - ssh -o StrictHostKeyChecking=no -v -i ~/.ssh/orca/protoorca.pem ubuntu@45.113.235.140 'while true; do date; sudo docker logs orca-auth-server -f; sleep 2; done'
+        - pane_with_multiple_commands:
+            - ssh -o StrictHostKeyChecking=no -v -i ~/.ssh/orca/protoorca.pem ubuntu@45.113.235.140 'while true; do date; sudo docker logs orca-resource-server -f; sleep 2; done'
+        - pane_with_multiple_commands:
+            - ssh -o StrictHostKeyChecking=no -v -i ~/.ssh/orca/protoorca.pem ubuntu@45.113.235.140 'while true; do date; sudo docker logs orca-nginx -f; sleep 2; done'
+        - pane_with_multiple_commands:
+            - ssh -o StrictHostKeyChecking=no -v -i ~/.ssh/orca/protoorca.pem ubuntu@45.113.235.140 'while true; do date; sudo docker logs orca-asset-server -f; sleep 2; done'
+        - pane_with_multiple_commands:
+            - ssh -o StrictHostKeyChecking=no -v -i ~/.ssh/orca/protoorca.pem ubuntu@45.113.235.140 'while true; do date; sudo docker logs orca-external-api -f; sleep 2; done'
+        - pane_with_multiple_commands:
+            - ssh -o StrictHostKeyChecking=no -v -i ~/.ssh/orca/protoorca.pem ubuntu@45.113.235.140 'while true; do date; sudo docker logs orca-ui -f; sleep 2; done'
+        - pane_with_multiple_commands:
+            - ssh -o StrictHostKeyChecking=no -v -i ~/.ssh/orca/protoorca.pem ubuntu@45.113.235.140 'while true; do date; sudo docker logs orca-resource-postgres -f; sleep 2; done'
+        - pane_with_multiple_commands:
+            - ssh -o StrictHostKeyChecking=no -v -i ~/.ssh/orca/protoorca.pem ubuntu@45.113.235.140 'while true; do date; sudo docker logs orca-auth-postgres -f; sleep 2; done'

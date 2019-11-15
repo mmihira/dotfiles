@@ -46,3 +46,12 @@ windows:
   - external-api-vim:
       - cd ~/c/orca-external-api/src
       - vim
+  - api-servers:
+      layout: even-horizontal
+      panes:
+        - pane_with_multiple_commands:
+          - cd ~/c/orca-auth/
+          - vim
+        - pane_with_multiple_commands:
+          - cd ~/c/orca-backend-proto/
+          - vim
