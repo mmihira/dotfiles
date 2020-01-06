@@ -1,6 +1,4 @@
-# /home/mihira/.config/tmuxinator/orca_tmux.yml
-
-name: scheduler_tmux_servers
+name: schedulermq_tmux_prod_docker_logs
 root: ~/
 
 # Optional tmux socket
@@ -40,20 +38,16 @@ root: ~/
 # attach: false
 
 windows:
-  - api-server:
-      layout: even-horizontal
+  - ssh-docker-logs:
+      layout: b3cf,135x104,0,0[136x34,0,0{66x34,0,0,1,69x34,67,0,2},136x35,0,35{39x35,0,35,3,48x35,40,35,73,47x35,89,35,4},136x34,0,71{38x34,0,71,5,48x34,39,71,6,48x34,88,71,7}]
       panes:
         - pane_with_multiple_commands:
-            - cd ~/c/schedulermq-api/images
-            - docker-compose down -v && docker-compose up
+            - ssh -o StrictHostKeyChecking=no -v -i ~/.ssh/schedulermq/schedulermq.pem ubuntu@115.146.92.63 'while true; do date; sudo docker logs smq-api -f; sleep 2; done'
         - pane_with_multiple_commands:
-            - cd ~/c/schedulermq-api/src/
-            - air -c .air.conf
-  - ui-server:
-      layout: even-horizontal
-      panes:
+            - ssh -o StrictHostKeyChecking=no -v -i ~/.ssh/schedulermq/schedulermq.pem ubuntu@115.146.92.63 'while true; do date; sudo docker logs smq-ui -f; sleep 2; done'
         - pane_with_multiple_commands:
-            - cd ~/c/schedulermq-ui/
-            - yarn run start
+            - ssh -o StrictHostKeyChecking=no -v -i ~/.ssh/schedulermq/schedulermq.pem ubuntu@115.146.92.63 'while true; do date; sudo docker logs smq-nginx-prod -f; sleep 2; done'
         - pane_with_multiple_commands:
-            - cd ~/c/schedulermq-ui
+            - ssh -o StrictHostKeyChecking=no -v -i ~/.ssh/schedulermq/schedulermq.pem ubuntu@115.146.92.63 'while true; do date; sudo docker logs smq-postgres -f; sleep 2; done'
+        - pane_with_multiple_commands:
+            - ssh -o StrictHostKeyChecking=no -v -i ~/.ssh/schedulermq/schedulermq.pem ubuntu@115.146.92.63 'while true; do date; sudo docker logs smq-nginx-prod -f; sleep 2; done'
