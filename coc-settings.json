@@ -10,6 +10,12 @@
       "command": "gopls",
       "rootPatterns": ["go.mod", ".vim/", ".git/", ".hg/"],
       "filetypes": ["go"]
+    },
+    "kotlinLanguageServer": {
+      "command": "/home/mihira/c/kotlin-language-server/server/build/install/server/bin/kotlin-language-server",
+      "filetypes": ["kotlin"],
+      "rootPatterns": [".kt", ".kts"],
+      "additionalSchemes": ["jar", "zipfile"]
     }
   },
   "eslint.quiet": true,
