@@ -49,21 +49,29 @@ set shortmess+=c
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! KEY REMAPPING
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Unite
+" Coq
 nnoremap <C-k> :CocList --normal buffers <CR>
 nnoremap <C-l> :CocList -I --normal grep <CR>
-" Quick Buffer Access
-" nnoremap <C-i> :b# <CR>
+
+" Jump list
+nmap <C-o> <Plug>EnhancedJumpsLocalOlder
+nmap <C-i> <Plug>EnhancedJumpsLocalNewer
+nmap <C-[> <Plug>EnhancedJumpsRemoteOlder
+nmap <C-]> <Plug>EnhancedJumpsRemoteNewer
+
 " Stop mistakingly causing text to lowercase
 nnoremap q: <Nop>
-"nnoremap Vu <Nop>
+" nnoremap Vu <Nop>
 vnoremap u <Nop>
+
+" Vista
+nnoremap <C-v> :Vista!! <CR>
 
 " Map line matching omnicomplete
 inoremap <C-l> <C-x><C-l>
 " JJ
-:imap jj <Esc>
-:cmap jj <Esc>
+imap jj <Esc>
+cmap jj <Esc>
 
 " Jump to anywhere you want with minimal keystrokes, with just one key binding." `s{char}{label}`
 nmap <leader>s <Plug>(easymotion-bd-f)
@@ -146,6 +154,11 @@ autocmd FileType javascript,jsx,scss,css,json nmap <leader>gs :NERDTreeFind src/
 autocmd FileType javascript,js,jsx,tss nmap <silent> <leader>gi <Plug>(coc-implementation)
 autocmd FileType javascript,js,jsx,tss nmap <silent> <leader>gd <Plug>(coc-definition)
 
+""""" Kotlin specific maps """""
+" Go to Implementation
+autocmd FileType kotlin,kt nmap <silent> <leader>gi <Plug>(coc-implementation)
+autocmd FileType kotlin,kt nmap <silent> <leader>gd <Plug>(coc-definition)
+
 """"" GoLang specific maps """""
 autocmd FileType go setlocal tabstop=4
 autocmd FileType go setlocal shiftwidth=4
@@ -165,7 +178,7 @@ autocmd ColorScheme highlight CocWarningHighlight ctermfg=Red  guifg=#FBE6A2
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 command! Spwd cd %:p:h
 
-function Run()
+function! Run()
   :w
   if g:neoterm.has_any()
     let combined = join(['T', '~/bin/nvim_run.sh ', expand('%:p')])
@@ -195,6 +208,7 @@ Plug  'janko-m/vim-test'
 Plug  'kassio/neoterm'
 
 " Code Helpers
+Plug  'rstacruz/vim-closer'
 Plug  'tpope/vim-surround'
 Plug  'tpope/vim-commentary'
 Plug  'simnalamburt/vim-mundo'
@@ -204,6 +218,7 @@ Plug  'simnalamburt/vim-mundo'
 Plug  'neoclide/coc.nvim', {'branch': 'release' }
 Plug  'SirVer/ultisnips'
 " To get this working go the ~/.vim/plugged/vim-javacomplete2/libs/ and mvn compile
+Plug  'liuchengxu/vista.vim'
 
 " Search and Navigation
 Plug  'scrooloose/nerdtree'
@@ -211,6 +226,8 @@ Plug  'mileszs/ack.vim'
 Plug  'https://github.com/alok/notational-fzf-vim' " Need ripgrep for this
 Plug  'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug  'junegunn/vim-peekaboo'
+Plug  'inkarkat/vim-ingo-library'
+Plug  'inkarkat/vim-EnhancedJumps'
 
 " Movement/
 Plug  'easymotion/vim-easymotion'
@@ -234,6 +251,7 @@ Plug  'fatih/vim-go'
 Plug  'MaxMEllon/vim-jsx-pretty'
 Plug  'elixir-editors/vim-elixir'
 Plug  'leafgarland/typescript-vim'
+Plug  'udalov/kotlin-vim'
 
 " Display
 Plug  'szw/vim-maximizer'
@@ -358,13 +376,33 @@ let g:go_def_mode='gopls'
 let g:go_info_mode='gopls'
 let g:go_doc_popup_window = 1
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" !! Vista
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:vista#renderer#enable_icon=0
+let g:vista_default_executive='coc'
+let g:vista_echo_cursor_strategy='floating_win'
+let g:vista_update_on_text_changed=1
+let g:vista_update_on_text_changed_delay=1500
+
 " Go specific always define
 " au CursorHold *.go :GoInfo
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" !! Enhanced Jumps
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:EnhancedJumps_CaptureJumpMessages = 0
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" !! Vim-Go
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:go_def_mapping_enabled = 0
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! ULTI SNIPS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips']
+let g:EnhancedJumps_no_mappings = 1
 
 syntax enable
 
