@@ -1,6 +1,4 @@
-# /home/mihira/.config/tmuxinator/orca_tmux.yml
-
-name: orca_tmux_servers
+name: schedulermq_tmux_prod_docker_logs
 root: ~/
 
 # Optional tmux socket
@@ -40,24 +38,16 @@ root: ~/
 # attach: false
 
 windows:
-  - api-server:
-      layout: fd2e,134x103,0,0[135x34,0,0{67x34,0,0,22,67x34,68,0,23},135x34,0,35,24,135x34,0,70{67x34,0,70,26,67x34,68,70,27}]
+  - ssh-docker-logs:
+      layout: b3cf,135x104,0,0[136x34,0,0{66x34,0,0,1,69x34,67,0,2},136x35,0,35{39x35,0,35,3,48x35,40,35,73,47x35,89,35,4},136x34,0,71{38x34,0,71,5,48x34,39,71,6,48x34,88,71,7}]
       panes:
         - pane_with_multiple_commands:
-            - cd ~/c/orca-auth
-            - mvn clean install package
-            - java -jar ~/c/orca-auth/target/auth-0.0.1-SNAPSHOT.jar --debug
+            - 'while true; do date; docker logs gmdata-postgres -f; sleep 2; done'
         - pane_with_multiple_commands:
-            - rm -rf ~/.m2/repository/au/org/orcabattery/orca-backend-proto
-            - cd ~/c/orca-backend-proto/
-            - mvn clean install package
-            - SPRING_PROFILES_ACTIVE=dev java -jar ~/c/orca-backend-proto/target/orca-backend-proto-0.0.1-SNAPSHOT.jar --debug
-        - pane_with_multiple_commands:
-            - cd ~/c/orca-external-api/src
-            - air -c .air.conf
-        - pane_with_multiple_commands:
-            - cd ~/c/orca-infra/scripts
-            - ./compose_reset_local_network_host.sh
-        - pane_with_multiple_commands:
-          - cd ~/c/proto-orca
-          - yarn run start
+            - 'while true; do date; docker logs gmdata -f; sleep 2; done'
+        # - pane_with_multiple_commands:
+        #     - 'while true; do date; sudo docker logs smq-nginx-prod -f; sleep 2; done'
+        # - pane_with_multiple_commands:
+        #     - 'while true; do date; sudo docker logs smq-postgres -f; sleep 2; done'
+        # - pane_with_multiple_commands:
+        #     - 'while true; do date; sudo docker logs smq-nginx-prod -f; sleep 2; done'
