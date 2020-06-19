@@ -92,7 +92,7 @@ if [ "$type" == '.js' ]; then
   exe_name=$(echo "$1" | sed 's/\.js//g' | sed 's/\/.*\///g')
   ( cd $base_file_path;
     eval_header_fs "$exe_name.js";
-    node "$exe_name.js";
+    # node "$exe_name.js";
   )
   exit 0
 fi
@@ -102,14 +102,23 @@ fi
 ########################################################################
 if [ "$type" == '.ts' ]; then
   base_file_path=$(echo "$1" | sed 's/\/\w\+\.ts//g')
+  filepath="$1"
   exe_name=$(echo "$1" | sed 's/\.ts//g' | sed 's/\/.*\///g')
-  ( cd $base_file_path;
-    eval_header_fs "$exe_name.ts";
-    if [ -d /tmp/tscOut/ ]; then rm -Rf /tmp/tscOut; fi
-    mkdir -p /tmp/tscOut
-    tsc --outDir /tmp/tscOut "$exe_name".ts;
-    node /tmp/tscOut/"$exe_name.js"
-  )
+
+  has_header_fs "$filepath"
+  if [ $has_header_fs_res -eq 1 ]; then
+    eval_header_fs "$filepath"
+  else
+    ( cd $base_file_path;
+      eval_header_fs "$exe_name.ts";
+      if [ -d /tmp/tscOut/ ]; then rm -Rf /tmp/tscOut; fi
+      mkdir -p /tmp/tscOut
+      echo "Transpiling ......"
+      tsc --outDir /tmp/tscOut "$exe_name".ts;
+      echo ""
+      NODE_PATH="$base_file_path/node_modules" node /tmp/tscOut/"$exe_name.js"
+    )
+  fi
   exit 0
 fi
 
@@ -124,7 +133,7 @@ if [ "$type" == '.py' ]; then
     echo "";
     eval_header "$exe_name.py";
     echo current env is $VIRTUAL_ENV
-    ./"$exe_name.py"
+    # ./"$exe_name.py"
   )
   exit 0
 fi

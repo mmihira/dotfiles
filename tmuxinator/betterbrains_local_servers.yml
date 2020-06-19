@@ -10,6 +10,7 @@ windows:
       panes:
         - pane_with_multiple_commands:
             - cd ~/c/betterbrains-infra
+            - ./scripts/build_betterbrains_local_nginx_network_host.sh
             - ./scripts/compose_reset_betterbrains_local_db.sh
         - pane_with_multiple_commands:
             - cd ~/c/betterbrains-backend
@@ -19,7 +20,8 @@ windows:
             - while ! nc -z localhost 9432; do; sleep 0.1; done
             - SPRING_PROFILES_ACTIVE=local ./gradlew bootRun
         - pane_with_multiple_commands:
-            - date
+            - cd ~/c/betterbrains-ui
+            - yarn run start
   # - psql_watch:
   #     layout: layout fc66,135x105,0,0[135x26,0,0,13,135x25,0,27,20,135x26,0,53,18,135x25,0,80,19]
   #     panes:

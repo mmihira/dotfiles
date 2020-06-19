@@ -2,56 +2,36 @@
 
 name: orca_tmux_servers
 root: ~/
-
-# Optional tmux socket
-# socket_name: foo
-
-# Note that the pre and post options have been deprecated and will be replaced by
-# project hooks.
-
-# Project hooks
-# Runs on project start, always
-# on_project_start: command
-# Run on project start, the first time
-# on_project_first_start: command
-# Run on project start, after the first time
-# on_project_restart: command
-# Run on project exit ( detaching from tmux session )
-# on_project_exit: command
-# Run on project stop
-# on_project_stop: command
-
-# Runs in each window and pane before window/pane specific commands. Useful for setting up interpreter versions.
-# pre_window: rbenv shell 2.0.0-p247
-
-# Pass command line options to tmux. Useful for specifying a different tmux.conf.
-# tmux_options: -f ~/.tmux.mac.conf
-
-# Change the command to call tmux.  This can be used by derivatives/wrappers like byobu.
-# tmux_command: byobu
-
-# Specifies (by name or index) which window will be selected on project startup. If not set, the first window is used.
-# startup_window: editor
-
-# Specifies (by index) which pane of the specified window will be selected on project startup. If not set, the first pane is used.
-# startup_pane: 1
-
-# Controls whether the tmux session should be attached to automatically. Defaults to true.
-# attach: false
-
 windows:
   - api-server:
       layout: fd2e,134x103,0,0[135x34,0,0{67x34,0,0,22,67x34,68,0,23},135x34,0,35,24,135x34,0,70{67x34,0,70,26,67x34,68,70,27}]
       panes:
         - pane_with_multiple_commands:
+            - sdk use java 14.0.1-open
             - cd ~/c/orca-auth
             - mvn clean install package
-            - java -jar ~/c/orca-auth/target/auth-0.0.1-SNAPSHOT.jar --debug
+            - source ~/c/orca-infra/config/config.sh
+            - export SPRING_DATASOURCE_USERNAME=$ORCA_AUTH_POSTGRES_ORCA_USER
+            - export SPRING_DATASOURCE_PASSWORD=$ORCA_AUTH_POSTGRES_ORCA_PASSWORD
+            - export SPRING_DATASOURCE_URL="jdbc:postgresql://localhost:5431/$ORCA_AUTH_POSTGRES_ORCA_DATABASE"
+            - export SERVER_PORT=$ORCA_AUTH_SERVER_PORT
+            - java --enable-preview -jar ~/c/orca-auth/target/orca-auth-0.0.1-SNAPSHOT.jar --debug
         - pane_with_multiple_commands:
+            - sdk use java 14.0.1-open
             - rm -rf ~/.m2/repository/au/org/orcabattery/orca-backend-proto
             - cd ~/c/orca-backend-proto/
             - mvn clean install package
-            - SPRING_PROFILES_ACTIVE=dev java -jar ~/c/orca-backend-proto/target/orca-backend-proto-0.0.1-SNAPSHOT.jar --debug
+            - source ~/c/orca-infra/config/config.sh
+            - export ASSETS_URL="http://localhost:8000/stimuli"
+            - export SERVER_PORT=$ORCA_RESOURCE_SERVER_PORT
+            - export JPA_HIBERNATE_DDL="create-drop"
+            - export SERVER_SERVLET_CONTEXTPATH=$ORCA_RESOURCE_SERVER_CONTEXT_PATH
+            - export SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWKSETURI="http://localhost:$ORCA_AUTH_SERVER_PORT/.well-known/jwks.json"
+            - export SPRING_DATASOURCE_USERNAME=$ORCA_RESOURCE_POSTGRES_ORCA_USER
+            - export SPRING_DATASOURCE_PASSWORD=$ORCA_RESOURCE_POSTGRES_ORCA_PASSWORD
+            - export ORCA_TESTDATA_ASSETORIGIN=$ASSETS_URL
+            - export SPRING_DATASOURCE_URL="jdbc:postgresql://localhost:5430/$ORCA_RESOURCE_POSTGRES_ORCA_DATABASE"
+            - java --enable-preview -jar ~/c/orca-backend-proto/target/orca-backend-proto-0.1.0-SNAPSHOT.jar --debug
         - pane_with_multiple_commands:
             - cd ~/c/orca-external-api/src
             - air -c .air.conf

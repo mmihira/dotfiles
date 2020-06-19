@@ -5,7 +5,7 @@ export ZSH=/home/mihira/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="lambda"
+# ZSH_THEME="lambda"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -91,6 +91,17 @@ alias xo="xdg-open $1"
 
 eval "$(fasd --init auto)"
 
+# Make CTRL-Z background things and unbackground them.
+function fg-bg() {
+  if [[ $#BUFFER -eq 0 ]]; then
+    fg
+  else
+    zle push-input
+  fi
+}
+zle -N fg-bg
+bindkey '^Z' fg-bg
+
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -117,6 +128,25 @@ export PATH=$PATH:$GOPATH/bin
 # Lombok
 export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
+alias mux="tmuxinator"
+alias vi="vim"
+
+# Syntax highlighting
+# To installhttps://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md#
+# echo "source ${(q-)PWD}/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc
+
+# Bash completion
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /tmp/mc mc
-alias mux="tmuxinator"
+
+fpath+=('/home/mihira/.nvm/versions/node/v8.11.3/lib/node_modules/pure-prompt/functions')
+autoload -U promptinit; promptinit
+prompt pure
+
+export GRAPHVIZ_DOT=/usr/bin/dot
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/home/mihira/.sdkman"
+[[ -s "/home/mihira/.sdkman/bin/sdkman-init.sh" ]] && source "/home/mihira/.sdkman/bin/sdkman-init.sh"
+
+[ -s "/home/mihira/.jabba/jabba.sh" ] && source "/home/mihira/.jabba/jabba.sh"

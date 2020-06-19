@@ -54,12 +54,14 @@ nnoremap <C-k> :CocList --normal buffers <CR>
 nnoremap <C-l> :CocList -I --normal grep <CR>
 
 " Jump list
-nmap <C-o> <Plug>EnhancedJumpsLocalOlder
-nmap <C-i> <Plug>EnhancedJumpsLocalNewer
-nmap <C-[> <Plug>EnhancedJumpsRemoteOlder
-nmap <C-]> <Plug>EnhancedJumpsRemoteNewer
+nmap <C-i> <Plug>EnhancedJumpsRemoteOlder
+nmap <C-o> <Plug>EnhancedJumpsRemoteNewer
+
+" nmap <C-[> <Plug>EnhancedJumpsRemoteOlder
+" nmap <C-]> <Plug>EnhancedJumpsRemoteNewer
 
 " Stop mistakingly causing text to lowercase
+nnoremap q: <Nop>
 nnoremap q: <Nop>
 " nnoremap Vu <Nop>
 vnoremap u <Nop>
@@ -74,7 +76,7 @@ imap jj <Esc>
 cmap jj <Esc>
 
 " Jump to anywhere you want with minimal keystrokes, with just one key binding." `s{char}{label}`
-nmap <leader>s <Plug>(easymotion-bd-f)
+nmap <leader>s yssiw'<CR>
 
 " Hold down alt+shift+>/< to change width
 " nmap <Esc>> :vertical res +1<Enter>
@@ -87,7 +89,7 @@ let mapleader = "\<Space>"
 nnoremap <leader>nn :NERDTreeToggle<CR>
 nnoremap <leader>nf :NERDTreeFind<CR>
 " Reassign macro key
-nnoremap <Leader>z q<CR>
+nnoremap Q q
 nnoremap q <Nop>
 " Remap exit
 noremap <Leader>q :q<CR>
@@ -159,6 +161,10 @@ autocmd FileType javascript,js,jsx,tss nmap <silent> <leader>gd <Plug>(coc-defin
 autocmd FileType kotlin,kt nmap <silent> <leader>gi <Plug>(coc-implementation)
 autocmd FileType kotlin,kt nmap <silent> <leader>gd <Plug>(coc-definition)
 
+""""" Java specific maps """""
+autocmd FileType kotlin,kt nmap <silent> <leader>gi <Plug>(coc-implementation)
+autocmd FileType kotlin,kt nmap <silent> <leader>gd <Plug>(coc-definition)
+
 """"" GoLang specific maps """""
 autocmd FileType go setlocal tabstop=4
 autocmd FileType go setlocal shiftwidth=4
@@ -210,6 +216,7 @@ Plug  'kassio/neoterm'
 " Code Helpers
 Plug  'rstacruz/vim-closer'
 Plug  'tpope/vim-surround'
+Plug  'tpope/vim-repeat'
 Plug  'tpope/vim-commentary'
 Plug  'simnalamburt/vim-mundo'
 " :CocInstall coc-lists

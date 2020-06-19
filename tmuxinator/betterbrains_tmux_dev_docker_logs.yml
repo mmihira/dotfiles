@@ -1,0 +1,15 @@
+name: betterbrains_tmux_dev_docker_logs
+root: ~/
+
+windows:
+  - api-server:
+      layout: layout fc66,135x105,0,0[135x26,0,0,13,135x25,0,27,20,135x26,0,53,18,135x25,0,80,19]
+      panes:
+        - pane_with_multiple_commands:
+            - ssh -o StrictHostKeyChecking=no -v -i ~/.ssh/betterbrains/betterbrains.pem ubuntu@45.113.234.191 'while true; do date; sudo docker logs betterbrains-resource-postgres -f; sleep 2; done'
+        - pane_with_multiple_commands:
+            - ssh -o StrictHostKeyChecking=no -v -i ~/.ssh/betterbrains/betterbrains.pem ubuntu@45.113.234.191 'while true; do date; sudo docker logs betterbrains-resource-server -f; sleep 2; done'
+        - pane_with_multiple_commands:
+            - ssh -o StrictHostKeyChecking=no -v -i ~/.ssh/betterbrains/betterbrains.pem ubuntu@45.113.234.191 'while true; do date; sudo docker logs betterbrains-nginx -f; sleep 2; done'
+        - pane_with_multiple_commands:
+            - ssh -o StrictHostKeyChecking=no -v -i ~/.ssh/betterbrains/betterbrains.pem ubuntu@45.113.234.191 'while true; do date; sudo docker logs betterbrains-ui -f; sleep 2; done'

@@ -1,0 +1,16 @@
+name: betterbrains_local_servers_docker
+root: ~/
+
+windows:
+  - main:
+      layout: layout fc66,135x105,0,0[135x26,0,0,13,135x25,0,27,20,135x26,0,53,18,135x25,0,80,19]
+      panes:
+        - pane_with_multiple_commands:
+            - 'while true; do date; docker logs betterbrains-nginx-local -f; sleep 2; done'
+        - pane_with_multiple_commands:
+            - 'while true; do date; docker logs betterbrains-resource-postgres -f; sleep 2; done'
+        - pane_with_multiple_commands:
+            - 'while true; do date; docker logs betterbrains-resource-server -f; sleep 2; done'
+        - pane_with_multiple_commands:
+            - 'while true; do date; docker logs betterbrains-ui -f; sleep 2; done'
+

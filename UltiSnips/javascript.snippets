@@ -1,4 +1,4 @@
-snippet sw "Switch statement" b
+snippet hsw "Switch statement" b
 switch ($1) {
 	case $2:
 		break;
@@ -7,17 +7,35 @@ switch ($1) {
 }
 endsnippet
 
-snippet rf "React Fragment" b
+snippet hrf "React Fragment" b
 <React.Fragment>
 $1
 </React.Fragment>
+endsnippet
+
+snippet hdv "Simple div" b
+<div className="$1">
+$2
+</div>
+endsnippet
+
+snippet gfn "Golang Function" b
+func $1() {
+$2
+}
+endsnippet
+
+snippet gr "Golang Error Check" b
+if err != nil {
+	return errors.Wrap(err, "$1")
+}
 endsnippet
 
 snippet conClass "Connected Class" b
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import act from 'actions';
+import * as act from 'actions';
 import * as types from 'actions/types';
 import {
 	mapDispatchCreator,
