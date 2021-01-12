@@ -19,7 +19,7 @@ set tabstop=2
 set shiftwidth=2
 set showcmd		        " Show (partial) command in status line.
 set showmatch		      " Show matching brackets.
-set ignorecase        " Do case insensitive matching
+" set ignorecase        " Do case insensitive matching
 set smartcase		      " Do smart case matching
 set incsearch		      " Incremental search
 set hlsearch          " Highlight after search finished
@@ -219,10 +219,11 @@ Plug  'tpope/vim-surround'
 Plug  'tpope/vim-repeat'
 Plug  'tpope/vim-commentary'
 Plug  'simnalamburt/vim-mundo'
+Plug  'neoclide/coc.nvim', {'branch': 'release' }
+" :CocInstall coc-eslint
 " :CocInstall coc-lists
 " :CocInstall coc-json
 " :CocInstall coc-tsserver
-Plug  'neoclide/coc.nvim', {'branch': 'release' }
 Plug  'SirVer/ultisnips'
 " To get this working go the ~/.vim/plugged/vim-javacomplete2/libs/ and mvn compile
 Plug  'liuchengxu/vista.vim'
@@ -307,6 +308,7 @@ let g:javascript_plugin_flow = 1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Load NERDTree on startup
 " autocmd vimenter * NERDTree
+let g:NERDTreeWinSize = 50
 
 " !! EASYMOTION SETUP
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

@@ -48,7 +48,7 @@ windows:
         - pane_with_multiple_commands:
             - while true; do date; docker logs orca-resource-server -f; sleep 2; done
         - pane_with_multiple_commands:
-            - while true; do date; docker logs orca-nginx -f; sleep 2; done
+            - while true; do date; docker logs orca-nginx-dev -f; sleep 2; done
         - pane_with_multiple_commands:
             - while true; do date; docker logs orca-asset-server -f; sleep 2; done
         - pane_with_multiple_commands:

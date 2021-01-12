@@ -78,6 +78,7 @@ vnoremap <Leader>cs "0y :Ack! <C-r>0
 " Replace highlighted text buffer global
 vnoremap <Leader>r "0y :%s/<C-r>0
 
+nnoremap <Leader>k  :action FindInPath<CR>
 nnoremap <Leader>nf :action SelectInProjectView<CR>
 nnoremap <Leader>gr :action RenameElement<CR>
 nnoremap <Leader>gt :action GotoTest<CR>

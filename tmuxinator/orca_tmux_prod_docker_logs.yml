@@ -48,7 +48,7 @@ windows:
         - pane_with_multiple_commands:
             - ssh -o StrictHostKeyChecking=no -v -i ~/.ssh/orca/protoorca.pem ubuntu@115.146.93.224 'while true; do date; sudo docker logs orca-resource-server -f; sleep 2; done'
         - pane_with_multiple_commands:
-            - ssh -o StrictHostKeyChecking=no -v -i ~/.ssh/orca/protoorca.pem ubuntu@115.146.93.224 'while true; do date; sudo docker logs orca-nginx -f; sleep 2; done'
+            - ssh -o StrictHostKeyChecking=no -v -i ~/.ssh/orca/protoorca.pem ubuntu@115.146.93.224 'while true; do date; sudo docker logs orca-nginx-prod -f; sleep 2; done'
         - pane_with_multiple_commands:
             - ssh -o StrictHostKeyChecking=no -v -i ~/.ssh/orca/protoorca.pem ubuntu@115.146.93.224 'while true; do date; sudo docker logs orca-asset-server -f; sleep 2; done'
         - pane_with_multiple_commands:
