@@ -354,7 +354,7 @@ set undodir=~/.vim/undo
 
 " !! ALE
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:ale_fixers = { 'go': ['gofmt'], 'javascript': ['prettier', 'eslint'], 'scss': ['prettier', 'eslint'], 'rust': ['rustc'], 'json': ['prettier'], 'elixir': ['mix_format'], 'typescript': ['prettier', 'eslint'] }
+let g:ale_fixers = { 'sql': ['sqlformat'], 'go': ['gofmt'], 'javascript': ['prettier', 'eslint'], 'scss': ['prettier', 'eslint'], 'rust': ['rustc'], 'json': ['prettier'], 'elixir': ['mix_format'], 'typescript': ['prettier', 'eslint'] }
 let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 0
 
