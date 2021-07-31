@@ -1,0 +1,62 @@
+
+- Install zsh
+  - Make zsh default
+
+-- Install pure prompt
+-------------------------------------------
+- git clone https://github.com/sindresorhus/pure.git "$HOME/.zsh/pure"
+
+
+-- Install ULauncher
+-------------------------------------------
+- sudo add-apt-repository ppa:agornostal/ulauncher
+- sudo apt-get update
+- sudo apt-get install ulauncher
+
+-- Vim
+-------------------------------------------
+- Download the neovim app image and copy to ~/bin
+- Link ~/.config/nvim/init.vim to ~/c/dotfiles/.vimrc
+
+-- Tmux
+-------------------------------------------
+- Install tmux. And copy over tmux configs from dot files
+- Install tmuxinator
+
+-- Keyboard settings
+-------------------------------------------
+- Applications shortcuts add
+  - Ctrl + , = xfce4-terminal -e "tmux new -As0"
+
+-- Terminal editor settings
+-------------------------------------------
+- Terminal editor settings
+ - General -> Clipboard -> Automatically copy selection to clipboard
+ - In appearance
+   - System font DejaVu Sans Mono Book 10
+   - Bold text off
+   - Disable toolbar
+   - Disable menu bar
+ - Colors -> Presets -> Dark pastels
+ -
+
+-- Key Remaps
+-------------------------------------------
+- In ~/.profile add line to remap caps to ctrl
+  /usr/bin/setxkbmap -option "ctrl:nocaps"
+
+
+-- Window Appearance
+-------------------------------------------
+- Appearance
+  - Choose Adwaita Dark
+
+- Windows Manager
+  - Theme Numix
+  - Keyboard tab -> Cycle Windows remap to ctrl + space
+  - Maximise window -> alt + M
+
+- Display settings
+  Make the menu span all montiors so the widgets menu show on second monitor
+
+- Install nvm
