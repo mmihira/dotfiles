@@ -230,6 +230,7 @@ Plug  'liuchengxu/vista.vim'
 
 " Search and Navigation
 Plug  'scrooloose/nerdtree'
+" Need to install ack-grep package
 Plug  'mileszs/ack.vim'
 Plug  'https://github.com/alok/notational-fzf-vim' " Need ripgrep for this
 Plug  'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }

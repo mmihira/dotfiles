@@ -227,13 +227,13 @@ if [ "$type" == '.go' ]; then
     ( cd $path;
       echo $path;
       bin_name=$(go list);
-      go install;
+      go build
       if [ $? -eq 0 ]; then
         has_header_fs "$filepath"
         if [ $has_header_fs_res -eq 1 ]; then
           eval_header_fs "$filepath"
         else
-          "$GOPATH/bin/$bin_name";
+          "$path/$bin_name";
         fi
       else
         echo "Build failure";
