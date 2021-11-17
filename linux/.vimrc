@@ -57,20 +57,14 @@ nnoremap <C-l> :CocList -I --normal grep <CR>
 nmap <C-i> <Plug>EnhancedJumpsRemoteOlder
 nmap <C-o> <Plug>EnhancedJumpsRemoteNewer
 
-" nmap <C-[> <Plug>EnhancedJumpsRemoteOlder
-" nmap <C-]> <Plug>EnhancedJumpsRemoteNewer
-
 " Stop mistakingly causing text to lowercase
 nnoremap q: <Nop>
 nnoremap q: <Nop>
 " nnoremap Vu <Nop>
 vnoremap u <Nop>
 
-" Vista
-nnoremap <C-v> :Vista!! <CR>
-
 " Map line matching omnicomplete
-inoremap <C-l> <C-x><C-l>
+inoremap <C-l> <C-x><C-o>
 " JJ
 imap jj <Esc>
 cmap jj <Esc>
@@ -224,9 +218,8 @@ Plug  'neoclide/coc.nvim', {'branch': 'release' }
 " :CocInstall coc-lists
 " :CocInstall coc-json
 " :CocInstall coc-tsserver
+" :CocInstall coc-go
 Plug  'SirVer/ultisnips'
-" To get this working go the ~/.vim/plugged/vim-javacomplete2/libs/ and mvn compile
-Plug  'liuchengxu/vista.vim'
 
 " Search and Navigation
 Plug  'scrooloose/nerdtree'
@@ -234,7 +227,6 @@ Plug  'scrooloose/nerdtree'
 Plug  'mileszs/ack.vim'
 Plug  'https://github.com/alok/notational-fzf-vim' " Need ripgrep for this
 Plug  'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug  'junegunn/vim-peekaboo'
 Plug  'inkarkat/vim-ingo-library'
 Plug  'inkarkat/vim-EnhancedJumps'
 
@@ -380,21 +372,14 @@ let g:nv_search_paths = ['/home/mihira/Dropbox/notes', '/home/mihira/Dropbox/Kno
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! VIM GO
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:go_imports_autosave = 0
 let g:go_fmt_autosave = 0
-let g:go_code_completion_enabled = 0
+let g:go_mod_fmt_autosave = 0
+let g:go_code_completion_enabled = 1
 let g:go_def_mode='gopls'
 let g:go_info_mode='gopls'
 let g:go_doc_popup_window = 1
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" !! Vista
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:vista#renderer#enable_icon=0
-let g:vista_default_executive='coc'
-let g:vista_echo_cursor_strategy='floating_win'
-let g:vista_update_on_text_changed=1
-let g:vista_update_on_text_changed_delay=1500
-
+let g:go_def_mapping_enabled = 0
 " Go specific always define
 " au CursorHold *.go :GoInfo
 
@@ -402,17 +387,12 @@ let g:vista_update_on_text_changed_delay=1500
 " !! Enhanced Jumps
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:EnhancedJumps_CaptureJumpMessages = 0
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" !! Vim-Go
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:go_def_mapping_enabled = 0
+let g:EnhancedJumps_no_mappings = 1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! ULTI SNIPS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips']
-let g:EnhancedJumps_no_mappings = 1
 
 syntax enable
 

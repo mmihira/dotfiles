@@ -1,0 +1,10 @@
+snippet pl "Fmt PrintLn" b
+fmt.Printf("%+v\n", $1)
+endsnippet
+
+snippet rbp "Error block" b
+if err != nil {
+	fmt.Printf("%+v\n", err)
+	return
+}
+endsnippet
