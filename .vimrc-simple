@@ -1,0 +1,169 @@
+runtime! debian.vim
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" !! BASE VIM SETTINGS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+set hidden      " Allow navigating to buffers without saving
+set rnu         " Set relative numbering
+set nu          " Set numbering
+set ruler       " Show line numbering
+set number      " Ensure we see line numbers
+set tabstop=2
+set shiftwidth=2
+set showcmd		  " Show (partial) command in status line.
+set showmatch		" Show matching brackets.
+set ignorecase  " Do case insensitive matching
+set smartcase		" Do smart case matching
+set incsearch		" Incremental search
+set hlsearch    " Highlight after search finished
+"set smartindent " Auto detect indenting
+set expandtab   " Make tab spaces
+set cursorline  " Highligh the line the cursor is on
+set hidden		  " Hide buffers when they are abandoned
+set mouse=""		" Disable the mouse
+set mousetime=1 " double click problem
+set backupdir=~/.tmp " Save swp and tmp files to a different place
+set directory=~/.tmp " Save swp and tmp files to a different place
+set nofoldenable " Don't use folding
+set autowrite
+"set ttyfast
+filetype off
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" !! KEY REMAPPING
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Quick Buffer Access
+nnoremap <C-i> :b# <CR>
+" Stop mistakingly causing text to lowercase
+nnoremap q: <Nop>
+"nnoremap Vu <Nop>
+vnoremap u <Nop>
+
+nnoremap <silent> <F4> :let @+=expand("%")<CR>
+" Map line matching omnicomplete
+inoremap <C-l> <C-x><C-l>
+" JJ
+:imap jj <Esc>
+:cmap jj <Esc>
+
+" Jump to anywhere you want with minimal keystrokes, with just one key binding." `s{char}{label}`
+nmap s <Plug>(easymotion-bd-f)
+
+" !! LEADER REMAPS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let mapleader = "\<Space>"
+" NERDTree
+nnoremap <leader>nn :NERDTreeToggle<CR>
+nnoremap <leader>nf :NERDTreeFind<CR>
+" Reassign macro key
+noremap <Leader>! q<CR>
+nnoremap q <Nop>
+" Remap exit
+noremap <Leader>q :q<CR>
+" Switch splits
+noremap <Leader>m <C-w>w
+" Fugitive Vim
+noremap <Leader>gs :Gstatus <CR> <C-w>T
+noremap <Leader>gd :Gdiff <CR>
+" Remap cancel highlight
+nnoremap <Leader>8 :noh<CR>
+" Remap save
+nnoremap <Leader>f :w<CR>
+" Remap paste from + buffer
+nnoremap <Leader>= "+gP
+" Remap copy one line to system buffer
+nnoremap <Leader>cc V"+yyv <CR>
+vnoremap <Leader>cc "+yyv <CR>
+" Search for highlighted text in dir
+vnoremap <Leader>cs "0y :Ack! <C-r>0
+" Replace highlighted text buffer global
+vnoremap <Leader>r "0y :%s/<C-r>0
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" !! CUSTOM COMMANDS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+command! Sfd set guifont=Droid\ Sans\ Mono\ 10
+command! Sfl set guifont=Droid\ Sans\ Mono\ 13
+command! Spwd cd %:p:h
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" !! PluginSetup
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+call plug#begin('~/.vim/plugged')
+
+" Code Helpers
+Plug  'tpope/vim-surround'
+Plug  'tpope/vim-commentary'
+
+" Search and Navigation
+Plug  'scrooloose/nerdtree'
+Plug  'mileszs/ack.vim'
+
+" Movement/
+Plug  'easymotion/vim-easymotion'
+
+" Git
+Plug  'airblade/vim-gitgutter'
+Plug  'tpope/vim-fugitive'
+
+" Syntax Plugs
+Plug  'isRuslan/vim-es6'
+Plug  'pangloss/vim-javascript'
+Plug  'crusoexia/vim-javascript-lib'
+
+" Color Schemes
+Plug  'mhartington/oceanic-next'
+Plug  'w0ng/vim-hybrid'
+
+
+call plug#end()
+
+filetype plugin indent on
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" !! CUSTOM SCRIPTS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" save file on loss of focus
+:au FocusLost * :wa
+" remove trailing whitespace
+:au FocusLost,BufRead,BufWrite * if ! &bin | silent! %s/\s\+$//ge | endif
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" !! PLUGIN CONFIGURATION
+
+" Use ag for search
+if executable('ag')
+  let g:unite_source_grep_command = 'ag'
+  let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
+  let g:unite_source_grep_recursive_opt = ''
+    let g:unite_source_rec_async_command =
+        \ ['ag', '--follow', '--nocolor', '--nogroup',
+        \  '--hidden', '-g', '']
+endif
+
+" !! EASYMOTION SETUP
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+" Turn on case insensitive feature
+let g:EasyMotion_smartcase = 1
+
+
+" !! GIT GUTTER
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:gitgutter_realtime = 0
+let g:gitgutter_eager = 0
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" !! COLOURSCHEME
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" let g:java_highlight_functions = "true"
+
+syntax enable
+color ron
+
+" if has("syntax")
+"   syntax on
+" endif

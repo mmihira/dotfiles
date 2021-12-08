@@ -1,0 +1,85 @@
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" !! BASE VIM SETTINGS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+set hidden      " Allow navigating to buffers without saving
+set rnu         " Set relative numbering
+set nu          " Set numbering
+set ruler       " Show line numbering
+set number      " Ensure we see line numbers
+set tabstop=2
+set shiftwidth=2
+set showcmd		  " Show (partial) command in status line.
+set showmatch		" Show matching brackets.
+set ignorecase  " Do case insensitive matching
+set smartcase		" Do smart case matching
+set incsearch		" Incremental search
+set hlsearch    " Highlight after search finished
+"set smartindent " Auto detect indenting
+set expandtab   " Make tab spaces
+set cursorline  " Highligh the line the cursor is on
+set hidden		  " Hide buffers when they are abandoned
+set mouse=""		" Disable the mouse
+set mousetime=1 " double click problem
+set backupdir=~/.tmp " Save swp and tmp files to a different place
+set directory=~/.tmp " Save swp and tmp files to a different place
+set nofoldenable " Don't use folding
+set backupcopy=yes
+"set ttyfast
+set path=.,src,node_modules                                             " Add paths to gf command
+set suffixesadd=.js,.jsx                                                " Specify you can open using gf command
+set includeexpr=substitute(v:fname,'::\\(.*\\)','\\1\/index\.js','')    " Open javascript files when index is not specified (Fix, not working)
+set completeopt-=preview
+filetype off
+
+" Ideavimrc settings
+set commentary
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" !! KEY REMAPPING
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Unite
+" Stop mistakingly causing text to lowercase
+nnoremap q: <Nop>
+"nnoremap Vu <Nop>
+vnoremap u <Nop>
+nmap gt <Nop>
+nmap <C-o> :action NextTab<CR>
+nmap <C-i> :action PreviousTab<CR>
+nmap <C-e> :action RecentFiles<CR>
+
+" JJ
+:imap jj <Esc>
+:cmap jj <Esc>
+
+" !! LEADER REMAPS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let mapleader = " "
+" Reassign macro key
+nnoremap <Leader>z q<CR>
+nnoremap q <Nop>
+" Remap exit
+noremap <Leader>q :q<CR>
+tnoremap ;;q <C-\><C-n>:q<CR>
+" Switch splits
+noremap <Leader>m <C-w>w
+tnoremap ;;a <C-\><C-n><C-w>w
+" Remap cancel highlight
+nnoremap <Leader>8 :noh<CR>
+" Remap save
+nnoremap <Leader>f :w<CR>
+" Remap paste from + buffer
+nnoremap <Leader>= "+gP
+" Remap copy one line to system buffer
+nnoremap <Leader>cc V"+yyv <CR>
+vnoremap <Leader>cc "+yyv <CR>
+" Search for highlighted text in dir
+vnoremap <Leader>cs "0y :Ack! <C-r>0
+" Replace highlighted text buffer global
+vnoremap <Leader>r "0y :%s/<C-r>0
+
+nnoremap <Leader>k  :action FindInPath<CR>
+nnoremap <Leader>nf :action SelectInProjectView<CR>
+nnoremap <Leader>gr :action RenameElement<CR>
+nnoremap <Leader>gt :action GotoTest<CR>
+nnoremap <Leader>lf :action ReformatCode<CR>

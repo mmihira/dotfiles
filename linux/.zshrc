@@ -145,3 +145,6 @@ export GRAPHVIZ_DOT=/usr/bin/dot
 export SDKMAN_DIR="/home/mihira/.sdkman"
 [[ -s "/home/mihira/.sdkman/bin/sdkman-init.sh" ]] && source "/home/mihira/.sdkman/bin/sdkman-init.sh"
 [ -s "/home/mihira/.jabba/jabba.sh" ] && source "/home/mihira/.jabba/jabba.sh"
+
+alias kubectl="minikube kubectl --"
+

@@ -39,6 +39,7 @@ set path=.,src,node_modules                                             " Add pa
 set suffixesadd=.js,.jsx                                                " Specify you can open using gf command
 set includeexpr=substitute(v:fname,'::\\(.*\\)','\\1\/index\.js','')    " Open javascript files when index is not specified (Fix, not working)
 set completeopt-=preview
+set splitright        " Open vertical splits to the right
 filetype off
 
 " Settings for coc-vim
@@ -49,9 +50,8 @@ set shortmess+=c
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! KEY REMAPPING
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Coq
-nnoremap <C-k> :CocList --normal buffers <CR>
-nnoremap <C-l> :CocList -I --normal grep <CR>
+" Telescope
+nnoremap <C-k> <cmd>Telescope buffers<cr>
 
 " Jump list
 nmap <C-i> <Plug>EnhancedJumpsRemoteOlder
@@ -69,9 +69,6 @@ inoremap <C-l> <C-x><C-o>
 imap jj <Esc>
 cmap jj <Esc>
 
-" Jump to anywhere you want with minimal keystrokes, with just one key binding." `s{char}{label}`
-nmap <leader>s yssiw'<CR>
-
 " Hold down alt+shift+>/< to change width
 " nmap <Esc>> :vertical res +1<Enter>
 " nmap <Esc>< :vertical res -1<Enter>
@@ -88,8 +85,6 @@ nnoremap q <Nop>
 " Remap exit
 noremap <Leader>q :q<CR>
 tnoremap ;;q <C-\><C-n>:q<CR>
-" Switch splits
-noremap <Leader>m <C-w>w
 tnoremap ;;a <C-\><C-n>
 " Fugitive Vim
 noremap <Leader>gs :Gstatus <CR> <C-w>T
@@ -112,6 +107,9 @@ vnoremap <Leader>r "0y :%s/<C-r>0
 nnoremap <silent> <leader>cp :let @+ = expand('%:p')<CR>
 " Ale fix
 nnoremap <Leader>lf :ALEFix<CR>
+" Floaterm
+nnoremap <Leader>ft :FloatermNew<CR>
+"
 
 """"" NeoTerm Leader map """""
 " Run the run.sh script
@@ -206,6 +204,8 @@ Plug  'janko-m/vim-test'
 
 " Terminal
 Plug  'kassio/neoterm'
+Plug 'voldikss/vim-floaterm'
+
 
 " Code Helpers
 Plug  'rstacruz/vim-closer'
@@ -215,7 +215,6 @@ Plug  'tpope/vim-commentary'
 Plug  'simnalamburt/vim-mundo'
 Plug  'neoclide/coc.nvim', {'branch': 'release' }
 " :CocInstall coc-eslint
-" :CocInstall coc-lists
 " :CocInstall coc-json
 " :CocInstall coc-tsserver
 " :CocInstall coc-go
@@ -229,9 +228,10 @@ Plug  'https://github.com/alok/notational-fzf-vim' " Need ripgrep for this
 Plug  'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug  'inkarkat/vim-ingo-library'
 Plug  'inkarkat/vim-EnhancedJumps'
-
-" Movement/
-Plug  'easymotion/vim-easymotion'
+Plug  'nvim-lua/popup.nvim'
+Plug  'nvim-lua/plenary.nvim'
+Plug  'nvim-telescope/telescope.nvim'
+Plug  'nvim-telescope/telescope-fzy-native.nvim'
 
 " Git
 Plug  'airblade/vim-gitgutter'
@@ -303,12 +303,6 @@ let g:javascript_plugin_flow = 1
 " autocmd vimenter * NERDTree
 let g:NERDTreeWinSize = 50
 
-" !! EASYMOTION SETUP
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:EasyMotion_do_mapping = 0 " Disable default mappings
-" Turn on case insensitive feature
-let g:EasyMotion_smartcase = 1
-
 " !! ACK VIM
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Use ag for text search
@@ -338,6 +332,7 @@ let test#go#gotest#options = "-v"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " let g:neoterm_size = "15"
 let g:neoterm_autoscroll = 1
+let g:neoterm_default_mod = "vertical"
 
 " !! MUNDO
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -393,6 +388,11 @@ let g:EnhancedJumps_no_mappings = 1
 " !! ULTI SNIPS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips']
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" !! TELESCOPE
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 
 syntax enable
 
