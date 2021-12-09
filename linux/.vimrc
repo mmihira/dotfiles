@@ -54,8 +54,8 @@ set shortmess+=c
 nnoremap <C-k> <cmd>Telescope buffers<cr>
 
 " Jump list
-nmap <C-i> <Plug>EnhancedJumpsRemoteOlder
-nmap <C-o> <Plug>EnhancedJumpsRemoteNewer
+" nmap <C-i> <Plug>EnhancedJumpsRemoteOlder
+" nmap <C-o> <Plug>EnhancedJumpsRemoteNewer
 
 " Stop mistakingly causing text to lowercase
 nnoremap q: <Nop>
@@ -213,11 +213,6 @@ Plug  'tpope/vim-surround'
 Plug  'tpope/vim-repeat'
 Plug  'tpope/vim-commentary'
 Plug  'simnalamburt/vim-mundo'
-Plug  'neoclide/coc.nvim', {'branch': 'release' }
-" :CocInstall coc-eslint
-" :CocInstall coc-json
-" :CocInstall coc-tsserver
-" :CocInstall coc-go
 Plug  'SirVer/ultisnips'
 
 " Search and Navigation
@@ -232,6 +227,13 @@ Plug  'nvim-lua/popup.nvim'
 Plug  'nvim-lua/plenary.nvim'
 Plug  'nvim-telescope/telescope.nvim'
 Plug  'nvim-telescope/telescope-fzy-native.nvim'
+Plug  'neovim/nvim-lspconfig'
+Plug  'hrsh7th/cmp-nvim-lsp'
+Plug  'hrsh7th/cmp-buffer'
+Plug  'hrsh7th/cmp-path'
+Plug  'hrsh7th/cmp-cmdline'
+Plug  'hrsh7th/nvim-cmp'
+Plug  'folke/trouble.nvim'
 
 " Git
 Plug  'airblade/vim-gitgutter'
@@ -345,6 +347,7 @@ set undodir=~/.vim/undo
 let g:ale_fixers = { 'sql': ['sqlformat'], 'go': ['gofmt'], 'javascript': ['prettier', 'eslint'], 'scss': ['prettier', 'eslint'], 'rust': ['rustc'], 'json': ['prettier'], 'elixir': ['mix_format'], 'typescript': ['prettier', 'eslint'] }
 let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 0
+let g:ale_disable_lsp = 1
 
 " !! RACER RUST
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -392,7 +395,82 @@ let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips']
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! TELESCOPE
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set completeopt=menu,menuone,noselect
 
+lua <<EOF
+  -- Setup nvim-cmp.
+  local cmp = require'cmp'
+  cmp.setup({
+    snippet = {
+      -- REQUIRED - you must specify a snippet engine
+      expand = function(args)
+        vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+        -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+        -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+        -- require'snippy'.expand_snippet(args.body) -- For `snippy` users.
+      end,
+    },
+    mapping = {
+      ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+      ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+      ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+      ['<C-y>'] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
+      ['<C-e>'] = cmp.mapping({
+        i = cmp.mapping.abort(),
+        c = cmp.mapping.close(),
+      }),
+      -- Accept currently selected item. If none selected, `select` first item.
+      -- Set `select` to `false` to only confirm explicitly selected items.
+      ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    },
+    sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
+      { name = 'vsnip' }, -- For vsnip users.
+      -- { name = 'luasnip' }, -- For luasnip users.
+      -- { name = 'ultisnips' }, -- For ultisnips users.
+      -- { name = 'snippy' }, -- For snippy users.
+    }, {
+      { name = 'buffer', keyword_length = 3 },
+    }),
+    experimental = {
+      native_menu = false,
+      ghost_text = true,
+    },
+  })
+
+  -- Setup lspconfig.
+  local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  require'lspconfig'.gopls.setup{}
+
+  -- Popup for dianostic
+  vim.o.updatetime = 250
+  vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
+  -- Hide the dianostic virtual text
+  vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+      vim.lsp.diagnostic.on_publish_diagnostics,
+      {
+        virtual_text = false,
+        signs = true,
+        update_in_insert = false,
+        underline = true,
+      }
+    )
+
+  -- Setup Trouble
+  require("trouble").setup {
+    icons = false,
+    fold_open = "v", -- icon used for open folds
+    fold_closed = ">", -- icon used for closed folds
+    indent_lines = false, -- add an indent guide below the fold icons
+    signs = {
+        -- icons / text used for a diagnostic
+        error = "error",
+        warning = "warn",
+        hint = "hint",
+        information = "info"
+    },
+  }
+EOF
 
 syntax enable
 
