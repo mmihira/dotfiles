@@ -38,7 +38,9 @@ set updatetime=1000   " Hold time before file written to disk in ms
 set path=.,src,node_modules                                             " Add paths to gf command
 set suffixesadd=.js,.jsx                                                " Specify you can open using gf command
 set includeexpr=substitute(v:fname,'::\\(.*\\)','\\1\/index\.js','')    " Open javascript files when index is not specified (Fix, not working)
-set completeopt-=preview
+set completeopt=menu,menuone,noselect
+
+set splitright        " Open vertical splits to the right
 filetype off
 
 " Settings for coc-vim
@@ -48,6 +50,14 @@ set shortmess+=c
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! KEY REMAPPING
+" Telescope
+nnoremap <C-k> <cmd>Telescope buffers<cr>
+nnoremap <C-l> <cmd>Telescope find_files<cr>
+
+" Jump list
+nmap <C-i> <Plug>EnhancedJumpsRemoteOlder
+nmap <C-o> <Plug>EnhancedJumpsRemoteNewer
+
 " Stop mistakingly causing text to lowercase
 nnoremap q: <Nop>
 nnoremap q: <Nop>
@@ -80,10 +90,9 @@ nnoremap q <Nop>
 noremap <Leader>q :q<CR>
 tnoremap ;;q <C-\><C-n>:q<CR>
 " Switch splits
-noremap <Leader>m <C-w>w
 tnoremap ;;a <C-\><C-n>
 " Fugitive Vim
-noremap <Leader>gs :Gstatus <CR> <C-w>T
+noremap <Leader>gs :Gstatus <CR> <C-w>
 " Remap cancel highlight
 nnoremap <Leader>8 :noh<CR>
 " Remap save
@@ -103,6 +112,8 @@ vnoremap <Leader>r "0y :%s/<C-r>0
 nnoremap <silent> <leader>cp :let @+ = expand('%:p')<CR>
 " Ale fix
 nnoremap <Leader>lf :ALEFix<CR>
+" Floaterm
+nnoremap <Leader>ft :FloatermNew<CR>
 
 """"" NeoTerm Leader map """""
 " Run the run.sh script
@@ -154,7 +165,7 @@ autocmd FileType kotlin,kt nmap <silent> <leader>gd <Plug>(coc-definition)
 autocmd FileType go setlocal tabstop=4
 autocmd FileType go setlocal shiftwidth=4
 au FileType go noremap <Leader>gd :GoDef <CR>
-au FileType go noremap <Leader>gi :GoInfo <CR>
+au FileType go noremap <Leader>gi :GoImports <CR>
 au FileType go noremap <Leader>gl :GoDecls <CR>
 au FileType go noremap <Leader>dd :GoDoc <CR>
 au FileType go noremap <Leader>gf :GoFillStruct <CR>
@@ -197,6 +208,7 @@ Plug  'janko-m/vim-test'
 
 " Terminal
 Plug  'kassio/neoterm'
+Plug  'voldikss/vim-floaterm'
 
 " Code Helpers
 Plug  'rstacruz/vim-closer'
@@ -204,16 +216,24 @@ Plug  'tpope/vim-surround'
 Plug  'tpope/vim-repeat'
 Plug  'tpope/vim-commentary'
 Plug  'simnalamburt/vim-mundo'
-Plug  'SirVer/ultisnips'
 
 " Search and Navigation
 Plug  'scrooloose/nerdtree'
 " Need to install ack-grep package
 Plug  'mileszs/ack.vim'
-Plug  'https://github.com/alok/notational-fzf-vim' " Need ripgrep for this
 Plug  'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug  'inkarkat/vim-ingo-library'
 Plug  'inkarkat/vim-EnhancedJumps'
+Plug  'nvim-lua/popup.nvim'
+Plug  'nvim-lua/plenary.nvim'
+Plug  'nvim-telescope/telescope.nvim'
+Plug  'nvim-telescope/telescope-fzy-native.nvim'
+Plug  'neovim/nvim-lspconfig'
+Plug  'hrsh7th/cmp-nvim-lsp'
+Plug  'hrsh7th/cmp-buffer'
+Plug  'hrsh7th/cmp-path'
+Plug  'hrsh7th/cmp-cmdline'
+Plug  'hrsh7th/nvim-cmp'
 
 " Movement/
 Plug  'easymotion/vim-easymotion'
@@ -323,6 +343,7 @@ let test#go#gotest#options = "-v"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " let g:neoterm_size = "15"
 let g:neoterm_autoscroll = 1
+let g:neoterm_default_mod = "vertical"
 
 " !! MUNDO
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -360,7 +381,7 @@ let g:nv_search_paths = ['/home/mihira/Dropbox/notes', '/home/mihira/Dropbox/Kno
 let g:go_imports_autosave = 0
 let g:go_fmt_autosave = 0
 let g:go_mod_fmt_autosave = 0
-let g:go_code_completion_enabled = 1
+let g:go_code_completion_enabled = 0
 let g:go_def_mode='gopls'
 let g:go_info_mode='gopls'
 let g:go_doc_popup_window = 1
@@ -380,6 +401,53 @@ let g:EnhancedJumps_no_mappings = 1
 let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips']
 
 syntax enable
+
+lua <<EOF
+  -- Setup nvim-cmp.
+  local cmp = require'cmp'
+
+  cmp.setup({
+    snippet = {
+      expand = function(args)
+        vim.fn["UltiSnips#Anon"](args.body)
+      end,
+    },
+    mapping = {
+      ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+      ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+      ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+      ['<C-y>'] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
+      ['<C-e>'] = cmp.mapping({
+        i = cmp.mapping.abort(),
+        c = cmp.mapping.close(),
+      }),
+      ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    },
+    sources = cmp.config.sources({
+      { name = 'ultisnips' },
+    }, {
+      { name = 'buffer' },
+    })
+  })
+
+  cmp.setup.cmdline('/', {
+    sources = {
+      { name = 'buffer' }
+    }
+  })
+
+  cmp.setup.cmdline(':', {
+    sources = cmp.config.sources({
+      { name = 'path' }
+    }, {
+      { name = 'cmdline' }
+    })
+  })
+
+  local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  require'lspconfig'.gopls.setup{}
+EOF
+
 
 if has("gui_running")
   set guioptions-=m  "remove menu bar
