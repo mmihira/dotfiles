@@ -126,6 +126,7 @@ export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
 alias mux="tmuxinator"
 alias vi="vim"
+alias kc="kubectl"
 
 # Syntax highlighting
 # To installhttps://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md#
@@ -146,5 +147,4 @@ export SDKMAN_DIR="/home/mihira/.sdkman"
 [[ -s "/home/mihira/.sdkman/bin/sdkman-init.sh" ]] && source "/home/mihira/.sdkman/bin/sdkman-init.sh"
 [ -s "/home/mihira/.jabba/jabba.sh" ] && source "/home/mihira/.jabba/jabba.sh"
 
-alias kubectl="minikube kubectl --"
-
+export PATH="/home/mihira/.local/share/solana/install/active_release/bin:$PATH"

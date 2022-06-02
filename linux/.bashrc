@@ -63,3 +63,4 @@ source $BASH_IT/bash_it.sh
 export PATH="/home/mihira/anaconda3/bin:$PATH"
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+. "$HOME/.cargo/env"

@@ -213,6 +213,11 @@ fi
 ########################################################################
 # Golang
 ########################################################################
+function gotmpcleanup {
+  rm -r "$GO_TMP_DIR";
+  echo "Deleted temp working directory $GO_TMP_DIR"
+}
+
 if [ "$type" == '.go' ]; then
   # Check if a src directory exists
   # up until $GOPATH
@@ -227,13 +232,15 @@ if [ "$type" == '.go' ]; then
     ( cd $path;
       echo $path;
       bin_name=$(go list);
-      go build
       if [ $? -eq 0 ]; then
         has_header_fs "$filepath"
         if [ $has_header_fs_res -eq 1 ]; then
           eval_header_fs "$filepath"
         else
-          "$path/$bin_name";
+          GO_TMP_DIR=$(mktemp -d -p /tmp)
+          trap gotmpcleanup EXIT
+          go build -o "$GO_TMP_DIR/$bin_name"
+          "$GO_TMP_DIR/$bin_name"
         fi
       else
         echo "Build failure";

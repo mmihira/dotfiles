@@ -77,8 +77,7 @@ cmap jj <Esc>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let mapleader = "\<Space>"
 " NERDTree
-nnoremap <leader>nn :NERDTreeToggle<CR>
-nnoremap <leader>nf :NERDTreeFind<CR>
+nnoremap <leader>nn :Neotree position=float toggle=true reveal_force_cwd=true<CR>
 " Reassign macro key
 nnoremap Q q
 nnoremap q <Nop>
@@ -108,12 +107,12 @@ nnoremap <silent> <leader>cp :let @+ = expand('%:p')<CR>
 " Ale fix
 nnoremap <Leader>lf :ALEFix<CR>
 " Floaterm
-nnoremap <Leader>ft :FloatermNew<CR>
-"
+nnoremap <Leader>mm :StartMainFloat<CR>
+tnoremap <Leader>mm <C-\><C-n>:FloatermToggle<CR>
+tnoremap <silent> <F9> <C-\><C-n>:FloaTermToggleLayout<CR>
+tnoremap <leader>qq <C-\><C-n><CR>
 
-""""" NeoTerm Leader map """""
-" Run the run.sh script
-nnoremap <Leader>r :Run <CR>
+
 " Vim-Test
 nnoremap <silent> <Leader>t :TestNearest<CR>
 nnoremap <silent> <Leader>T :TestFile<CR>
@@ -144,24 +143,12 @@ autocmd FileType javascript,jsx,scss,css,json nmap <leader>gr :NERDTreeFind src/
 autocmd FileType javascript,jsx,scss,css,json nmap <leader>gf :NERDTreeFind src/features<CR>
 " Go to sagas in NERDTree
 autocmd FileType javascript,jsx,scss,css,json nmap <leader>gs :NERDTreeFind src/sagas<CR>
-" Go to Implementation
-autocmd FileType javascript,js,jsx,tss nmap <silent> <leader>gi <Plug>(coc-implementation)
-autocmd FileType javascript,js,jsx,tss nmap <silent> <leader>gd <Plug>(coc-definition)
-
-""""" Kotlin specific maps """""
-" Go to Implementation
-autocmd FileType kotlin,kt nmap <silent> <leader>gi <Plug>(coc-implementation)
-autocmd FileType kotlin,kt nmap <silent> <leader>gd <Plug>(coc-definition)
-
-""""" Java specific maps """""
-autocmd FileType kotlin,kt nmap <silent> <leader>gi <Plug>(coc-implementation)
-autocmd FileType kotlin,kt nmap <silent> <leader>gd <Plug>(coc-definition)
 
 """"" GoLang specific maps """""
 autocmd FileType go setlocal tabstop=4
 autocmd FileType go setlocal shiftwidth=4
 au FileType go noremap <Leader>gd :GoDef <CR>
-au FileType go noremap <Leader>gi :GoInfo <CR>
+au FileType go noremap <Leader>gi :GoImports <CR>
 au FileType go noremap <Leader>gl :GoDecls <CR>
 au FileType go noremap <Leader>dd :GoDoc <CR>
 au FileType go noremap <Leader>gf :GoFillStruct <CR>
@@ -178,20 +165,53 @@ command! Spwd cd %:p:h
 
 function! Run()
   :w
-  if g:neoterm.has_any()
-    let combined = join(['T', '~/bin/nvim_run.sh ', expand('%:p')])
-    :exe combined
+  let combined = [join(['~/bin/nvim_run.sh ', expand('%:p')])]
+  if floaterm#terminal#get_bufnr("main_term")
+    :FloatermToggle main_term
   else
-    :vert Topen
-    :exe "normal \<C-w>\h"
-    :exe "normal \<C-w>\L"
-    let combined = join(['T', '~/bin/nvim_run.sh ', expand('%:p')])
-    :exe combined
+    :FloatermNew! --wintype=float --name=main_term
   end
+
+  let bufnr = floaterm#terminal#get_bufnr("main_term")
+  call floaterm#terminal#send(bufnr, combined)
 endfunction
 command! Run :call Run()
 
-command! Tmin :res -20
+" For staring a floaterm
+function! StartMainFloat()
+if floaterm#terminal#get_bufnr("main_term")
+  :FloatermToggle main_term
+else
+  :FloatermNew! --wintype=float --name=main_term
+end
+endfunction
+command! StartMainFloat :call StartMainFloat()
+
+" Toggle floaterm layout between float and vsplit right
+function! FloaTermToggleLayout()
+  let bufnr = floaterm#terminal#get_bufnr("main_term")
+  let wintype = floaterm#config#get(bufnr, 'wintype')
+  if wintype == 'float'
+    :FloatermUpdate --wintype=vsplit --position=botright --width=0.4 <CR>
+  else
+    :FloatermUpdate --wintype=float --position=center --width=0.8 <CR>
+  end
+  :stopinsert
+endfunction
+command! FloaTermToggleLayout :call FloaTermToggleLayout()
+
+" Command to do test in floaterm
+function! CustomFloatermTest(cmd)
+  if floaterm#terminal#get_bufnr("main_term")
+    :FloatermToggle main_term
+  else
+    :FloatermNew! --wintype=float --name=main_term
+  end
+  let bufnr = floaterm#terminal#get_bufnr("main_term")
+  call floaterm#terminal#send(bufnr, [a:cmd])
+  :stopinsert
+endfunction
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! PluginSetup
@@ -203,9 +223,7 @@ call plug#begin('~/.vim/plugged')
 Plug  'janko-m/vim-test'
 
 " Terminal
-Plug  'kassio/neoterm'
 Plug 'voldikss/vim-floaterm'
-
 
 " Code Helpers
 Plug  'rstacruz/vim-closer'
@@ -217,7 +235,9 @@ Plug  'SirVer/ultisnips'
 
 " Search and Navigation
 Plug  'scrooloose/nerdtree'
-" Need to install ack-grep package
+Plug  'nvim-neo-tree/neo-tree.nvim'
+Plug  'kyazdani42/nvim-web-devicons' "Required: install a nerd-font
+Plug  'MunifTanjim/nui.nvim'
 Plug  'mileszs/ack.vim'
 Plug  'https://github.com/alok/notational-fzf-vim' " Need ripgrep for this
 Plug  'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -326,9 +346,14 @@ let g:gitgutter_eager = 0
 
 " !! VIM TEST
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let test#strategy = "neoterm"
+let g:test#custom_strategies = {'custom_floaterm': function('CustomFloatermTest')}
+let g:test#strategy = 'custom_floaterm'
 let test#go#go#options = "-v"
 let test#go#gotest#options = "-v"
+
+" !! FLOATERM
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:floaterm_autoclose = 0
 
 " !! NEOTERM
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -441,6 +466,7 @@ lua <<EOF
   -- Setup lspconfig.
   local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
   require'lspconfig'.gopls.setup{}
+  require'lspconfig'.tsserver.setup{}
 
   -- Popup for dianostic
   vim.o.updatetime = 250
@@ -470,6 +496,28 @@ lua <<EOF
         information = "info"
     },
   }
+
+  require'nvim-web-devicons'.setup {
+   override = {
+    zsh = {
+      icon = "",
+      color = "#428850",
+      cterm_color = "65",
+      name = "Zsh"
+    }
+   };
+   default = true;
+  }
+
+  require("neo-tree").setup({
+    window = {
+      mappings = {
+        ["v"] = "open_vsplit",
+        ["o"] = "open"
+      }
+    },
+  })
+
 EOF
 
 syntax enable
@@ -483,7 +531,7 @@ if has("gui_running")
 elseif has('nvim')
   set termguicolors
   set guicursor=
-  set background=dark
+  let g:gruvbox_contrast_dark='medium'
   colorscheme gruvbox
   " colorscheme OceanicNext
   " set background=light
