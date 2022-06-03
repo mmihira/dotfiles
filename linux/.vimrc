@@ -54,10 +54,6 @@ nnoremap <C-k> <cmd>Telescope buffers<cr>
 :command Sym Telescope lsp_document_symbols symbols=function,method
 :command Ghist 0Gclog
 
-" Jump list
-nmap <C-i> <Plug>EnhancedJumpsRemoteOlder
-nmap <C-o> <Plug>EnhancedJumpsRemoteNewer
-
 " Stop mistakingly causing text to lowercase
 nnoremap q: <Nop>
 nnoremap q: <Nop>
@@ -175,12 +171,13 @@ function! Run()
 endfunction
 command! Run :call Run()
 
+let FLOAT_TERM_HEIGHT = 0.8
 " For staring a floaterm
 function! StartMainFloat()
 if floaterm#terminal#get_bufnr("main_term")
   :FloatermToggle main_term
 else
-  :FloatermNew! --wintype=float --name=main_term
+  :FloatermNew! --wintype=float --name=main_term --width=0.8 --height=0.8
 end
 endfunction
 command! StartMainFloat :call StartMainFloat()
@@ -203,7 +200,7 @@ function! CustomFloatermTest(cmd)
   if floaterm#terminal#get_bufnr("main_term")
     :FloatermToggle main_term
   else
-    :FloatermNew! --wintype=float --name=main_term
+    :FloatermNew! --wintype=float --name=main_term --width=0.8 --height=FLOAT_TERM_HEIGHT
   end
   let bufnr = floaterm#terminal#get_bufnr("main_term")
   call floaterm#terminal#send(bufnr, [a:cmd])
@@ -232,15 +229,13 @@ Plug  'simnalamburt/vim-mundo'
 Plug  'SirVer/ultisnips'
 
 " Search and Navigation
-Plug  'scrooloose/nerdtree'
 Plug  'nvim-neo-tree/neo-tree.nvim'
 Plug  'kyazdani42/nvim-web-devicons' "Required: install a nerd-font
 Plug  'MunifTanjim/nui.nvim'
 Plug  'mileszs/ack.vim'
 Plug  'https://github.com/alok/notational-fzf-vim' " Need ripgrep for this
 Plug  'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug  'inkarkat/vim-ingo-library'
-Plug  'inkarkat/vim-EnhancedJumps'
+Plug  'kwkarlwang/bufjump.nvim'
 Plug  'nvim-lua/popup.nvim'
 Plug  'nvim-lua/plenary.nvim'
 Plug  'nvim-telescope/telescope.nvim'
@@ -318,11 +313,6 @@ au BufRead,BufNewFile *.ejs setf javascript.jsx
 let g:jsx_ext_required = 0
 let g:javascript_plugin_flow = 1
 
-" !! NERD TREE MAPPINGS
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Load NERDTree on startup
-" autocmd vimenter * NERDTree
-let g:NERDTreeWinSize = 50
 
 " !! ACK VIM
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -354,12 +344,6 @@ let test#go#gotest#options = "-v"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:floaterm_autoclose = 0
 
-" !! NEOTERM
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" let g:neoterm_size = "15"
-let g:neoterm_autoscroll = 1
-let g:neoterm_default_mod = "vertical"
-
 " !! MUNDO
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Enable persistent undo so that undo history persists across vim sessions
@@ -382,9 +366,6 @@ let g:racer_experimental_completer = 1
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! COLOURSCHEME
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:gruvbox_contrast_dark = "hard"
-let g:gruvbox_invert_selection = 0
-let g:gruvbox_invert_selection = 0
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! NOTATIONAL
@@ -444,6 +425,8 @@ lua <<EOF
         i = cmp.mapping.abort(),
         c = cmp.mapping.close(),
       }),
+      ['<C-p>'] = cmp.mapping.select_prev_item(),
+      ['<C-n>'] = cmp.mapping.select_next_item(),
       ['<CR>'] = cmp.mapping.confirm({ select = true }),
     },
     sources = cmp.config.sources({
@@ -501,7 +484,7 @@ lua <<EOF
     -- buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
     -- Use :Ref for below
     -- buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-    -- buf_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+    buf_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
     -- buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
     -- buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
     -- buf_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
@@ -576,6 +559,12 @@ lua <<EOF
     }
   })
 
+  require("bufjump").setup({
+      forward = "<C-p>",
+      backward = "<C-n>",
+      on_success = nil,
+  })
+
 EOF
 
 if has("gui_running")
@@ -587,6 +576,7 @@ if has("gui_running")
 elseif has('nvim')
   set termguicolors
   set guicursor=
+  let g:gruvbox_invert_selection = 0
   let g:gruvbox_contrast_dark='medium'
   colorscheme gruvbox
   " colorscheme OceanicNext
