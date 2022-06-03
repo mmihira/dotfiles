@@ -40,22 +40,23 @@ set suffixesadd=.js,.jsx                                                " Specif
 set includeexpr=substitute(v:fname,'::\\(.*\\)','\\1\/index\.js','')    " Open javascript files when index is not specified (Fix, not working)
 set completeopt-=preview
 set splitright        " Open vertical splits to the right
-filetype off
+set updatetime=800
 
-" Settings for coc-vim
-set cmdheight=2
-set updatetime=300
-set shortmess+=c
+filetype off
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! KEY REMAPPING
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Telescope
 nnoremap <C-k> <cmd>Telescope buffers<cr>
+:command Lg Telescope live_grep
+:command Ref Telescope lsp_references
+:command Sym Telescope lsp_document_symbols symbols=function,method
+:command Ghist 0Gclog
 
 " Jump list
-" nmap <C-i> <Plug>EnhancedJumpsRemoteOlder
-" nmap <C-o> <Plug>EnhancedJumpsRemoteNewer
+nmap <C-i> <Plug>EnhancedJumpsRemoteOlder
+nmap <C-o> <Plug>EnhancedJumpsRemoteNewer
 
 " Stop mistakingly causing text to lowercase
 nnoremap q: <Nop>
@@ -147,12 +148,8 @@ autocmd FileType javascript,jsx,scss,css,json nmap <leader>gs :NERDTreeFind src/
 """"" GoLang specific maps """""
 autocmd FileType go setlocal tabstop=4
 autocmd FileType go setlocal shiftwidth=4
-au FileType go noremap <Leader>gd :GoDef <CR>
 au FileType go noremap <Leader>gi :GoImports <CR>
-au FileType go noremap <Leader>gl :GoDecls <CR>
-au FileType go noremap <Leader>dd :GoDoc <CR>
 au FileType go noremap <Leader>gf :GoFillStruct <CR>
-au FileType go noremap <Leader>ge :GoIfErr <CR>
 
 """"" Coc Autocommands """""
 autocmd ColorScheme highlight CocErrorHighlight ctermfg=DarkGrey guifg=#FAE2E2
@@ -162,6 +159,7 @@ autocmd ColorScheme highlight CocWarningHighlight ctermfg=Red  guifg=#FBE6A2
 " !! CUSTOM COMMANDS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 command! Spwd cd %:p:h
+command! Vimfile :e ~/.config/nvim/init.vim
 
 function! Run()
   :w
@@ -253,6 +251,7 @@ Plug  'hrsh7th/cmp-buffer'
 Plug  'hrsh7th/cmp-path'
 Plug  'hrsh7th/cmp-cmdline'
 Plug  'hrsh7th/nvim-cmp'
+Plug  'hrsh7th/cmp-nvim-lsp-signature-help'
 Plug  'folke/trouble.nvim'
 
 " Git
@@ -369,7 +368,7 @@ set undodir=~/.vim/undo
 
 " !! ALE
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:ale_fixers = { 'sql': ['sqlformat'], 'go': ['gofmt'], 'javascript': ['prettier', 'eslint'], 'scss': ['prettier', 'eslint'], 'rust': ['rustc'], 'json': ['prettier'], 'elixir': ['mix_format'], 'typescript': ['prettier', 'eslint'] }
+let g:ale_fixers = { 'sql': ['sqlformat'], 'go': ['gofmt'], 'javascript': ['prettier', 'eslint'], 'scss': ['prettier', 'eslint'], 'rust': ['rustc'], 'json': ['prettier'], 'elixir': ['mix_format'], 'typescript': ['prettier', 'eslint'], 'xml':['xmllint'] }
 let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 0
 let g:ale_disable_lsp = 1
@@ -390,7 +389,7 @@ let g:gruvbox_invert_selection = 0
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! NOTATIONAL
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:nv_search_paths = ['/home/mihira/Dropbox/notes', '/home/mihira/Dropbox/Knowledge']
+let g:nv_search_paths = [ '/home/mihira/Dropbox/notes', '/home/mihira/Dropbox/Knowledge', '~/notes', '~/c/dotfiles/vim_cheatsheet.md']
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! VIM GO
@@ -398,7 +397,7 @@ let g:nv_search_paths = ['/home/mihira/Dropbox/notes', '/home/mihira/Dropbox/Kno
 let g:go_imports_autosave = 0
 let g:go_fmt_autosave = 0
 let g:go_mod_fmt_autosave = 0
-let g:go_code_completion_enabled = 1
+let g:go_code_completion_enabled = 0
 let g:go_def_mode='gopls'
 let g:go_info_mode='gopls'
 let g:go_doc_popup_window = 1
@@ -423,16 +422,17 @@ let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips']
 set completeopt=menu,menuone,noselect
 
 lua <<EOF
-  -- Setup nvim-cmp.
+  require('telescope').setup{
+        defaults = {
+          initial_mode = 'normal',
+        },
+      }
+
   local cmp = require'cmp'
   cmp.setup({
     snippet = {
-      -- REQUIRED - you must specify a snippet engine
       expand = function(args)
-        vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-        -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-        -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
-        -- require'snippy'.expand_snippet(args.body) -- For `snippy` users.
+         vim.fn["UltiSnips#Anon"](args.body)
       end,
     },
     mapping = {
@@ -444,18 +444,15 @@ lua <<EOF
         i = cmp.mapping.abort(),
         c = cmp.mapping.close(),
       }),
-      -- Accept currently selected item. If none selected, `select` first item.
-      -- Set `select` to `false` to only confirm explicitly selected items.
       ['<CR>'] = cmp.mapping.confirm({ select = true }),
     },
     sources = cmp.config.sources({
       { name = 'nvim_lsp' },
-      { name = 'vsnip' }, -- For vsnip users.
-      -- { name = 'luasnip' }, -- For luasnip users.
-      -- { name = 'ultisnips' }, -- For ultisnips users.
-      -- { name = 'snippy' }, -- For snippy users.
+      { name = 'ultisnips' },
     }, {
       { name = 'buffer', keyword_length = 3 },
+    }, {
+      { name = 'nvim_lsp_signature_help' },
     }),
     experimental = {
       native_menu = false,
@@ -463,14 +460,69 @@ lua <<EOF
     },
   })
 
+  cmp.setup.cmdline('/', {
+    sources = {
+      { name = 'buffer' }
+    }
+  })
+
+  cmp.setup.cmdline(':', {
+    sources = cmp.config.sources({
+      { name = 'path' }
+    }, {
+      { name = 'cmdline' }
+    })
+  })
+
   -- Setup lspconfig.
   local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-  require'lspconfig'.gopls.setup{}
-  require'lspconfig'.tsserver.setup{}
+  local nvim_lsp = require('lspconfig')
+  nvim_lsp.gopls.setup{}
+  nvim_lsp.tsserver.setup{}
+  local on_attach = function(client, bufnr)
+    local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+    local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+
+    -- Mappings.
+    local opts = { noremap=true, silent=true }
+
+    -- See `:help vim.lsp.*` for documentation on any of the below functions
+    -- buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+    buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+    buf_set_keymap('n', 'ci', '<cmd>lua vim.lsp.buf.incoming_calls()<CR>', opts)
+    buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+    -- buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+    buf_set_keymap('n', '<C-h>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+    -- buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+    -- buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+    -- buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+    -- buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+    buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+    -- buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+    -- Use :Ref for below
+    -- buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+    -- buf_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+    -- buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+    -- buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+    -- buf_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
+    -- buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+  end
+
+  -- Use a loop to conveniently call 'setup' on multiple servers and
+  -- map buffer local keybindings when the language server attaches
+  local servers = { 'gopls' }
+  for _, lsp in ipairs(servers) do
+    nvim_lsp[lsp].setup {
+      on_attach = on_attach,
+      flags = {
+        debounce_text_changes = 150,
+      }
+    }
+  end
 
   -- Popup for dianostic
-  vim.o.updatetime = 250
-  vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
+  -- vim.o.updatetime = 250
+  -- vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
   -- Hide the dianostic virtual text
   vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
       vim.lsp.diagnostic.on_publish_diagnostics,
@@ -516,11 +568,15 @@ lua <<EOF
         ["o"] = "open"
       }
     },
+    filesystem = {
+      filterd_items = {
+        hide_dotfiles = false,
+        hide_gitignored = false,
+      }
+    }
   })
 
 EOF
-
-syntax enable
 
 if has("gui_running")
   set guioptions-=m  "remove menu bar
@@ -539,11 +595,3 @@ elseif has('nvim')
 else
   color jellybeans
 endif
-
-highlight CocErrorHighlight ctermfg=DarkGrey guifg=#735DD0
-highlight CocErrorSign ctermfg=DarkGrey guifg=#EC4C47
-highlight CocWarningHighlight ctermfg=Red  guifg=#FBE6A2
-
-" if has("syntax")
-"   syntax on
-" endif

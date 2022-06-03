@@ -87,8 +87,8 @@ nmap <leader>s yssiw'<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let mapleader = "\<Space>"
 " NERDTree
-nnoremap <leader>nn :NERDTreeToggle<CR>
-nnoremap <leader>nf :NERDTreeFind<CR>
+nnoremap <leader>nn :Neotree position=float toggle=true reveal_force_cwd=true<CR>
+
 " Reassign macro key
 nnoremap Q q
 nnoremap q <Nop>
@@ -209,7 +209,6 @@ Plug  'tpope/vim-commentary'
 Plug  'simnalamburt/vim-mundo'
 
 " Search and Navigation
-Plug  'scrooloose/nerdtree'
 " Need to install ack-grep package
 Plug  'mileszs/ack.vim'
 Plug  'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
