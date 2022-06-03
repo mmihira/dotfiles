@@ -53,6 +53,12 @@ set shortmess+=c
 " Telescope
 nnoremap <C-k> <cmd>Telescope buffers<cr>
 nnoremap <C-l> <cmd>Telescope find_files<cr>
+nnoremap <C-l> <cmd>Telescope find_files<cr>
+:command Lg Telescope live_grep
+:command Ref Telescope lsp_references
+:command Sym Telescope lsp_document_symbols symbols=function,method
+:command Trouble Telescope lsp_workspace_diagnostics
+:command Ghist 0Gclog
 
 " Jump list
 nmap <C-i> <Plug>EnhancedJumpsRemoteOlder
@@ -148,28 +154,13 @@ autocmd FileType javascript,jsx,scss,css,json nmap <leader>gr :NERDTreeFind src/
 autocmd FileType javascript,jsx,scss,css,json nmap <leader>gf :NERDTreeFind src/features<CR>
 " Go to sagas in NERDTree
 autocmd FileType javascript,jsx,scss,css,json nmap <leader>gs :NERDTreeFind src/sagas<CR>
-" Go to Implementation
-autocmd FileType javascript,js,jsx,tss nmap <silent> <leader>gi <Plug>(coc-implementation)
-autocmd FileType javascript,js,jsx,tss nmap <silent> <leader>gd <Plug>(coc-definition)
 
-""""" Kotlin specific maps """""
-" Go to Implementation
-autocmd FileType kotlin,kt nmap <silent> <leader>gi <Plug>(coc-implementation)
-autocmd FileType kotlin,kt nmap <silent> <leader>gd <Plug>(coc-definition)
-
-""""" Java specific maps """""
-autocmd FileType kotlin,kt nmap <silent> <leader>gi <Plug>(coc-implementation)
-autocmd FileType kotlin,kt nmap <silent> <leader>gd <Plug>(coc-definition)
 
 """"" GoLang specific maps """""
 autocmd FileType go setlocal tabstop=4
 autocmd FileType go setlocal shiftwidth=4
-au FileType go noremap <Leader>gd :GoDef <CR>
 au FileType go noremap <Leader>gi :GoImports <CR>
-au FileType go noremap <Leader>gl :GoDecls <CR>
-au FileType go noremap <Leader>dd :GoDoc <CR>
 au FileType go noremap <Leader>gf :GoFillStruct <CR>
-au FileType go noremap <Leader>ge :GoIfErr <CR>
 
 """"" Coc Autocommands """""
 autocmd ColorScheme highlight CocErrorHighlight ctermfg=DarkGrey guifg=#FAE2E2
@@ -194,8 +185,8 @@ function! Run()
   end
 endfunction
 command! Run :call Run()
-
 command! Tmin :res -20
+command! Vimfile :e ~/.config/nvim/init.vim
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! PluginSetup
@@ -211,7 +202,7 @@ Plug  'kassio/neoterm'
 Plug  'voldikss/vim-floaterm'
 
 " Code Helpers
-Plug  'rstacruz/vim-closer'
+Plug  'jiangmiao/auto-pairs'
 Plug  'tpope/vim-surround'
 Plug  'tpope/vim-repeat'
 Plug  'tpope/vim-commentary'
@@ -261,7 +252,7 @@ Plug  'udalov/kotlin-vim'
 
 " Display
 Plug  'szw/vim-maximizer'
-Plug   'itchyny/lightline.vim'
+Plug  'itchyny/lightline.vim'
 
 " Color Schemes
 Plug  'mhartington/oceanic-next'
@@ -353,9 +344,10 @@ set undodir=~/.vim/undo
 
 " !! ALE
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:ale_fixers = { 'sql': ['sqlformat'], 'go': ['gofmt'], 'javascript': ['prettier', 'eslint'], 'scss': ['prettier', 'eslint'], 'rust': ['rustc'], 'json': ['prettier'], 'elixir': ['mix_format'], 'typescript': ['prettier', 'eslint'] }
+let g:ale_fixers = { 'sql': ['sqlformat'], 'go': ['gofmt'], 'javascript': ['prettier', 'eslint'], 'scss': ['prettier', 'eslint'], 'rust': ['rustc'], 'json': ['prettier'], 'elixir': ['mix_format'], 'typescript': ['prettier', 'eslint'], 'xml':['xmllint'] }
 let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 0
+let g:ale_disable_lsp = 1
 
 " !! RACER RUST
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -396,6 +388,11 @@ let g:EnhancedJumps_CaptureJumpMessages = 0
 let g:EnhancedJumps_no_mappings = 1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" !! AUTOPAIRS
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" let g:AutoPairsShortcutFastWrap = '<C-m>'
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! ULTI SNIPS
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips']
@@ -403,9 +400,13 @@ let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips']
 syntax enable
 
 lua <<EOF
-  -- Setup nvim-cmp.
-  local cmp = require'cmp'
+  require('telescope').setup{
+        defaults = {
+          initial_mode = 'normal',
+        },
+      }
 
+  local cmp = require'cmp'
   cmp.setup({
     snippet = {
       expand = function(args)
@@ -424,10 +425,15 @@ lua <<EOF
       ['<CR>'] = cmp.mapping.confirm({ select = true }),
     },
     sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
       { name = 'ultisnips' },
     }, {
-      { name = 'buffer' },
-    })
+      { name = 'buffer', keyword_length = 3 },
+    }),
+    experimental = {
+      native_menu = false,
+      ghost_text = true,
+    },
   })
 
   cmp.setup.cmdline('/', {
@@ -444,8 +450,68 @@ lua <<EOF
     })
   })
 
+  -- Setup lspconfig.
   local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-  require'lspconfig'.gopls.setup{}
+
+  local nvim_lsp = require('lspconfig')
+  nvim_lsp.gopls.setup{}
+  local on_attach = function(client, bufnr)
+    local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+    local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+
+    -- Enable completion triggered by <c-x><c-o>
+    buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+    -- Mappings.
+    local opts = { noremap=true, silent=true }
+
+    -- See `:help vim.lsp.*` for documentation on any of the below functions
+    -- buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+    buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+    buf_set_keymap('n', 'ci', '<cmd>lua vim.lsp.buf.incoming_calls()<CR>', opts)
+    buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+    -- buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+    buf_set_keymap('n', '<C-h>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+    -- buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+    -- buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+    -- buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+    -- buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+    buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+    -- buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+    buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+    -- buf_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+    -- buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+    -- buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+    -- buf_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
+    -- buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+
+  end
+
+  -- Use a loop to conveniently call 'setup' on multiple servers and
+  -- map buffer local keybindings when the language server attaches
+  local servers = { 'gopls' }
+  for _, lsp in ipairs(servers) do
+    nvim_lsp[lsp].setup {
+      on_attach = on_attach,
+      flags = {
+        debounce_text_changes = 150,
+      }
+    }
+  end
+
+  -- Popup for dianosticG(not working for macs)
+  -- vim.o.updatetime = 250
+  -- vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
+  -- Hide the dianostic virtual text
+  vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+      vim.lsp.diagnostic.on_publish_diagnostics,
+      {
+        virtual_text = false,
+        signs = true,
+        update_in_insert = false,
+        underline = true,
+      }
+    )
 EOF
 
 
