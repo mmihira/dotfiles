@@ -1,6 +1,12 @@
 My Vim Cheat Sheet
 --------------------------------------------------------------------------------------
 
+
+Movement
+--------------------------------------------------------------------------------------
+<C-X><C-L>          Complete by line match
+zz                  Center current line
+
 Notes
 --------------------------------------------------------------------------------------
 :NV                 Open up a rigpgrep for searching your notes
@@ -33,5 +39,4 @@ backspace           Reveal more of dir
 o                   Open up file or dir
 v                   Vertical split file
 .                   Make directory root
-
 

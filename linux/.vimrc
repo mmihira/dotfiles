@@ -99,6 +99,7 @@ vnoremap <Leader>cc "+yyv <CR>
 vnoremap <Leader>cs "0y :Ack! <C-r>0
 " Replace highlighted text buffer global
 vnoremap <Leader>r "0y :%s/<C-r>0
+nnoremap <Leader>r :Run <CR>
 " Copy file path to buffer
 nnoremap <silent> <leader>cp :let @+ = expand('%:p')<CR>
 " Ale fix

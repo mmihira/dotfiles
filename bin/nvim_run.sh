@@ -1,5 +1,7 @@
 #!/bin/bash
 
+CODING_DIR="${NVIM_RUN_CODING_DIR:-/home/mihira/c}"
+
 # This function evaulates header commands in the
 # file. Structure must be like :
 # # VIMTRUN#!
@@ -66,7 +68,7 @@ has_header_fs () {
 }
 
 
-if [ $(echo "$PWD" | grep '/home/mihira/c' -c) -eq '0' ]; then
+if [ $(echo "$PWD" | grep "$CODING_DIR" -c) -eq '0' ]; then
   echo 'This script only works in the coding directory'
   exit
 fi
@@ -145,7 +147,7 @@ if [ "$type" == '.rs' ]; then
   # First check if custom run script exists
   path=$(echo "$1" | sed 's/\/\w\+\.rs//g')
   run_script_found='0'
-  while [[ $path != /home/mihira/c ]];
+  while [[ $path != "$CODING_DIR" ]];
   do
     if [[ -n $(find "$path" -maxdepth 1 -mindepth 1 -name 'nvim_run_script.sh' | head -n 1) ]]; then
       run_script_found='1'
@@ -162,10 +164,10 @@ if [ "$type" == '.rs' ]; then
   fi
 
   # Check if cargo exist in any of the parent directories
-  # up until /home/mihira/c
+  # up until CODING DIR
   path=$(echo "$1" | sed 's/\/\w\+\.rs//g')
   cargoFound='0'
-  while [[ $path != /home/mihira/c ]];
+  while [[ $path != "$CODING_DIR" ]];
   do
     if [[ -n $(find "$path" -maxdepth 1 -mindepth 1 -name 'Cargo.toml' | head -n 1) ]]; then
       cargoFound='1'
@@ -179,9 +181,9 @@ if [ "$type" == '.rs' ]; then
   if [ "$cargoFound" -eq '1' ]; then
     (cd $path; RUST_BACKTRACE=1 cargo run)
   else
-    if [ $(echo "$1" | grep -c "/home/mihira/c/rust_ex") -eq '1' ]; then
+    if [ $(echo "$1" | grep -c "$CODING_DIR/c/rust_ex") -eq '1' ]; then
       # Special case of in ~/c/rust_ex we want all to compile to ~/c/rust_ex/target
-      base_path="/home/mihira/c/rust_ex/target/"
+      base_path="$CODING_DIR/c/rust_ex/target/"
       exe_name=$(echo "$1" | sed 's/\.rs//g' | sed 's/\/.*\///g')
       if [ -e "$base_path$exe_name" ]; then
         rm "$base_path$exe_name"
@@ -256,10 +258,10 @@ fi
 ########################################################################
 if [ "$type" == '.java' ]; then
   # Check if pom files exists
-  # up until /home/mihira/c
+  # up until CODING_DIR
   path=$(echo "$1" | sed 's/\/\w\+\.java//g')
   pomFile='0'
-  while [[ $path != /home/mihira/c ]];
+  while [[ $path != "$CODING_DIR" ]];
   do
     if [[ -n $(find "$path" -maxdepth 1 -mindepth 1 -name 'pom.xml' | head -n 1) ]]; then
       pomFile='1'
