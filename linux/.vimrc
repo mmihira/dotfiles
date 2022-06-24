@@ -158,6 +158,11 @@ autocmd ColorScheme highlight CocWarningHighlight ctermfg=Red  guifg=#FBE6A2
 command! Spwd cd %:p:h
 command! Vimfile :e ~/.config/nvim/init.vim
 
+function! GitStatus()
+    :Neotree position=float toggle=true source=git_status
+endfunction
+command! Gitstatus :call GitStatus()
+
 function! Run()
   :w
   let combined = [join(['~/bin/nvim_run.sh ', expand('%:p')])]
