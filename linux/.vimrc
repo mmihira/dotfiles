@@ -17,17 +17,17 @@ set ruler             " Show line numbering
 set number            " Ensure we see line numbers
 set tabstop=2
 set shiftwidth=2
-set showcmd		        " Show (partial) command in status line.
-set showmatch		      " Show matching brackets.
-" set ignorecase        " Do case insensitive matching
+set showcmd           " Show (partial) command in status line.
+set showmatch         " Show matching brackets.
+" set ignorecase      " Do case insensitive matching
 set smartcase		      " Do smart case matching
-set incsearch		      " Incremental search
+set incsearch         " Incremental search
 set hlsearch          " Highlight after search finished
 "set smartindent      " Auto detect indenting
 set expandtab         " Make tab spaces
 set cursorline        " Highligh the line the cursor is on
-set hidden		        " Hide buffers when they are abandoned
-set mouse=""		      " Disable the mouse
+set hidden            " Hide buffers when they are abandoned
+set mouse=""          " Disable the mouse
 set mousetime=1       " double click problem
 set backupdir=~/.tmp  " Save swp and tmp files to a different place
 set directory=~/.tmp  " Save swp and tmp files to a different place
