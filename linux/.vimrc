@@ -227,7 +227,7 @@ Plug  'janko-m/vim-test'
 Plug 'voldikss/vim-floaterm'
 
 " Code Helpers
-Plug  'rstacruz/vim-closer'
+" Plug  'rstacruz/vim-closer'
 Plug  'tpope/vim-surround'
 Plug  'tpope/vim-repeat'
 Plug  'tpope/vim-commentary'
@@ -275,6 +275,7 @@ Plug  'MaxMEllon/vim-jsx-pretty'
 Plug  'elixir-editors/vim-elixir'
 Plug  'leafgarland/typescript-vim'
 Plug  'udalov/kotlin-vim'
+Plug  'mechatroner/rainbow_csv'
 
 " Display
 Plug  'szw/vim-maximizer'
