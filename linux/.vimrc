@@ -20,7 +20,7 @@ set shiftwidth=2
 set showcmd           " Show (partial) command in status line.
 set showmatch         " Show matching brackets.
 " set ignorecase      " Do case insensitive matching
-set smartcase		      " Do smart case matching
+set smartcase         " Do smart case matching
 set incsearch         " Incremental search
 set hlsearch          " Highlight after search finished
 "set smartindent      " Auto detect indenting
