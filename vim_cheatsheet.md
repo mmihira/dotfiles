@@ -22,15 +22,16 @@ Lsp
 
 Git
 --------------------------------------------------------------------------------------
-Ghist               List history for this file
-
+:Diff               Open up a diff view of current changes
+-                   To stage the file
+q                   Quit the diff
+gf                  Open file
 
 Floaterm
 --------------------------------------------------------------------------------------
 <leader>mm          Open a new floating terminal, or open the existing one
 <leader>qq          Exit out of insert mode in terminal
 F9                  Toggle between float, and botright
-
 
 NeoTree
 --------------------------------------------------------------------------------------

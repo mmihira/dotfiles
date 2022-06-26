@@ -104,6 +104,8 @@ nnoremap <Leader>r :Run <CR>
 nnoremap <silent> <leader>cp :let @+ = expand('%:p')<CR>
 " Ale fix
 nnoremap <Leader>lf :ALEFix<CR>
+" Git view
+nnoremap <Leader>ss :Diff<CR>
 " Floaterm
 nnoremap <Leader>mm :StartMainFloat<CR>
 tnoremap <Leader>mm <C-\><C-n>:FloatermToggle<CR>
@@ -158,10 +160,18 @@ autocmd ColorScheme highlight CocWarningHighlight ctermfg=Red  guifg=#FBE6A2
 command! Spwd cd %:p:h
 command! Vimfile :e ~/.config/nvim/init.vim
 
-function! GitStatus()
-    :Neotree position=float toggle=true source=git_status
+function! Diff()
+    "" make this toggle to allready open if possible
+    :DiffviewOpen
 endfunction
-command! Gitstatus :call GitStatus()
+command! Diff :call Diff()
+
+if !exists('*Reload')
+  function! Reload()
+      :source $MYVIMRC
+  endfunction
+endif
+command!  Reload :call Reload()
 
 function! Run()
   :w
@@ -256,8 +266,9 @@ Plug  'hrsh7th/cmp-nvim-lsp-signature-help'
 Plug  'folke/trouble.nvim'
 
 " Git
-Plug  'airblade/vim-gitgutter'
-Plug  'tpope/vim-fugitive'
+Plug  'itchyny/vim-gitbranch'
+Plug  'lewis6991/gitsigns.nvim'
+Plug  'sindrets/diffview.nvim'
 
 " Framework Plugs
 Plug  'tpope/vim-rails'
@@ -340,6 +351,19 @@ let g:maximizer_set_default_mapping = 1
 let g:gitgutter_realtime = 0
 let g:gitgutter_eager = 0
 
+" !! LIGHTLINE
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'gitbranch#name'
+      \ },
+      \ }
+
 " !! VIM TEST
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let g:test#custom_strategies = {'custom_floaterm': function('CustomFloatermTest')}
@@ -410,9 +434,18 @@ let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/UltiSnips']
 set completeopt=menu,menuone,noselect
 
 lua <<EOF
+  local tele_actions = require "telescope.actions"
   require('telescope').setup{
         defaults = {
           initial_mode = 'normal',
+          layout_config = {
+            prompt_position = "top",
+          },
+          mappings = {
+            n = {
+              ["<leader>q"] = "close",
+            },
+          },
         },
       }
 
@@ -572,6 +605,20 @@ lua <<EOF
       on_success = nil,
   })
 
+  require('gitsigns').setup()
+  local df_actions = require("diffview.actions")
+  require("diffview").setup({
+    keymaps={
+      file_panel={
+        ["gf"] = df_actions.goto_file_edit,
+      },
+    },
+    key_bindings = {
+      file_history_panel = { q = '<Cmd>DiffviewClose<CR>' },
+      file_panel = { q = '<Cmd>DiffviewClose<CR>' },
+      view = { q = '<Cmd>DiffviewClose<CR>' },
+    },
+  })
 EOF
 
 if has("gui_running")
