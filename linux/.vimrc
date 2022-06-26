@@ -52,7 +52,6 @@ nnoremap <C-k> <cmd>Telescope buffers<cr>
 :command Lg Telescope live_grep
 :command Ref Telescope lsp_references
 :command Sym Telescope lsp_document_symbols symbols=function,method
-:command Ghist 0Gclog
 
 " Stop mistakingly causing text to lowercase
 nnoremap q: <Nop>
@@ -65,6 +64,9 @@ inoremap <C-l> <C-x><C-o>
 " JJ
 imap jj <Esc>
 cmap jj <Esc>
+
+" GitSigns
+nnoremap <S-h> :Gitsigns next_hunk<CR>
 
 " Hold down alt+shift+>/< to change width
 " nmap <Esc>> :vertical res +1<Enter>
@@ -611,12 +613,11 @@ lua <<EOF
     keymaps={
       file_panel={
         ["gf"] = df_actions.goto_file_edit,
+        ["<leader>q"] = '<Cmd>DiffviewClose<CR>',
       },
-    },
-    key_bindings = {
-      file_history_panel = { q = '<Cmd>DiffviewClose<CR>' },
-      file_panel = { q = '<Cmd>DiffviewClose<CR>' },
-      view = { q = '<Cmd>DiffviewClose<CR>' },
+      view={
+        ["<leader>q"] = '<Cmd>DiffviewClose<CR>',
+      },
     },
   })
 EOF

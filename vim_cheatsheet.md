@@ -24,8 +24,9 @@ Git
 --------------------------------------------------------------------------------------
 :Diff               Open up a diff view of current changes
 -                   To stage the file
-q                   Quit the diff
+<leader>q           Quit the diff
 gf                  Open file
+<C-h>               Jump to next hunk
 
 Floaterm
 --------------------------------------------------------------------------------------
