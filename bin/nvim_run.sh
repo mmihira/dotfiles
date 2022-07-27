@@ -81,8 +81,10 @@ type=$(echo "$1" | sed -r 's/(.*)(\.rs|\.py|\.java|\.js|\.sh|\.go|\.ts)/\2/g')
 ########################################################################
 if [ "$type" == '.sh' ]; then
   base_file_path=$(echo "$1" | sed 's/\/\w\+\.sh//g')
+  buildName=$(echo "$base_file_path" | sed 's/.*\/\(\w\+.sh\)/\1/g')
+  parentdir="$(dirname "$base_file_path")"
   exe_name=$(echo "$1" | sed 's/\.sh//g' | sed 's/\/.*\///g')
-  (cd $base_file_path; echo $base_file_path; ./"$exe_name.sh")
+  (cd $parentdir; ./"$exe_name.sh")
   exit 0
 fi
 
