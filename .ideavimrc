@@ -35,6 +35,9 @@ filetype off
 " Ideavimrc settings
 set commentary
 
+" IDEA VIM ACTION LIST
+" https://gist.github.com/zchee/9c78f91cc5ad771c1f5d
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! KEY REMAPPING
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -44,9 +47,9 @@ nnoremap q: <Nop>
 "nnoremap Vu <Nop>
 vnoremap u <Nop>
 nmap gt <Nop>
-nmap <C-o> :action NextTab<CR>
-nmap <C-i> :action PreviousTab<CR>
-nmap <C-e> :action RecentFiles<CR>
+nmap <C-p> :action NextTab<CR>
+nmap <C-n> :action PreviousTab<CR>
+nmap <C-k> :action RecentFiles<CR>
 
 " JJ
 :imap jj <Esc>
@@ -80,6 +83,6 @@ vnoremap <Leader>r "0y :%s/<C-r>0
 
 nnoremap <Leader>k  :action FindInPath<CR>
 nnoremap <Leader>nf :action SelectInProjectView<CR>
-nnoremap <Leader>gr :action RenameElement<CR>
+nnoremap <Leader>rn :action RenameElement<CR>
 nnoremap <Leader>gt :action GotoTest<CR>
-nnoremap <Leader>lf :action ReformatCode<CR>
+nnoremap <Leader>rn :action ReformatCode<CR>
