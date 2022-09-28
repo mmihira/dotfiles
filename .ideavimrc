@@ -37,6 +37,7 @@ set commentary
 
 " IDEA VIM ACTION LIST
 " https://gist.github.com/zchee/9c78f91cc5ad771c1f5d
+" https://towardsdatascience.com/the-essential-ideavim-remaps-291d4cd3971b"
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " !! KEY REMAPPING
@@ -85,4 +86,7 @@ nnoremap <Leader>k  :action FindInPath<CR>
 nnoremap <Leader>nf :action SelectInProjectView<CR>
 nnoremap <Leader>rn :action RenameElement<CR>
 nnoremap <Leader>gt :action GotoTest<CR>
-nnoremap <Leader>rn :action ReformatCode<CR>
+nnoremap <Leader>lf :action ReformatCode<CR>
+nnoremap <Leader>t :action ContextRun<CR>
+nnoremap <leader>rq :action Refactorings.QuickListPopupAction<CR>
+
