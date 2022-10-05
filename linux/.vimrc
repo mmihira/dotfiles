@@ -244,7 +244,7 @@ Plug  'tpope/vim-surround'
 Plug  'tpope/vim-repeat'
 Plug  'tpope/vim-commentary'
 Plug  'simnalamburt/vim-mundo'
-Plug  'SirVer/ultisnips'
+Plug  'L3MON4D3/LuaSnip'
 
 " Search and Navigation
 Plug  'nvim-neo-tree/neo-tree.nvim'
@@ -455,7 +455,7 @@ lua <<EOF
   cmp.setup({
     snippet = {
       expand = function(args)
-         vim.fn["UltiSnips#Anon"](args.body)
+        require('luasnip').lsp_expand(args.body)
       end,
     },
     mapping = {
@@ -473,7 +473,7 @@ lua <<EOF
     },
     sources = cmp.config.sources({
       { name = 'nvim_lsp' },
-      { name = 'ultisnips' },
+      { name = 'luasnip' },
     }, {
       { name = 'buffer', keyword_length = 3 },
     }, {
