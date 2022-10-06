@@ -289,6 +289,11 @@ Plug  'elixir-editors/vim-elixir'
 Plug  'leafgarland/typescript-vim'
 Plug  'udalov/kotlin-vim'
 Plug  'mechatroner/rainbow_csv'
+Plug 'tjdevries/nlua.nvim'
+Plug 'nvim-lua/completion-nvim'
+Plug 'euclidianAce/BetterLua.vim'
+
+Plug 'williamboman/mason.nvim'
 
 " Display
 Plug  'szw/vim-maximizer'
@@ -500,10 +505,6 @@ lua <<EOF
   })
 
   -- Setup lspconfig.
-  local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-  local nvim_lsp = require('lspconfig')
-  nvim_lsp.gopls.setup{}
-  nvim_lsp.tsserver.setup{}
   local on_attach = function(client, bufnr)
     local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
     local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
@@ -533,6 +534,13 @@ lua <<EOF
     -- buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
   end
 
+  local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  local nvim_lsp = require('lspconfig')
+  nvim_lsp.gopls.setup{}
+  nvim_lsp.tsserver.setup{}
+  nvim_lsp.sumneko_lua.setup{}
+
+
   -- Use a loop to conveniently call 'setup' on multiple servers and
   -- map buffer local keybindings when the language server attaches
   local servers = { 'gopls' }
@@ -544,6 +552,15 @@ lua <<EOF
       }
     }
   end
+  require('nlua.lsp.nvim').setup(require('lspconfig'), {
+    on_attach = custom_nvim_lspconfig_attach,
+
+    -- Include globals you want to tell the LSP are real :)
+    globals = {
+      -- Colorbuddy
+      "Color", "c", "Group", "g", "s",
+    }
+  })
 
   -- Popup for dianostic
   -- vim.o.updatetime = 250
@@ -620,6 +637,8 @@ lua <<EOF
       },
     },
   })
+
+  require("mason").setup()
 EOF
 
 if has("gui_running")
