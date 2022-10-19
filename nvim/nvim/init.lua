@@ -1,5 +1,6 @@
 require "plugins"
 
+require "settings/paths"
 require "settings/functions"
 require "settings/options"
 require "settings/keymaps"
