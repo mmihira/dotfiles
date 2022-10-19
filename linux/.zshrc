@@ -82,7 +82,6 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias c="clear"
 alias vim=nvim
-alias nvim=nvim.appimage
 alias xo="xdg-open $1"
 
 eval "$(fasd --init auto)"
