@@ -30,3 +30,11 @@ end, { nargs = 0 })
 vim.api.nvim_create_user_command("Old", function(opts)
 	vim.api.nvim_command(":Telescope oldfiles")
 end, { nargs = 0 })
+
+vim.api.nvim_create_user_command("Ref", function(opts)
+	vim.api.nvim_command(":Telescope lsp_references")
+end, { nargs = 0 })
+
+vim.api.nvim_create_user_command("Sym", function(opts)
+	vim.api.nvim_command(":Telescope lsp_document_symbols symbols=function,method")
+end, { nargs = 0 })

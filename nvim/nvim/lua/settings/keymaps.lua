@@ -42,12 +42,12 @@ keymap("n", "<leader>q", ":q<CR>", opts)
 -- Remap cancel highlight
 keymap("n", "<leader>8", ":noh<CR>", opts)
 -- Remap paste from + buffer
-keymap("n", "<leader>=", "+gP", opts)
+keymap("n", "<leader>=", "\"+P", opts)
 -- Remap copy one line to system buffer
-keymap("n", "<leader>cc V", "+yyv <CR>", opts)
-keymap("v", "<leader>cc V", "+yyv <CR>", opts)
+keymap("n", "<leader>cc", "\"+y <CR>", opts)
+keymap("v", "<leader>cc", "\"+y <CR>", opts)
 -- Replace highlighted text buffer global
-keymap("v", "<leader>r", "0y :%s/<C-r>0", opts)
+keymap("v", "<leader>r", ":%s/<C-r>0", opts)
 -- Run
 keymap("n", "<leader>r", ":Run <CR>", opts)
 -- Git view

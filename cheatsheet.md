@@ -5,7 +5,8 @@ Tmux
 <C>a <Enter>        Switch to copy mode with vim bindings, visual select and <Enter> to copy
 <C>a ;              Swtich to last buffer
 <C>a h,l            Switch buffers left, right
-
+<C>-                Split vertical
+<C>_                Split horizontal
 
 Vim
 --------------------------------------------------------------------------------------
@@ -13,16 +14,20 @@ Vim
 
 Movement
 --------------------------------------------------------------------------------------
-<C-X><C-L>          Complete by line match
+
+Movement
+--------------------------------------------------------------------------------------
 zz                  Center current line
 
 Notes
 --------------------------------------------------------------------------------------
 :NV                 Open up a rigpgrep for searching your notes
 
-Buffers
+Telescope
 --------------------------------------------------------------------------------------
 <C-k>               List all buffers in telescope
+:Old                Search oldfiles
+<Space>k            Live grep search
 
 Lsp
 --------------------------------------------------------------------------------------
@@ -54,6 +59,6 @@ v                   Vertical split file
 
 Surround
 --------------------------------------------------------------------------------------
-
 selection s[b or ' or "]
+
 
