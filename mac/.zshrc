@@ -83,19 +83,15 @@ source $ZSH/oh-my-zsh.sh
 alias c="clear"
 alias vim=nvim
 
+# command line speed
 eval "$(fasd --init auto)"
 
-# Make CTRL-Z background things and unbackground them.
-function fg-bg() {
-  if [[ $#BUFFER -eq 0 ]]; then
-    fg
-  else
-    zle push-input
-  fi
-}
-zle -N fg-bg
-bindkey '^Z' fg-bg
+# Bash completion
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /tmp/mc mc
 
+# For CTRL-R
+# https://github.com/junegunn/fzf
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -115,6 +111,7 @@ export PATH=$PATH:/usr/local/go/bin
 export GOPATH="$HOME/c/go"
 export PATH=$PATH:$GOPATH/bin
 
+# For nvim,vim
 export XDG_CONFIG_HOME="$HOME/.config"
 
 source ~/.ssh/env_keys.sh
@@ -125,19 +122,9 @@ export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 alias mux="tmuxinator"
 alias vi="vim"
 
-# Syntax highlighting
-# To installhttps://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md#
-# echo "source ${(q-)PWD}/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc
-
-# Bash completion
-autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /tmp/mc mc
-
 fpath+=("$(brew --prefix)/share/zsh/site-functions")
 autoload -U promptinit; promptinit
 prompt pure
-
-export GRAPHVIZ_DOT=/usr/bin/dot
 
 # THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
