@@ -1,4 +1,4 @@
-local opts = {noremap = true, silent = true}
+local opts = { noremap = true, silent = true }
 local keymap = vim.api.nvim_set_keymap
 
 keymap("", "<Space>", "<Nop>", opts)
@@ -33,10 +33,9 @@ keymap("c", "jj", "<Esc>", opts)
 
 -- Telescope
 keymap("n", "<c-k>", ":Telescope buffers<CR>", opts)
-keymap("n", "<leader>rg", ":Telescope live_grep<CR>", opts)
+keymap("n", "<leader>k", ":Telescope oldfiles live_grep<CR>", opts)
 
-keymap("n", "<leader>nn",
-       "<CMD>Neotree position=float toggle=true reveal_force_cwd=true<CR>", opts)
+keymap("n", "<leader>nn", "<CMD>Neotree position=float toggle=true reveal_force_cwd=true<CR>", opts)
 
 -- Remap exit
 keymap("n", "<leader>q", ":q<CR>", opts)
