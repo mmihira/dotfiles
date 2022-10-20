@@ -64,7 +64,7 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagn
 	virtual_text = false,
 	signs = true,
 	update_in_insert = false,
-	underline = true,
+	underline = false,
 })
 
 vim.api.nvim_command("autocmd CursorHold * lua vim.diagnostic.open_float(nil, {focusable = false})")

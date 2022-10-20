@@ -34,10 +34,17 @@ packer.startup(function(use)
 	use("voldikss/vim-floaterm")
 
 	-- LSP
+	use({
+		"nvim-treesitter/nvim-treesitter",
+		run = function()
+			require("nvim-treesitter.install").update({ with_sync = true })
+		end,
+	})
 	use("williamboman/mason.nvim")
 	use("williamboman/mason-lspconfig.nvim")
 	use("neovim/nvim-lspconfig")
-  use("folke/trouble.nvim")
+	use("folke/trouble.nvim")
+	use("ray-x/go.nvim")
 
 	-- Syntax
 	use("euclidianAce/BetterLua.vim")
