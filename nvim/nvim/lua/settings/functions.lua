@@ -8,7 +8,8 @@ end
 
 -- Open vimconfig
 vim.api.nvim_create_user_command("Vimfile", function(opts)
-	vim.api.nvim_command(":e ~/.config/nvim/init.vim")
+  local file_path = vim.fn.expand("~/.config/nvim/lua/plugins/init.lua")
+	vim.api.nvim_command(":e " .. file_path)
 end, { nargs = 0 })
 
 -- Start the main float we reuse
