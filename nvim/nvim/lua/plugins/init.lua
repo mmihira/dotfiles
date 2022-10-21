@@ -78,9 +78,13 @@ packer.startup(function(use)
   -- Navigation
   use("kwkarlwang/bufjump.nvim")
   use({
-    "folke/persistence.nvim",
-    event = "BufReadPre",
-    module = "persistence",
+    "rmagatti/auto-session",
+    config = function()
+      require("auto-session").setup({
+        log_level = "error",
+        auto_session_suppress_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
+      })
+    end,
   })
 
   -- Tree
@@ -97,6 +101,8 @@ packer.startup(function(use)
   -- Display
   use("itchyny/lightline.vim")
   use("goolord/alpha-nvim")
+  use("MunifTanjim/nui.nvim")
+  use("CosmicNvim/cosmic-ui")
 
   -- Color Schemes
   use("ellisonleao/gruvbox.nvim")

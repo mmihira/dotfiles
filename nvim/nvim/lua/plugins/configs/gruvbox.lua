@@ -1,11 +1,12 @@
 local present, gruvbox = pcall(require, "gruvbox")
 if not present then
-	return
+  return
 end
 
 gruvbox.setup({
-	invert_selection = false,
-	contrast = "soft",
+  invert_selection = false,
+  transparent_mode = true,
+  contrast = "soft",
 })
 
 vim.cmd("colorscheme gruvbox")

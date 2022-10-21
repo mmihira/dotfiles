@@ -1,7 +1,13 @@
+local present, cosmic = pcall(require, "cosmic-ui")
+if not present then
+  return
+end
+
 local api = vim.api
 local lsp = require("vim.lsp")
 local M = {}
 
+require("cosmic-ui").setup()
 local key_mappings = {
   { "documentFormattingProvider", "n", "<space>lf", "<Cmd>lua vim.lsp.buf.format()<CR>" },
   { "documentRangeFormattingProvider", "v", "gq", "<Esc><Cmd>lua vim.lsp.buf.range_formatting()<CR>" },
@@ -10,6 +16,7 @@ local key_mappings = {
   { "implementation", "n", "gi", "<Cmd>lua vim.lsp.buf.implementation()<CR>" },
   { "definitionProvider", "n", "gd", "<Cmd>lua vim.lsp.buf.definition()<CR>" },
   -- { "signatureHelpProvider", "i", "<c-space>", "<Cmd>lua vim.lsp.buf.signature_help()<CR>" },
+  { "renameProvider", "n", "<space>rn", '<cmd>lua require("cosmic-ui").rename()<cr>' },
   { "workspaceSymbolProvider", "n", "gW", "<Cmd>lua vim.lsp.buf.workspace_symbol()<CR>" },
   { "codeActionProvider", "n", "<leader>cl", "<Cmd>lua vim.lsp.buf.code_action()<CR>" },
   -- { "codeActionProvider", "n", "<leader>r", "<Cmd>lua vim.lsp.buf.code_action { only = 'refactor' }<CR>" },
@@ -38,7 +45,6 @@ local function on_attach(client, bufnr, attach_opts)
     end
   end
 
-  api.nvim_buf_set_keymap(bufnr, "n", "<space>rn", "<Cmd>lua vim.lsp.buf.rename(vim.fn.input('New Name: '))<CR>", opts)
   -- api.nvim_buf_set_keymap(bufnr, "i", "<c-n>", "<Cmd>lua require('lsp_compl').trigger_completion()<CR>", opts)
 
   -- On hover over syntax highlight the term
@@ -55,6 +61,7 @@ local function on_attach(client, bufnr, attach_opts)
   end
   vim.cmd("augroup end")
 end
+
 M.on_attach = on_attach
 
 local function on_init(client)

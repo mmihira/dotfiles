@@ -5,14 +5,14 @@ if not present then
 end
 
 local border = {
-    { "╭", "CmpBorder" },
-    { "─", "CmpBorder" },
-    { "╮", "CmpBorder" },
-    { "│", "CmpBorder" },
-    { "╯", "CmpBorder" },
-    { "─", "CmpBorder" },
-    { "╰", "CmpBorder" },
-    { "│", "CmpBorder" },
+  { "╭", "CmpBorder" },
+  { "─", "CmpBorder" },
+  { "╮", "CmpBorder" },
+  { "│", "CmpBorder" },
+  { "╯", "CmpBorder" },
+  { "─", "CmpBorder" },
+  { "╰", "CmpBorder" },
+  { "│", "CmpBorder" },
 }
 
 cmp.setup({
