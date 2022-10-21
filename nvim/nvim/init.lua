@@ -4,6 +4,7 @@ require "settings/paths"
 require "settings/functions"
 require "settings/options"
 require "settings/keymaps"
+require "settings/highlights"
 
 require "plugins/configs/gruvbox"
 require "plugins/configs/alpha"
