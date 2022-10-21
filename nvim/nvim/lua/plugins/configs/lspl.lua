@@ -7,6 +7,35 @@ local api = vim.api
 local lsp = require("vim.lsp")
 local M = {}
 
+local show_client_capabilities = function(client)
+  local Popup = require("nui.popup")
+  local event = require("nui.utils.autocmd").event
+  local popup = Popup({
+    enter = true,
+    focusable = true,
+    border = {
+      style = "rounded",
+    },
+    position = "50%",
+    size = {
+      width = "80%",
+      height = "60%",
+    },
+  })
+  popup:mount()
+  popup:on(event.BufLeave, function()
+    popup:unmount()
+  end)
+
+  local content = vim.inspect(client.server_capabilities)
+  lines = {}
+  for s in content:gmatch("[^\r\n]+") do
+    table.insert(lines, s)
+  end
+  vim.api.nvim_buf_set_lines(popup.bufnr, 0, 2, false, { "Client Capabilities", "-------------------------------" })
+  vim.api.nvim_buf_set_lines(popup.bufnr, 3, 4, false, lines)
+end
+
 require("cosmic-ui").setup()
 local key_mappings = {
   { "documentFormattingProvider", "n", "<space>lf", "<Cmd>lua vim.lsp.buf.format()<CR>" },
@@ -30,7 +59,7 @@ local function on_attach(client, bufnr, attach_opts)
   api.nvim_buf_set_option(bufnr, "bufhidden", "hide")
 
   vim.api.nvim_create_user_command("ClientCapabilities", function(opts)
-    print(vim.inspect(client.server_capabilities))
+    show_client_capabilities(client)
   end, { nargs = 0 })
 
   if client.server_capabilities.goto_definition then
