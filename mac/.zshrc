@@ -55,6 +55,7 @@ plugins=(git)
 # export PATH="/usr/bin:/bin:/usr/sbin:/sbin:$PATH"
 # export MANPATH="/usr/local/man:$MANPATH"
 source $ZSH/oh-my-zsh.sh
+eval $(/opt/homebrew/bin/brew shellenv)
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -125,6 +126,8 @@ alias vi="vim"
 fpath+=("$(brew --prefix)/share/zsh/site-functions")
 autoload -U promptinit; promptinit
 prompt pure
+
+# /Users/mihira/.local/bin:/Users/mihira/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Users/mihira/.sdkman/candidates/java/current/bin:/Users/mihira/.local/bin:/Users/mihira/bin:/opt/homebrew/opt/fzf/bin:/Users/mihira/c/go/bin:/usr/local/go/bin:/Users/mihira/c/go/bin
 
 # THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"

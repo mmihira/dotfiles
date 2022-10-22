@@ -31,3 +31,7 @@ vim.api.nvim_command("autocmd CursorHold * lua vim.diagnostic.open_float(nil, {f
 -- Vanity
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
 vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
+
+vim.diagnostic.config({
+  float = { border = "rounded" },
+})

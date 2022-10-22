@@ -46,12 +46,19 @@ packer.startup(function(use)
   use("folke/trouble.nvim")
   use("ray-x/go.nvim")
   use("mfussenegger/nvim-jdtls")
+  use({
+    "j-hui/fidget.nvim",
+    config = function()
+      require("fidget").setup({})
+    end,
+  })
 
   -- Syntax
   use("euclidianAce/BetterLua.vim")
   use("tpope/vim-commentary")
   use({ "kylechui/nvim-surround", tag = "*" })
   use("jose-elias-alvarez/null-ls.nvim")
+  use("cohama/lexima.vim")
 
   -- Completion
   use("hrsh7th/nvim-cmp")
