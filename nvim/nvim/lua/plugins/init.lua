@@ -75,7 +75,6 @@ packer.startup(function(use)
   -- Git
   use("itchyny/vim-gitbranch")
   use("lewis6991/gitsigns.nvim")
-
   use("sindrets/diffview.nvim")
 
   -- Finders
@@ -84,15 +83,6 @@ packer.startup(function(use)
 
   -- Navigation
   use("kwkarlwang/bufjump.nvim")
-  use({
-    "rmagatti/auto-session",
-    config = function()
-      require("auto-session").setup({
-        log_level = "error",
-        auto_session_suppress_dirs = { "~/", "~/Projects", "~/Downloads", "/" },
-      })
-    end,
-  })
 
   -- Tree
   use({

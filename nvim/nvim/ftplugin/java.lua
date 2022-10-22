@@ -1,6 +1,8 @@
 local lsplib = require("plugins/configs/lspl")
-config = lsplib.mk_config()
 
+local lombok_path = vim.fn.expand("~/.m2/repository/org/projectlombok/lombok/1.18.24/lombok-1.18.24.jar")
+
+config = lsplib.mk_config()
 config.cmd = {
 
   "java", -- or '/path/to/java17_or_newer/bin/java'
@@ -11,11 +13,15 @@ config.cmd = {
   "-Dlog.protocol=true",
   "-Dlog.level=ALL",
   "-Xms1g",
+  "-Xmx2G",
+
   "--add-modules=ALL-SYSTEM",
   "--add-opens",
   "java.base/java.util=ALL-UNNAMED",
   "--add-opens",
   "java.base/java.lang=ALL-UNNAMED",
+
+  "-javaagent:" .. lombok_path,
 
   "-jar",
   "/Users/mihira/.local/share/nvim/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar",
@@ -89,5 +95,5 @@ end
 -- or attaches to an existing client & server depending on the `root_dir`.
 require("jdtls").start_or_attach(config)
 
-local bufopts = { noremap = true, silent = true, buffer = bufnr }
-vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
+-- Tree Sitter
+vim.api.nvim_command("TSEnable highlight")

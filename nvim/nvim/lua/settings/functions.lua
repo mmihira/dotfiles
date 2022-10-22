@@ -37,5 +37,5 @@ vim.api.nvim_create_user_command("Ref", function(opts)
 end, { nargs = 0 })
 
 vim.api.nvim_create_user_command("Sym", function(opts)
-  vim.api.nvim_command(":Telescope lsp_document_symbols symbols=function,method")
+  vim.api.nvim_command(":Telescope lsp_workspace_symbols")
 end, { nargs = 0 })
