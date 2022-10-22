@@ -2,8 +2,8 @@ Aemthyst
 --------------------------------------------------------------------------------------
 **************************************************************************************
 
-<Opt><Cmd>Enter    Swap current window to main
-<Opt><Cmd>Z        Reload Amethyst
+<Ctrl><Cmd>Enter   Swap current window to main
+<Ctrl><Cmd>Z       Reload Amethyst
 <Ctrl>8            FullScreenCurrent
 <Ctrl>9            Tall Layout
 
@@ -34,11 +34,13 @@ Telescope
 <C-k>               List all buffers in telescope
 :Old                Search oldfiles
 <Space>k            Live grep search
+                    j,k if not typing. Else C-n,p for up/down
 
 Lsp
 --------------------------------------------------------------------------------------
 :Ref                Find all references for under cursor
 :Sym                List all functions in this file
+<space>cl           Code Lens
 
 Git
 --------------------------------------------------------------------------------------
@@ -64,4 +66,4 @@ v                   Vertical split file
 
 Surround
 --------------------------------------------------------------------------------------
-selection s[b or ' or "]
+selection s, [b or ' or "]
