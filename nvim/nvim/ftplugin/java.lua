@@ -49,6 +49,7 @@ config.init_options = {
   bundles = {},
 }
 
+-- For picking a file to move to etc
 local finders = require("telescope.finders")
 local sorters = require("telescope.sorters")
 local actions = require("telescope.actions")
@@ -70,8 +71,9 @@ require("jdtls.ui").pick_one_async = function(items, prompt, label_fn, cb)
         }),
         sorter = sorters.get_generic_fuzzy_sorter(),
         attach_mappings = function(prompt_bufnr)
-          actions.goto_file_selection_edit:replace(function()
-            local selection = actions.get_selected_entry(prompt_bufnr)
+          actions.select_default:replace(function()
+            local action_state = require("telescope.actions.state")
+            local selection = action_state.get_selected_entry(prompt_bufnr)
             actions.close(prompt_bufnr)
 
             cb(selection.value)

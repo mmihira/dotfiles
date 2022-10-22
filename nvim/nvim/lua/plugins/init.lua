@@ -47,7 +47,7 @@ packer.startup(function(use)
   use("ray-x/go.nvim")
   use("mfussenegger/nvim-jdtls")
   use({
-    "j-hui/fidget.nvim",
+    "j-hui/fidget.nvim", -- for nicely displaying lsp output
     config = function()
       require("fidget").setup({})
     end,
