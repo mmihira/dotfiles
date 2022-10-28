@@ -4,7 +4,13 @@ if not present then
 end
 
 neotree.setup({
-  window = { mappings = { ["v"] = "open_vsplit", ["o"] = "open" } },
+  window = {
+    mappings = {
+      ["v"] = "open_vsplit",
+      ["o"] = "open",
+      ["Z"] = "expand_all_nodes"
+    },
+  },
   filesystem = {
     filterd_items = {
       visible = true,
