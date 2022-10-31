@@ -1,6 +1,6 @@
 -- Run command
 vim.api.nvim_create_user_command("Run", function(opts)
-  require("settings/run").run_file()
+  require("scripts/run").run_file()
 end, { nargs = 0 })
 
 -- Show git diff
