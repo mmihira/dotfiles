@@ -38,17 +38,15 @@ RUN apt-get -y install sudo lua5.4 luarocks
 RUN luarocks install luasocket
 RUN apt-get -y install luajit
 
-COPY r.sh ./
-RUN mkdir -p /root/.config/nvim
-COPY nvim /root/.config/nvim
-COPY go-example go-example
+RUN mkdir -p $HOME/.config/nvim
+COPY nvim $HOME/.config/nvim
 
 # Install Plugins [might break .. https://github.com/wbthomason/packer.nvim/issues/502]
 RUN date
 RUN nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
 RUN nvim --headless -c 'MasonInstall lua-language-server' -c q
 RUN nvim --headless -c 'MasonInstall gopls' -c q
-RUN nvim --headless -c 'MasonInstall goimports goimports-reviser' -c q
+RUN nvim --headless -c 'MasonInstall goimports' -c q
 RUN nvim --headless -c 'MasonInstall golangci-lint' -c q
 RUN nvim --headless -c 'MasonInstall stylua' -c q
 

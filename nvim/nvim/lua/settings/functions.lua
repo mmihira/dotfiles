@@ -1,3 +1,8 @@
+-- Run command
+vim.api.nvim_create_user_command("Run", function(opts)
+  require("settings/run").run_file()
+end, { nargs = 0 })
+
 -- Show git diff
 local present, diffview = pcall(require, "diffview")
 if present then
@@ -39,3 +44,4 @@ end, { nargs = 0 })
 vim.api.nvim_create_user_command("Sym", function(opts)
   vim.api.nvim_command(":Telescope lsp_document_symbols")
 end, { nargs = 0 })
+

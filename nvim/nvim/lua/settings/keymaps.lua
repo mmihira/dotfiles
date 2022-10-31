@@ -49,7 +49,7 @@ keymap("v", "<leader>cc", '"+y <CR>', opts)
 -- Replace highlighted text buffer global
 keymap("v", "<leader>r", "\"0y :%s/<C-r>0", opts)
 -- Run
-keymap("n", "<leader>r", ":Run <CR>", opts)
+keymap("n", "<leader>r", ":Run<CR>", opts)
 -- Git view
 keymap("n", "<leader>ss", ":Diff<CR>", opts)
 -- Floaterm

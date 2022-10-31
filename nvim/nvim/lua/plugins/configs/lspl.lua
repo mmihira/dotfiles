@@ -29,8 +29,8 @@ local show_client_capabilities = function(client)
 
   local content = vim.inspect(client.server_capabilities)
   lines = {}
-  for s in content:gmatch("[^\r\n]+") do
-    table.insert(lines, s)
+  for string in content:gmatch("[^\r\n]+") do
+    table.insert(lines, string)
   end
   vim.api.nvim_buf_set_lines(popup.bufnr, 0, 2, false, { "Client Capabilities", "-------------------------------" })
   vim.api.nvim_buf_set_lines(popup.bufnr, 3, 4, false, lines)
