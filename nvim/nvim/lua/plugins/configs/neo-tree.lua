@@ -8,7 +8,8 @@ neotree.setup({
     mappings = {
       ["v"] = "open_vsplit",
       ["o"] = "open",
-      ["Z"] = "expand_all_nodes"
+      ["<c-o>"] = "expand_all_nodes",
+      ["z"] = "close_all_nodes"
     },
   },
   filesystem = {

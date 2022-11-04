@@ -54,7 +54,7 @@ keymap("n", "<leader>r", ":Run<CR>", opts)
 keymap("n", "<leader>ss", ":Diff<CR>", opts)
 -- Floaterm
 keymap("n", "<leader>mm", ":StartMainFloat<CR>", opts)
-keymap("n", "<leader>mm", "<C-\\><C-n>:FloatermToggle<CR>", opts)
+keymap("t", "<leader>mm", "<C-\\><C-n>:FloatermToggle<CR>", opts)
 keymap("n", "<F9>", "<C-\\><C-n>:FloaTermToggleLayout<CR>", opts)
 keymap("t", "<leader>qq", "<C-\\><C-n><CR>", opts)
 -- Vim-Test

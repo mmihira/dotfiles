@@ -59,6 +59,7 @@ packer.startup(function(use)
   use({ "kylechui/nvim-surround", tag = "*" })
   use("jose-elias-alvarez/null-ls.nvim")
   use("cohama/lexima.vim")
+  use("mechatroner/rainbow_csv")
 
   -- Completion
   use("hrsh7th/nvim-cmp")
