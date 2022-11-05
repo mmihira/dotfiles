@@ -24,6 +24,15 @@ local run_bash = function(file_path)
   exec_floaterm(_cmd)
 end
 
+local run_go = function(file_path)
+  -- Should traverse up the directory until main.go is found
+  local parent_path = file_path:parent()
+  local rel = file_path:make_relative(parent_path:absolute())
+  local go_build_cmd = "go build -o go_app"
+  local _cmd = "(cd " .. parent_path:absolute() .. "; " .. go_build_cmd .. ";" .. "./go_app" .. ")"
+  exec_floaterm(_cmd)
+end
+
 local run_file = function()
   local plenary = require("plenary")
   local path = require("plenary.path")
@@ -35,9 +44,11 @@ local run_file = function()
   if filetype == "lua" then
     run_lua()
   end
-
   if filetype == "sh" then
     run_bash(file_path)
+  end
+  if filetype == "go" then
+    run_go(file_path)
   end
 end
 M.run_file = run_file
