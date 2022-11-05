@@ -112,6 +112,9 @@ export PATH=$PATH:/usr/local/go/bin
 export GOPATH="$HOME/c/go"
 export PATH=$PATH:$GOPATH/bin
 
+# For  mac commands
+export PATH=$PATH:/usr/bin
+
 # For nvim,vim
 export XDG_CONFIG_HOME="$HOME/.config"
 
