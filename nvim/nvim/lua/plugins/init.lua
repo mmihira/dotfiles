@@ -60,6 +60,7 @@ packer.startup(function(use)
   use("jose-elias-alvarez/null-ls.nvim")
   use("cohama/lexima.vim")
   use("mechatroner/rainbow_csv")
+  use("hashivim/vim-terraform")
 
   -- Completion
   use("hrsh7th/nvim-cmp")
@@ -101,6 +102,12 @@ packer.startup(function(use)
   use("goolord/alpha-nvim")
   use("MunifTanjim/nui.nvim")
   use("CosmicNvim/cosmic-ui")
+  use({
+    "b0o/incline.nvim",
+    config = function()
+      require("incline").setup()
+    end,
+  })
 
   -- Color Schemes
   use("ellisonleao/gruvbox.nvim")
