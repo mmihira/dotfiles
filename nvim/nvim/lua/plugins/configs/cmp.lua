@@ -35,7 +35,8 @@ cmp.setup({
     ["<CR>"] = cmp.mapping.confirm({ select = true }),
   },
   sources = cmp.config.sources(
-    { { name = "nvim_lsp" }, { name = "luasnip" } },
+    { { name = "nvim_lsp" } },
+    { { name = "luasnip" } },
     { { name = "buffer", keyword_length = 3 } },
     { { name = "nvim_lsp_signature_help" } },
     { { name = "path", keyword_length = 3 } }
@@ -57,3 +58,6 @@ cmp.setup.cmdline("/", { sources = { { name = "buffer" } } })
 cmp.setup.cmdline(":", {
   sources = cmp.config.sources({ { name = "path" } }, { { name = "cmdline" } }),
 })
+
+-- For snippets
+require("luasnip.loaders.from_vscode").lazy_load()
