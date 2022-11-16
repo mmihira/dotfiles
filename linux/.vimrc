@@ -277,9 +277,6 @@ Plug  'tpope/vim-rails'
 Plug  'vim-scripts/ruby-matchit'
 
 " Syntax Plugs
-Plug  'rust-lang/rust.vim'
-Plug  'slim-template/vim-slim'
-Plug  'pangloss/vim-javascript'
 Plug  'mattn/emmet-vim'
 Plug  'othree/javascript-libraries-syntax.vim'
 Plug  'w0rp/ale', { 'do': 'yarn global add prettier' }

@@ -2,10 +2,9 @@ Aemthyst
 --------------------------------------------------------------------------------------
 **************************************************************************************
 
-<Ctrl><Cmd>Enter   Swap current window to main
-<Ctrl><Cmd>Z       Reload Amethyst
-<Ctrl>8            FullScreenCurrent
-<Ctrl>9            Tall Layout
+<cmd>(arrow)        Move to half screen
+<cmd><shift>(arrow) Move to third screen
+
 
 Tmux
 --------------------------------------------------------------------------------------
@@ -20,6 +19,10 @@ Tmux
 Vim
 --------------------------------------------------------------------------------------
 **************************************************************************************
+
+:Cheat              Open this file
+:Vimfile            Open init.vim
+:ClientCapabilities Show current LSP capabilities
 
 Movement
 --------------------------------------------------------------------------------------
