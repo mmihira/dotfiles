@@ -11,9 +11,15 @@ if present then
   end, { nargs = 0 })
 end
 
--- Open vimconfig
+-- Open init.vim
 vim.api.nvim_create_user_command("Vimfile", function(opts)
   local file_path = vim.fn.expand("~/.config/nvim/lua/plugins/init.lua")
+  vim.api.nvim_command(":e " .. file_path)
+end, { nargs = 0 })
+
+-- Open settings
+vim.api.nvim_create_user_command("Settings", function(opts)
+  local file_path = vim.fn.expand("~/.config/nvim/lua/settings/keymaps.lua")
   vim.api.nvim_command(":e " .. file_path)
 end, { nargs = 0 })
 
@@ -45,3 +51,14 @@ vim.api.nvim_create_user_command("Sym", function(opts)
   vim.api.nvim_command(":Telescope lsp_document_symbols")
 end, { nargs = 0 })
 
+vim.api.nvim_create_user_command("Nocmp", function(opts)
+  require("cmp").setup.buffer({ enabled = false })
+end, { nargs = 0 })
+
+vim.api.nvim_create_user_command("OpenData", function(opts)
+  vim.api.nvim_command(":Neotree " .. vim.fn.stdpath("data"))
+end, { nargs = 0 })
+
+vim.api.nvim_create_user_command("Snip", function(opts)
+  vim.api.nvim_command(":Neotree " .. vim.fn.stdpath("data") .. "/site/pack/packer/start/friendly-snippets/snippets")
+end, { nargs = 0 })

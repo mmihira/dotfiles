@@ -35,6 +35,7 @@ keymap("c", "jj", "<Esc>", opts)
 keymap("n", "<c-k>", ":Telescope buffers<CR>", opts)
 keymap("n", "<leader>k", ":Telescope live_grep<CR>", opts)
 
+-- Neotree
 keymap("n", "<leader>nn", "<CMD>Neotree position=float toggle=true reveal_force_cwd=true<CR>", opts)
 
 -- Remap exit
@@ -61,4 +62,3 @@ keymap("t", "<leader>qq", "<C-\\><C-n><CR>", opts)
 keymap("n", "<leader>t", ":TestNearest<CR>", opts)
 keymap("n", "<leader>T", ":TestFile<CR>", opts)
 keymap("n", "<leader>C", ":T clear<CR>", opts)
-
