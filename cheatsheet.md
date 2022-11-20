@@ -12,12 +12,12 @@ Vim
 --------------------------------------------------------------------------------------
 **************************************************************************************
 
-:Old
-:Cheat
-:Vimfile
-:Nocmp
-:OpenData
-:Snip
+:Old                Telescope file history
+:Cheat              Open this page
+:Vimfile            Open init.vim
+:Nocmp              Disable autocompletion for the session
+:OpenData           Open the data file directory in NeoTree
+:Snip               Open the snippet directory
 
 Movement
 --------------------------------------------------------------------------------------
@@ -51,10 +51,10 @@ Lsp
 Git
 --------------------------------------------------------------------------------------
 :Diff               Open up a diff view of current changes
--                   To stage the file
 <leader>q           Quit the diff
 gf                  Open file
 <C-h>               Jump to next hunk
+-                   To stage the file
 
 Floaterm
 --------------------------------------------------------------------------------------
