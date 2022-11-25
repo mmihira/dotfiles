@@ -1,6 +1,6 @@
 local lsplib = require("plugins/configs/lspl")
-
 local lombok_path = vim.fn.expand("~/.m2/repository/org/projectlombok/lombok/1.18.24/lombok-1.18.24.jar")
+local datapath = vim.fn.stdpath("data")
 
 config = lsplib.mk_config()
 config.cmd = {
@@ -24,13 +24,13 @@ config.cmd = {
   "-javaagent:" .. lombok_path,
 
   "-jar",
-  "/Users/mihira/.local/share/nvim/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar",
+  datapath .. "/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar",
 
   "-configuration",
-  "/Users/mihira/.local/share/nvim/mason/packages/jdtls/config_mac",
+  datapath .. "/mason/packages/jdtls/config_mac",
 
   "-data",
-  "/Users/mihira/.local/share/nvim/java_ws",
+  datapath .. "/nvim/java_ws",
 }
 
 -- This is the default if not provided, you can remove it. Or adjust as needed.
