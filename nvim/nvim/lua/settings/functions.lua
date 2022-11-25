@@ -62,3 +62,7 @@ end, { nargs = 0 })
 vim.api.nvim_create_user_command("Snip", function(opts)
   vim.api.nvim_command(":Neotree " .. vim.fn.stdpath("data") .. "/site/pack/packer/start/friendly-snippets/snippets")
 end, { nargs = 0 })
+
+vim.api.nvim_create_user_command("Ghist", function(opts)
+  vim.api.nvim_command("DiffviewFileHistory %")
+end, { nargs = 0 })
