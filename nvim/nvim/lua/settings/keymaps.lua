@@ -62,3 +62,6 @@ keymap("t", "<leader>qq", "<C-\\><C-n><CR>", opts)
 keymap("n", "<leader>t", ":TestNearest<CR>", opts)
 keymap("n", "<leader>T", ":TestFile<CR>", opts)
 keymap("n", "<leader>C", ":T clear<CR>", opts)
+-- Goto preview
+keymap("n", "gd", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", opts)
+keymap("n", "gr", "<cmd>lua require('goto-preview').goto_preview_references()<CR>", opts)

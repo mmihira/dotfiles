@@ -18,6 +18,7 @@ Vim
 :Nocmp              Disable autocompletion for the session
 :OpenData           Open the data file directory in NeoTree
 :Snip               Open the snippet directory
+:Settings           Open keymaps
 
 Movement
 --------------------------------------------------------------------------------------
@@ -51,6 +52,7 @@ Lsp
 Git
 --------------------------------------------------------------------------------------
 :Diff               Open up a diff view of current changes
+:GHist              Show git history of current file
 <leader>q           Quit the diff
 gf                  Open file
 <C-h>               Jump to next hunk
