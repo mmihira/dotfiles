@@ -26,9 +26,9 @@ end
 
 packer.startup(function(use)
   -- Util
-  use("wbthomason/packer.nvim") -- packer manages itself
-  use("nvim-lua/plenary.nvim") -- avoids callbacks, used by other plugins
-  use("nvim-lua/popup.nvim") -- common dependency
+  use("wbthomason/packer.nvim")
+  use("nvim-lua/plenary.nvim")
+  use("nvim-lua/popup.nvim")
 
   -- Terminal
   use("voldikss/vim-floaterm")
@@ -47,11 +47,12 @@ packer.startup(function(use)
   use("ray-x/go.nvim")
   use("mfussenegger/nvim-jdtls")
   use({
-    "j-hui/fidget.nvim", -- for nicely displaying lsp output
+    "j-hui/fidget.nvim", -- for nicely displaying lsp startup progress
     config = function()
       require("fidget").setup({})
     end,
   })
+  use({ "rmagatti/goto-preview" })
 
   -- Syntax
   use("euclidianAce/BetterLua.vim")
