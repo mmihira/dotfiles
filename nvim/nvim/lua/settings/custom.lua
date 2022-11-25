@@ -40,5 +40,3 @@ function message(message)
 		highlight = "GoTestResult",
 	})
 end
-
-message("hello 2")
