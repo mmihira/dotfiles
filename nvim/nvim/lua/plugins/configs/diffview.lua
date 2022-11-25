@@ -12,7 +12,7 @@ require("gitsigns").setup()
 require("diffview").setup({
   keymaps = {
     file_panel = {
-      ["gf"] = diffview_actions.goto_file_edit,
+      ["o"] = diffview_actions.goto_file_tab,
       ["<leader>q"] = "<Cmd>DiffviewClose<CR>",
     },
     view = { ["<leader>q"] = "<Cmd>DiffviewClose<CR>" },
