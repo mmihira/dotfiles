@@ -52,7 +52,7 @@ Lsp
 Git
 --------------------------------------------------------------------------------------
 :Diff               Open up a diff view of current changes
-:GHist              Show git history of current file
+:Ghist              Show git history of current file
 <leader>q           Quit the diff
 gf                  Open file
 <C-h>               Jump to next hunk
