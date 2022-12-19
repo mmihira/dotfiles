@@ -24,7 +24,8 @@ config.cmd = {
   "-javaagent:" .. lombok_path,
 
   "-jar",
-  datapath .. "/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar",
+  -- we should automatically find the version here otherwise we have to change it everytime we update jdtls
+  datapath .. "/mason/packages/jdtls/plugins/org.eclipse.equinox.launcher_1.6.400.v20210924-0641.jar",  
 
   "-configuration",
   datapath .. "/mason/packages/jdtls/config_mac",
