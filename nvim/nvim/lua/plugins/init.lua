@@ -110,10 +110,11 @@ packer.startup(function(use)
     config = function()
       require("incline").setup()
     end,
-  })
+  }) -- floating status line
 
   -- Color Schemes
   use("ellisonleao/gruvbox.nvim")
+  use("EdenEast/nightfox.nvim")
 
   -- Automatically set up your configuration after cloning packer.nvim
   if Packer_Bootstrap then
