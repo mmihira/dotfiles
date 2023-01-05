@@ -76,6 +76,16 @@ function! Sym()
 endfunction
 command! Sym :call Sym()
 
+function! Il()
+  :action Inline
+endfunction
+command! Il :call Il()
+
+function! Xl()
+  :action IntroduceVariable
+endfunction
+command Xl :call Xl()
+
 function! Exm()
   :action ExtractMethod
 endfunction
