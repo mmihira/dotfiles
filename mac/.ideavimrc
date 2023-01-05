@@ -81,10 +81,15 @@ function! Il()
 endfunction
 command! Il :call Il()
 
-function! Xl()
+function! Iv()
   :action IntroduceVariable
 endfunction
-command Xl :call Xl()
+command Iv :call Iv()
+
+function! Ip()
+  :action IntroduceParameter
+endfunction
+command Ip :call Ip()
 
 function! Exm()
   :action ExtractMethod
