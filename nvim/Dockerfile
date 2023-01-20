@@ -8,10 +8,6 @@ RUN apt-get -y install ninja-build gettext libtool libtool-bin autoconf automake
 RUN git clone -b stable --depth 1 https://github.com/neovim/neovim.git $HOME/neovim
 RUN git clone --depth 1 https://github.com/mmihira/dotfiles.git 
 
-# Setup zsh
-RUN rm ~/.zshrc
-RUN ln -s ./dotfiles/mac/.zshrc /root/.zshrc
-
 # Install Neovim
 WORKDIR $HOME/neovim
 RUN git checkout stable &&  make CMAKE_BUILD_TYPE=Release CMAKE_INSTALL_PREFIX=/usr/local/bin install
@@ -20,6 +16,10 @@ WORKDIR $HOME
 # Sdkman, Java
 RUN curl -s "https://get.sdkman.io" | bash
 RUN /bin/bash -c "source /root/.sdkman/bin/sdkman-init.sh; sdk install java 18.0.2-zulu"
+
+# Setup zsh
+RUN rm /root/.zshrc
+RUN ln -s ./dotfiles/mac/.zshrc /root/.zshrc
 
 # Go
 RUN wget https://go.dev/dl/go1.19.2.linux-arm64.tar.gz

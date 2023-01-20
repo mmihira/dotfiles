@@ -43,7 +43,7 @@ local key_mappings = {
   -- { "referencesProvider", "n", "gr", "<Cmd>lua vim.lsp.buf.references()<CR>" }, :Ref in telescope
   { "hoverProvider", "n", "K", "<Cmd>lua vim.lsp.buf.hover()<CR>" },
   { "implementation", "n", "gi", "<Cmd>lua vim.lsp.buf.implementation()<CR>" },
-  -- { "definitionProvider", "n", "gd", "<Cmd>lua vim.lsp.buf.definition()<CR>" }, Using glance instead
+  -- { "definitionProvider", "n", "gd", "<Cmd>lua vim.lsp.buf.definition()<CR>" }, Use gotopreview
   -- { "signatureHelpProvider", "i", "<c-space>", "<Cmd>lua vim.lsp.buf.signature_help()<CR>" },
   { "renameProvider", "n", "<space>rn", '<cmd>lua require("cosmic-ui").rename()<cr>' },
   { "workspaceSymbolProvider", "n", "gW", "<Cmd>lua vim.lsp.buf.workspace_symbol()<CR>" },

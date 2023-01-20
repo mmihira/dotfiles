@@ -48,6 +48,8 @@ Lsp
 :Ref                Find all references for under cursor
 :Sym                List all functions in this file
 <space>cl           Code Lens
+<space>gd           Open definition window
+<C-w>L              Open definiton in new tab
 
 Git
 --------------------------------------------------------------------------------------
