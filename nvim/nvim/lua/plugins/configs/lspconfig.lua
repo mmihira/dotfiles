@@ -15,7 +15,7 @@ lspconfig.gopls.setup(goplsconfig)
 
 luaconfig = lsplib.mk_config()
 luaconfig.settings = { Lua = { diagnostics = { globals = { "vim" } } } }
-lspconfig.sumneko_lua.setup(luaconfig)
+lspconfig.lua_ls.setup(luaconfig)
 
 -- Hide the dianostic virtual text
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
