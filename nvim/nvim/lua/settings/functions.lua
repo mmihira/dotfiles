@@ -24,8 +24,7 @@ vim.api.nvim_create_user_command("Settings", function(opts)
 end, { nargs = 0 })
 
 vim.api.nvim_create_user_command("Cheat", function(opts)
-  local file_path = vim.fn.expand("~/c/dotfiles/cheatsheet.md")
-  vim.api.nvim_command(":e " .. file_path)
+  vim.api.nvim_command(":e " .. os.getenv("CODE_DIR") .. "/dotfiles/cheatsheet.md")
 end, { nargs = 0 })
 
 -- Start the main float we reuse
@@ -63,6 +62,20 @@ vim.api.nvim_create_user_command("Snip", function(opts)
   vim.api.nvim_command(":Neotree " .. vim.fn.stdpath("data") .. "/site/pack/packer/start/friendly-snippets/snippets")
 end, { nargs = 0 })
 
-vim.api.nvim_create_user_command("Ghist", function(opts)
+vim.api.nvim_create_user_command("GhistFile", function(opts)
   vim.api.nvim_command("DiffviewFileHistory %")
 end, { nargs = 0 })
+
+vim.api.nvim_create_user_command("GhistBranch", function(opts)
+  vim.api.nvim_command("DiffviewFileHistory")
+end, { nargs = 0 })
+
+-- Macquarie work -- 
+vim.api.nvim_create_user_command("ProdConfig", function(opts)
+  vim.api.nvim_command(":Neotree " .. os.getenv("CODE_DIR") .. "/product-config-registry/products/ci-platform")
+end, { nargs = 0 })
+
+vim.api.nvim_create_user_command("GhistPCR", function(opts)
+  vim.api.nvim_command("DiffviewFileHistory" .. os.getenv("CODE_DIR") .. "/product-config-registry/products/ci-platform")
+end, { nargs = 0 })
+

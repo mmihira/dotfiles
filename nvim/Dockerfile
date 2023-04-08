@@ -22,8 +22,8 @@ RUN rm /root/.zshrc
 RUN ln -s ./dotfiles/mac/.zshrc /root/.zshrc
 
 # Go
-RUN wget https://go.dev/dl/go1.19.2.linux-arm64.tar.gz
-RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go1.19.2.linux-arm64.tar.gz
+RUN wget https://go.dev/dl/go1.20.2.linux-arm64.tar.gz
+RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go1.20.2.linux-arm64.tar.gz
 ENV PATH="/usr/local/go/bin:${PATH}"
 
 # Install Packer

@@ -19,6 +19,8 @@ Vim
 :OpenData           Open the data file directory in NeoTree
 :Snip               Open the snippet directory
 :Settings           Open keymaps
+:GhistFile          View history for current file
+:GhistBranch        View history for current branch
 
 Movement
 --------------------------------------------------------------------------------------
@@ -54,7 +56,8 @@ Lsp
 Git
 --------------------------------------------------------------------------------------
 :Diff               Open up a diff view of current changes
-:Ghist              Show git history of current file
+:GhistFile          View history for current file
+:GhistBranch        View history for current branch
 <leader>q           Quit the diff
 gf                  Open file
 <C-h>               Jump to next hunk
@@ -77,3 +80,9 @@ v                   Vertical split file
 Surround
 --------------------------------------------------------------------------------------
 selection s, [b or ' or "]
+
+Macquarie
+--------------------------------------------------------------------------------------
+
+:ProdConfig         Open neotree in product config registry
+:GhistPCR           Show commit affecting ci-platform
