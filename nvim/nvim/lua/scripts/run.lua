@@ -25,12 +25,40 @@ local run_bash = function(file_path)
 end
 
 local run_go = function(file_path)
-  -- Should traverse up the directory until main.go is found
+  local scan = require("plenary.scandir")
+
+  local findMakeLoop = true
+  local foundMake = false
   local parent_path = file_path:parent()
-  local rel = file_path:make_relative(parent_path:absolute())
-  local go_build_cmd = "go build -o go_app"
-  local _cmd = "(cd " .. parent_path:absolute() .. "; " .. go_build_cmd .. ";" .. "./go_app" .. ")"
-  exec_floaterm(_cmd)
+
+  while findMakeLoop do
+    local out = scan.scan_dir(parent_path:absolute(), { hidden = true, depth = 1 })
+    for _, item in ipairs(out) do
+      if string.find(item, ".git", 1, true) then
+        print("Found git without finding Makefile")
+        findMakeLoop = false
+      end
+
+      if string.find(item, "Makefile", 1, true) then
+        findMakeLoop = false
+        foundMake = true
+      end
+    end
+
+    if findMakeLoop then
+      parent_path = parent_path:parent()
+    end
+  end
+
+  if foundMake then
+    local rel = file_path:make_relative(parent_path:absolute())
+    local go_build_cmd = "go build -o go_app"
+    local _cmd = "(cd " .. parent_path:absolute() .. "; make run" .. ")"
+    exec_floaterm(_cmd)
+  else
+    print("Could not found makefile")
+  end
+
 end
 
 local run_file = function()
