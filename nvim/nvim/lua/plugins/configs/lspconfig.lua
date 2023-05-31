@@ -11,11 +11,17 @@ end
 local lsplib = require("plugins/configs/lspl")
 
 local goplsconfig = { on_attach = lsplib.mk_config().on_attach }
+
+-- Gopls
 lspconfig.gopls.setup(goplsconfig)
 
+-- Lua
 luaconfig = lsplib.mk_config()
 luaconfig.settings = { Lua = { diagnostics = { globals = { "vim" } } } }
 lspconfig.lua_ls.setup(luaconfig)
+
+-- Python
+lspconfig.pyright.setup({})
 
 -- Hide the dianostic virtual text
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {

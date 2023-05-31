@@ -8,11 +8,27 @@ if not present then
   return
 end
 
+local present, trouble = pcall(require, "trouble")
+if not present then
+  return
+end
+
+local actions = require("telescope.actions")
+local trouble = require("trouble.providers.telescope")
+
+telescope.load_extension("ui-select")
+
 telescope.setup({
   defaults = {
     initial_mode = "normal",
     layout_config = { prompt_position = "top" },
-    mappings = { n = { ["<leader>q"] = "close" } },
+    mappings = {
+      n = {
+        ["<leader>q"] = "close",
+        ["<c-t>"] = trouble.open_with_trouble,
+      },
+      i = { ["<c-t>"] = trouble.open_with_trouble },
+    },
   },
   extensions = {
     ["ui-select"] = {
@@ -33,5 +49,3 @@ telescope.setup({
     },
   },
 })
-
-telescope.load_extension("ui-select")

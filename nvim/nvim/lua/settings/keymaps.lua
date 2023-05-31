@@ -63,5 +63,7 @@ keymap("n", "<leader>t", ":TestNearest<CR>", opts)
 keymap("n", "<leader>T", ":TestFile<CR>", opts)
 keymap("n", "<leader>C", ":T clear<CR>", opts)
 -- Goto preview
-keymap("n", "gd", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", opts)
-keymap("n", "gr", "<cmd>lua require('goto-preview').goto_preview_references()<CR>", opts)
+keymap("n", "gv", "<Cmd>vsplit | lua vim.lsp.buf.definition()<CR>", opts)
+keymap("n", "gpd", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", opts)
+-- Refactoring Inline variable can also pick up the identifier currently under the cursor without visual mode
+vim.api.nvim_set_keymap("n", "<leader>ri", [[ <Cmd>lua require('refactoring').refactor('Inline Variable')<CR>]], {noremap = true, silent = true, expr = false})

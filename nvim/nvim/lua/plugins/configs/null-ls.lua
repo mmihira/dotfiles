@@ -13,5 +13,6 @@ null.setup({
     null.builtins.formatting.gofmt,
     null.builtins.formatting.goimports,
     null.builtins.formatting.goimports_reviser,
+    null.builtins.diagnostics.yamllint,
   },
 })

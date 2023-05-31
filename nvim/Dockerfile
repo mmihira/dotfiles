@@ -47,5 +47,6 @@ RUN nvim --headless -c 'MasonInstall gopls' -c q
 RUN nvim --headless -c 'MasonInstall goimports' -c q
 RUN nvim --headless -c 'MasonInstall golangci-lint' -c q
 RUN nvim --headless -c 'MasonInstall stylua' -c q
+RUN nvim --headless -c 'MasonInstall yamllint' -c q
 
 CMD ["zsh"]

@@ -14,4 +14,4 @@ end
 vim.g["test#custom_strategies"] = { custom_floaterm = floa_vim_test_callback }
 vim.g["test#strategy"] = "custom_floaterm"
 vim.g["test#go#go#options"] = "-v"
-vim.g["test#go#gotest#options"] = "-v"
+vim.g["test#go#gotest#options"] = "-v -count 1"

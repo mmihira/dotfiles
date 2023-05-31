@@ -32,6 +32,7 @@ export PATH=$PATH:/usr/local/go/bin
 export PATH=$PATH:/usr/local/bin
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:/usr/bin
+export PATH="$(python3 -m site --user-base)/bin:$PATH"
 
 [ -s ~/.ssh/env_keys.sh ] && source ~/.ssh/env_keys.sh
 

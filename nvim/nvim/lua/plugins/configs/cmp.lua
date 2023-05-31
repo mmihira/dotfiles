@@ -5,6 +5,12 @@ if not present then
   return
 end
 
+vim.keymap.set({ "i", "s" }, "<C-l>", function()
+  if luasnip.choice_active() then
+    luasnip.change_choice(1)
+  end
+end)
+
 local border = {
   { "╭", "CmpBorder" },
   { "─", "CmpBorder" },

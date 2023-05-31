@@ -4,12 +4,12 @@ if not present then
 end
 
 treesitterconfig.setup({
-  ensure_installed = { "go", "lua", "java" },
+  ensure_installed = { "go", "lua" },
   sync_install = false,
   auto_install = false,
   ignore_install = { "javascript" },
   highlight = {
-    enable = true,
+    enable = false,
     additional_vim_regex_highlighting = false,
   },
 })

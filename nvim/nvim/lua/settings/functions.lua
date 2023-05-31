@@ -23,6 +23,12 @@ vim.api.nvim_create_user_command("Settings", function(opts)
   vim.api.nvim_command(":e " .. file_path)
 end, { nargs = 0 })
 
+-- Open Plugins
+vim.api.nvim_create_user_command("Plugins", function(opts)
+  local file_path = vim.fn.expand("~/.config/nvim/lua/plugins/init.lua")
+  vim.api.nvim_command(":e " .. file_path)
+end, { nargs = 0 })
+
 vim.api.nvim_create_user_command("Cheat", function(opts)
   vim.api.nvim_command(":e " .. os.getenv("CODE_DIR") .. "/dotfiles/cheatsheet.md")
 end, { nargs = 0 })

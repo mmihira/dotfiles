@@ -15,10 +15,10 @@ Vim
 :Old                Telescope file history
 :Cheat              Open this page
 :Vimfile            Open init.vim
+:Settings           Open keymaps
 :Nocmp              Disable autocompletion for the session
 :OpenData           Open the data file directory in NeoTree
 :Snip               Open the snippet directory
-:Settings           Open keymaps
 :GhistFile          View history for current file
 :GhistBranch        View history for current branch
 
@@ -29,6 +29,7 @@ zz                  Center current line
 Snippets
 --------------------------------------------------------------------------------------
 <Tab>               In insert mode tab to next node.
+<Ctr>l              When in insert mode go to next alternative
 
 Cmp
 --------------------------------------------------------------------------------------
@@ -44,10 +45,11 @@ Telescope
 :Old                Search oldfiles
 <Space>k            Live grep search
                     j,k if not typing. Else C-n,p for up/down
+<C-t>               To send file list to trouble quickfix list
 
 Lsp
 --------------------------------------------------------------------------------------
-:Ref                Find all references for under cursor
+:Ref                Find all references for under cursor, then <C-t> to send to quickfix list
 :Sym                List all functions in this file
 <space>cl           Code Lens
 <space>gd           Open definition window

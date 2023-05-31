@@ -44,7 +44,6 @@ packer.startup(function(use)
   use("williamboman/mason-lspconfig.nvim")
   use("neovim/nvim-lspconfig")
   use("folke/trouble.nvim")
-  use("ray-x/go.nvim")
   use("mfussenegger/nvim-jdtls")
   use({
     "j-hui/fidget.nvim", -- for nicely displaying lsp startup progress
@@ -53,6 +52,7 @@ packer.startup(function(use)
     end,
   })
   use({ "rmagatti/goto-preview" })
+  use({ "ThePrimeagen/refactoring.nvim" })
 
   -- Syntax
   use("euclidianAce/BetterLua.vim")
