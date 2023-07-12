@@ -3,7 +3,7 @@ ARG HOME=/root
 
 # Packages
 RUN apt-get update
-RUN apt-get -y install zsh tree git wget curl make unzip zip
+RUN apt-get -y install zsh tree git wget curl make unzip zip python3
 RUN apt-get -y install ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config 
 RUN git clone -b stable --depth 1 https://github.com/neovim/neovim.git $HOME/neovim
 RUN git clone --depth 1 https://github.com/mmihira/dotfiles.git 
@@ -48,5 +48,6 @@ RUN nvim --headless -c 'MasonInstall goimports' -c q
 RUN nvim --headless -c 'MasonInstall golangci-lint' -c q
 RUN nvim --headless -c 'MasonInstall stylua' -c q
 RUN nvim --headless -c 'MasonInstall yamllint' -c q
+RUN nvim --headless -c 'MasonInstall impl' -c q
 
 CMD ["zsh"]

@@ -53,7 +53,7 @@ vim.api.nvim_create_user_command("Ref", function(opts)
 end, { nargs = 0 })
 
 vim.api.nvim_create_user_command("Sym", function(opts)
-  vim.api.nvim_command(":Telescope lsp_document_symbols")
+  vim.api.nvim_command(":Telescope lsp_document_symbols ignore_symbols=field")
 end, { nargs = 0 })
 
 vim.api.nvim_create_user_command("Nocmp", function(opts)
@@ -76,12 +76,13 @@ vim.api.nvim_create_user_command("GhistBranch", function(opts)
   vim.api.nvim_command("DiffviewFileHistory")
 end, { nargs = 0 })
 
--- Macquarie work -- 
+-- Macquarie work --
 vim.api.nvim_create_user_command("ProdConfig", function(opts)
   vim.api.nvim_command(":Neotree " .. os.getenv("CODE_DIR") .. "/product-config-registry/products/ci-platform")
 end, { nargs = 0 })
 
 vim.api.nvim_create_user_command("GhistPCR", function(opts)
-  vim.api.nvim_command("DiffviewFileHistory" .. os.getenv("CODE_DIR") .. "/product-config-registry/products/ci-platform")
+  vim.api.nvim_command(
+    "DiffviewFileHistory" .. os.getenv("CODE_DIR") .. "/product-config-registry/products/ci-platform"
+  )
 end, { nargs = 0 })
-

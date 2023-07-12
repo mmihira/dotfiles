@@ -1,13 +1,3 @@
-Tmux
---------------------------------------------------------------------------------------
-**************************************************************************************
-
-<C>a <Enter>        Switch to copy mode with vim bindings, visual select and <Enter> to copy
-<C>a ;              Swtich to last buffer
-<C>a h,l            Switch buffers left, right
-<C>-                Split vertical
-<C>_                Split horizontal
-
 Vim
 --------------------------------------------------------------------------------------
 **************************************************************************************
@@ -25,6 +15,8 @@ Vim
 Movement
 --------------------------------------------------------------------------------------
 zz                  Center current line
+<Ctr> a             Last Buffer
+<Ctr> p             Next Buffer
 
 Snippets
 --------------------------------------------------------------------------------------
@@ -54,6 +46,7 @@ Lsp
 <space>cl           Code Lens
 <space>gd           Open definition window
 <C-w>L              Open definiton in new tab
+<space>im           Implement a go interface for a type 
 
 Git
 --------------------------------------------------------------------------------------

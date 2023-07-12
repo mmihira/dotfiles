@@ -47,12 +47,19 @@ packer.startup(function(use)
   use("mfussenegger/nvim-jdtls")
   use({
     "j-hui/fidget.nvim", -- for nicely displaying lsp startup progress
+    tag = "legacy",
     config = function()
       require("fidget").setup({})
     end,
   })
   use({ "rmagatti/goto-preview" })
   use({ "ThePrimeagen/refactoring.nvim" })
+  use({
+    "edolphin-ydf/goimpl.nvim",
+    config = function()
+      require("telescope").load_extension("goimpl")
+    end,
+  })
 
   -- Syntax
   use("euclidianAce/BetterLua.vim")
