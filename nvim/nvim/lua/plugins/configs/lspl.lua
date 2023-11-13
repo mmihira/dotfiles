@@ -38,19 +38,18 @@ end
 
 require("cosmic-ui").setup()
 local key_mappings = {
-  { "documentFormattingProvider", "n", "<space>lf", "<Cmd>lua vim.lsp.buf.format()<CR>" },
-  { "documentRangeFormattingProvider", "v", "gq", "<Esc><Cmd>lua vim.lsp.buf.range_formatting()<CR>" },
+  { "documentFormattingProvider", "n",          "<space>lf",  "<Cmd>lua vim.lsp.buf.format()<CR>" },
+  -- { "documentRangeFormattingProvider", "v", "gq", "<Esc><Cmd>lua vim.lsp.buf.range_formatting()<CR>" },
   -- { "referencesProvider", "n", "gr", "<Cmd>lua vim.lsp.buf.references()<CR>" }, :Ref in telescope
-  { "hoverProvider", "n", "K", "<Cmd>lua vim.lsp.buf.hover()<CR>" },
-  { "implementation", "n", "gi", "<Cmd>lua vim.lsp.buf.implementation()<CR>" },
-  { "definitionProvider", "n", "gd", "<Cmd>lua vim.lsp.buf.definition()<CR>" }, 
+  { "hoverProvider",              "n",          "K",          "<Cmd>lua vim.lsp.buf.hover()<CR>" },
+  { "implementation",             "n",          "<space>gi",  "<Cmd>lua vim.lsp.buf.implementation()<CR>" },
+  { "definitionProvider",         "n",          "gd",         "<Cmd>lua vim.lsp.buf.definition()<CR>" },
   -- { "signatureHelpProvider", "i", "<c-space>", "<Cmd>lua vim.lsp.buf.signature_help()<CR>" },
-  { "renameProvider", "n", "<space>rn", '<cmd>lua require("cosmic-ui").rename()<cr>' },
-  { "workspaceSymbolProvider", "n", "gW", "<Cmd>lua vim.lsp.buf.workspace_symbol()<CR>" },
-  { "codeActionProvider", "n", "<leader>cl", "<Cmd>lua vim.lsp.buf.code_action()<CR>" },
+  { "renameProvider",             "n",          "<space>rn",  '<cmd>lua require("cosmic-ui").rename()<cr>' },
+  -- { "workspaceSymbolProvider", "n", "gW", "<Cmd>lua vim.lsp.buf.workspace_symbol()<CR>" },
+  -- { "codeActionProvider", { "n", "v" }, "<leader>cl", '<Cmd>lua require("cosmic-ui").code_actions()<CR>' },
+  { "codeActionProvider",         { "n", "v" }, "<leader>cl", "<Cmd>lua vim.lsp.buf.code_action()<CR>" },
   -- { "codeActionProvider", "n", "<leader>r", "<Cmd>lua vim.lsp.buf.code_action { only = 'refactor' }<CR>" },
-  -- { "codeActionProvider", "v", "<a-CR>", "<Esc><Cmd>lua vim.lsp.buf.range_code_action()<CR>" },
-  -- { "codeActionProvider", "v", "<leader>r", "<Esc><Cmd>lua vim.lsp.buf.range_code_action { only = 'refactor'}<CR>" },
 }
 
 local function on_attach(client, bufnr, attach_opts)
@@ -66,11 +65,12 @@ local function on_attach(client, bufnr, attach_opts)
     api.nvim_buf_set_option(bufnr, "tagfunc", "v:lua.vim.lsp.tagfunc")
   end
 
-  local opts = { silent = true }
+  local opts = { silent = true, buffer = bufnr }
   for _, mappings in pairs(key_mappings) do
     local capability, mode, lhs, rhs = unpack(mappings)
     if client.server_capabilities[capability] then
-      api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, opts)
+      -- api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, opts)
+      vim.keymap.set(mode, lhs, rhs, opts)
     end
   end
 
@@ -89,6 +89,7 @@ local function on_attach(client, bufnr, attach_opts)
     api.nvim_buf_set_keymap(bufnr, "n", "<leader>cr", "<Cmd>lua vim.lsp.codelens.refresh()<CR>", opts)
   end
   vim.cmd("augroup end")
+
 end
 
 M.on_attach = on_attach

@@ -35,13 +35,19 @@ keymap("c", "jj", "<Esc>", opts)
 keymap("n", "<c-k>", ":Telescope buffers<CR>", opts)
 keymap("n", "<c-l>", ":Telescope lsp_document_symbols symbol_width=60 ignore_symbols=field,struct<CR>", opts)
 keymap("n", "<leader>k", ":Telescope live_grep<CR>", opts)
-keymap('n', '<leader>im', [[<cmd>lua require'telescope'.extensions.goimpl.goimpl{}<CR>]], {noremap=true, silent=true})
+keymap(
+  "n",
+  "<leader>im",
+  [[<cmd>lua require'telescope'.extensions.goimpl.goimpl{}<CR>]],
+  { noremap = true, silent = true }
+)
 
 -- Neotree
 keymap("n", "<leader>nn", "<CMD>Neotree position=float toggle=true reveal_force_cwd=true<CR>", opts)
 
+-- GoAlt
 -- Remap exit
-keymap("n", "<leader>q", ":q<CR>", opts)
+keymap("n", "<leader>q", ":close<CR>", opts)
 -- Remap cancel highlight
 keymap("n", "<leader>8", ":noh<CR>", opts)
 -- Remap paste from + buffer
@@ -66,7 +72,7 @@ keymap("n", "<leader>T", ":TestFile<CR>", opts)
 keymap("n", "<leader>C", ":T clear<CR>", opts)
 -- Goto preview
 keymap("n", "gv", "<Cmd>vsplit | lua vim.lsp.buf.definition()<CR>", opts)
-keymap("n", "gpd", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", opts)
+keymap("n", "gp", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", opts)
 -- Refactoring Inline variable can also pick up the identifier currently under the cursor without visual mode
 vim.api.nvim_set_keymap(
   "n",

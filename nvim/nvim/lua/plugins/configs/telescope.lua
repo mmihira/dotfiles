@@ -16,8 +16,6 @@ end
 local actions = require("telescope.actions")
 local trouble = require("trouble.providers.telescope")
 
-telescope.load_extension("ui-select")
-
 telescope.setup({
   defaults = {
     initial_mode = "normal",
@@ -49,3 +47,5 @@ telescope.setup({
     },
   },
 })
+
+telescope.load_extension("ui-select")

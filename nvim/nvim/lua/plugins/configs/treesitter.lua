@@ -9,7 +9,7 @@ treesitterconfig.setup({
   auto_install = false,
   ignore_install = { "javascript" },
   highlight = {
-    enable = false,
+    enable = true,
     additional_vim_regex_highlighting = false,
   },
 })

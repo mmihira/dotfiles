@@ -76,7 +76,8 @@ packer.startup(function(use)
   use("hrsh7th/cmp-path")
   use("hrsh7th/cmp-cmdline")
   use("hrsh7th/cmp-nvim-lsp")
-  use("hrsh7th/cmp-nvim-lsp-signature-help")
+  -- use("hrsh7th/cmp-nvim-lsp-signature-help")
+  use("ray-x/lsp_signature.nvim")
   use("L3MON4D3/LuaSnip")
   use("saadparwaiz1/cmp_luasnip")
   use("rafamadriz/friendly-snippets")
@@ -95,6 +96,7 @@ packer.startup(function(use)
 
   -- Navigation
   use("kwkarlwang/bufjump.nvim")
+  use("folke/flash.nvim")
 
   -- Tree
   use({
@@ -109,7 +111,7 @@ packer.startup(function(use)
 
   -- Display
   use("itchyny/lightline.vim")
-  use("goolord/alpha-nvim")
+  use("echasnovski/mini.starter")
   use("MunifTanjim/nui.nvim")
   use("CosmicNvim/cosmic-ui")
   use({
@@ -122,6 +124,17 @@ packer.startup(function(use)
   -- Color Schemes
   use("ellisonleao/gruvbox.nvim")
   use("EdenEast/nightfox.nvim")
+  use({
+    "ray-x/starry.nvim",
+    setup = function()
+      vim.g.starry_italic_comments = true
+    end,
+  })
+
+  -- Notes
+  use({
+    "renerocksai/telekasten.nvim",
+  })
 
   -- Automatically set up your configuration after cloning packer.nvim
   if Packer_Bootstrap then

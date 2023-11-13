@@ -10,6 +10,7 @@ end
 
 require("gitsigns").setup()
 require("diffview").setup({
+  enhanced_diff_hl = true,
   keymaps = {
     file_panel = {
       ["o"] = diffview_actions.goto_file_tab,

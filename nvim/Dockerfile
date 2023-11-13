@@ -3,8 +3,8 @@ ARG HOME=/root
 
 # Packages
 RUN apt-get update
-RUN apt-get -y install zsh tree git wget curl make unzip zip python3
-RUN apt-get -y install ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config 
+RUN apt-get -y install zsh tree git wget curl make unzip zip python3 
+RUN apt-get -y install ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config python3.10-venv
 RUN git clone -b stable --depth 1 https://github.com/neovim/neovim.git $HOME/neovim
 RUN git clone --depth 1 https://github.com/mmihira/dotfiles.git 
 

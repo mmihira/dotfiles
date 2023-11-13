@@ -54,7 +54,6 @@ cmp.setup({
     { { name = "luasnip" } },
     { { name = "nvim_lsp" } },
     { { name = "buffer", keyword_length = 3 } },
-    { { name = "nvim_lsp_signature_help" } },
     { { name = "path", keyword_length = 3 } }
   ),
   window = {
@@ -69,7 +68,8 @@ cmp.setup({
   experimental = { native_menu = false, ghost_text = true },
 })
 
-cmp.setup.cmdline("/", { sources = { { name = "buffer" } } })
+-- prompt for the command line search
+-- cmp.setup.cmdline("/", { sources = { { name = "buffer" } } })
 
 cmp.setup.cmdline(":", {
   sources = cmp.config.sources({ { name = "path" } }, { { name = "cmdline" } }),

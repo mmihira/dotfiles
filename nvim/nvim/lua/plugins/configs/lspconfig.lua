@@ -41,3 +41,12 @@ vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.s
 vim.diagnostic.config({
   float = { border = "rounded" },
 })
+
+-- Signature help, doesn't work in attach func, so putting it here
+local signature_config = {
+  debug = true,
+  hint_enable = false,
+  handler_opts = { border = "rounded" },
+  max_width = 80,
+}
+require("lsp_signature").setup(signature_config)

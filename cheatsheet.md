@@ -22,6 +22,7 @@ Snippets
 --------------------------------------------------------------------------------------
 <Tab>               In insert mode tab to next node.
 <Ctr>l              When in insert mode go to next alternative
+<Ctr>i              When in insert mode go to next input section of snippet
 
 Cmp
 --------------------------------------------------------------------------------------
@@ -42,11 +43,13 @@ Telescope
 Lsp
 --------------------------------------------------------------------------------------
 :Ref                Find all references for under cursor, then <C-t> to send to quickfix list
+:Imp                Find all implementations for this interface
 :Sym                List all functions in this file
 <space>cl           Code Lens
 <space>gd           Open definition window
 <C-w>L              Open definiton in new tab
 <space>im           Implement a go interface for a type 
+<C-a>               Switch to alternatve in golang
 
 Git
 --------------------------------------------------------------------------------------
@@ -74,7 +77,8 @@ v                   Vertical split file
 
 Surround
 --------------------------------------------------------------------------------------
-selection s, [b or ' or "]
+ysiw"               Surround the word
+ys$"                Surround till end of line
 
 Macquarie
 --------------------------------------------------------------------------------------

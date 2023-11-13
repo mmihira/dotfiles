@@ -52,6 +52,10 @@ vim.api.nvim_create_user_command("Ref", function(opts)
   vim.api.nvim_command(":Telescope lsp_references")
 end, { nargs = 0 })
 
+vim.api.nvim_create_user_command("Imp", function(opts)
+  vim.api.nvim_command(":Telescope lsp_implementations")
+end, { nargs = 0 })
+
 vim.api.nvim_create_user_command("Sym", function(opts)
   vim.api.nvim_command(":Telescope lsp_document_symbols ignore_symbols=field")
 end, { nargs = 0 })
@@ -76,6 +80,14 @@ vim.api.nvim_create_user_command("GhistBranch", function(opts)
   vim.api.nvim_command("DiffviewFileHistory")
 end, { nargs = 0 })
 
+-- Telekasten
+vim.api.nvim_create_user_command("Notes", function(opts)
+  vim.api.nvim_command(":Telekasten find_notes")
+end, { nargs = 0 })
+vim.api.nvim_create_user_command("TK", function(opts)
+  vim.api.nvim_command(":Telekasten panel")
+end, { nargs = 0 })
+
 -- Macquarie work --
 vim.api.nvim_create_user_command("ProdConfig", function(opts)
   vim.api.nvim_command(":Neotree " .. os.getenv("CODE_DIR") .. "/product-config-registry/products/ci-platform")
@@ -86,3 +98,4 @@ vim.api.nvim_create_user_command("GhistPCR", function(opts)
     "DiffviewFileHistory" .. os.getenv("CODE_DIR") .. "/product-config-registry/products/ci-platform"
   )
 end, { nargs = 0 })
+

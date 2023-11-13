@@ -350,8 +350,8 @@ if !reflect.DeepEqual({}, {}) {{
   ls.s(
     { trig = "ae", name = "Assert Equal", dscr = "Add assert.Equal" },
     ls.c(1, {
-      ls.sn(nil, fmt('assert.Equal(t, {}, {})', { ls.i(1, "got"), ls.i(2, "want") })),
-      ls.sn(nil, fmt('assert.Equalf(t, {}, {}, "{}", {})', { ls.i(1, "got"), ls.i(2, "want"), ls.i(3, "got %v not equal to want"), ls.i(4, "got") })),
+      ls.sn(nil, fmt('assert.Equal(t, {}, {})', { ls.i(1, "expected"), ls.i(2, "got") })),
+      ls.sn(nil, fmt('assert.Equalf(t, {}, {}, "{}", {})', { ls.i(1, "expected"), ls.i(2, "got"), ls.i(3, "got %v not equal to want"), ls.i(4, "got") })),
     })
   ),
 
