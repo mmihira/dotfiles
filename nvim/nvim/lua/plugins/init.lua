@@ -69,6 +69,13 @@ packer.startup(function(use)
   use("cohama/lexima.vim")
   use("mechatroner/rainbow_csv")
   use("hashivim/vim-terraform")
+  use({
+    "Wansmer/treesj",
+    requires = { "nvim-treesitter/nvim-treesitter" },
+    config = function()
+      require("treesj").setup({})
+    end,
+  })
 
   -- Completion
   use("hrsh7th/nvim-cmp")
@@ -110,6 +117,7 @@ packer.startup(function(use)
   })
 
   -- Display
+  use("hlucco/nvim-eswpoch")
   use("itchyny/lightline.vim")
   use("echasnovski/mini.starter")
   use("MunifTanjim/nui.nvim")

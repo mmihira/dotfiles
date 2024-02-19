@@ -68,6 +68,10 @@ vim.api.nvim_create_user_command("OpenData", function(opts)
   vim.api.nvim_command(":Neotree " .. vim.fn.stdpath("data"))
 end, { nargs = 0 })
 
+vim.api.nvim_create_user_command("SS", function(opts)
+  vim.api.nvim_command(":TSJToggle")
+end, { nargs = 0 })
+
 vim.api.nvim_create_user_command("Snip", function(opts)
   vim.api.nvim_command(":Neotree " .. vim.fn.stdpath("data") .. "/site/pack/packer/start/friendly-snippets/snippets")
 end, { nargs = 0 })
@@ -98,4 +102,3 @@ vim.api.nvim_create_user_command("GhistPCR", function(opts)
     "DiffviewFileHistory" .. os.getenv("CODE_DIR") .. "/product-config-registry/products/ci-platform"
   )
 end, { nargs = 0 })
-

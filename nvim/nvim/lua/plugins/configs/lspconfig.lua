@@ -23,6 +23,12 @@ lspconfig.lua_ls.setup(luaconfig)
 -- Python
 lspconfig.pyright.setup({})
 
+-- HTML
+lspconfig.html.setup({})
+
+-- HTML
+lspconfig.tsserver.setup(goplsconfig)
+
 -- Hide the dianostic virtual text
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
   virtual_text = false,

@@ -50,6 +50,7 @@ Lsp
 <C-w>L              Open definiton in new tab
 <space>im           Implement a go interface for a type 
 <C-a>               Switch to alternatve in golang
+:Sp                 TSJToggle
 
 Git
 --------------------------------------------------------------------------------------
