@@ -22,6 +22,14 @@ local border = {
   { "│", "CmpBorder" },
 }
 
+local has_words_before = function()
+  if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
+    return false
+  end
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  return col ~= 0 and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match("^%s*$") == nil
+end
+
 cmp.setup({
   snippet = {
     expand = function(args)
@@ -41,8 +49,8 @@ cmp.setup({
     ["<C-n>"] = cmp.mapping.select_next_item(),
     ["<CR>"] = cmp.mapping.confirm({ select = true }),
     ["<Tab>"] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
+      if cmp.visible() and has_words_before() then
+        cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
       elseif luasnip.expand_or_jumpable() then
         luasnip.expand_or_jump()
       else
@@ -50,12 +58,13 @@ cmp.setup({
       end
     end, { "i", "s" }),
   },
-  sources = cmp.config.sources(
-    { { name = "luasnip" } },
-    { { name = "nvim_lsp" } },
-    { { name = "buffer", keyword_length = 3 } },
-    { { name = "path", keyword_length = 3 } }
-  ),
+  sources = {
+    { name = "copilot",  group_index = 2, priority = 3 },
+    { name = "nvim_lsp", group_index = 2, priority = 2, max_item_count = 5 },
+    { name = "luasnip",  group_index = 1, priority = 1 },
+    { name = "buffer",   group_index = 2, priority = 1, max_item_count = 5 },
+    -- { name = "path" },
+  },
   window = {
     documentation = {
       border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },

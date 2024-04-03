@@ -46,7 +46,6 @@ keymap(
 -- Neotree
 keymap("n", "<leader>nn", "<CMD>Neotree position=float toggle=true reveal_force_cwd=true<CR>", opts)
 
--- GoAlt
 -- Remap exit
 keymap("n", "<leader>q", ":close<CR>", opts)
 -- Remap cancel highlight

@@ -60,6 +60,30 @@ packer.startup(function(use)
       require("telescope").load_extension("goimpl")
     end,
   })
+  use({
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    event = "InsertEnter",
+    config = function()
+      require("copilot").setup({
+        suggestion = { enabled = false },
+        panel = { enabled = false },
+      })
+    end,
+  })
+  use({
+    "zbirenbaum/copilot-cmp",
+    after = { "copilot.lua" },
+    config = function()
+      require("copilot_cmp").setup()
+    end,
+  })
+  use({
+    "CopilotC-Nvim/CopilotChat.nvim",
+    config = function()
+      require("CopilotChat").setup({})
+    end,
+  })
 
   -- Syntax
   use("euclidianAce/BetterLua.vim")

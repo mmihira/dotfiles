@@ -227,6 +227,15 @@ switch {} := {}.(type) {{
     in_fn
   ),
 
+  ls.s(
+    { trig = "sf", name = "[]f64", dscr = "Slice Float64" },
+    fmt("{} {} := []float64{{}}", {
+      ls.i(1, "name"),
+      ls.i(2),
+    }),
+    in_fn
+  ),
+
   -- Test Cases
   ls.s(
     { trig = "tcs", dscr = "create test cases for testing" },

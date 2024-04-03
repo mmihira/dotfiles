@@ -10,7 +10,23 @@ end
 
 local lsplib = require("plugins/configs/lspl")
 
-local goplsconfig = { on_attach = lsplib.mk_config().on_attach }
+local defaultconfig = { on_attach = lsplib.mk_config().on_attach }
+local goplsconfig = {
+  on_attach = lsplib.mk_config().on_attach,
+  settings = {
+    gopls = {
+      experimentalPostfixCompletions = true,
+      analyses = {
+        unusedparams = true,
+        shadow = true,
+      },
+      staticcheck = true,
+    },
+  },
+  init_options = {
+    usePlaceholders = true,
+  },
+}
 
 -- Gopls
 lspconfig.gopls.setup(goplsconfig)
@@ -27,7 +43,7 @@ lspconfig.pyright.setup({})
 lspconfig.html.setup({})
 
 -- HTML
-lspconfig.tsserver.setup(goplsconfig)
+lspconfig.tsserver.setup(defaultconfig)
 
 -- Hide the dianostic virtual text
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
