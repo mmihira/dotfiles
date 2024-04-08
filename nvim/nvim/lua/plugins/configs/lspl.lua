@@ -1,8 +1,3 @@
-local present, cosmic = pcall(require, "cosmic-ui")
-if not present then
-  return
-end
-
 local api = vim.api
 local lsp = require("vim.lsp")
 local M = {}
@@ -36,7 +31,6 @@ local show_client_capabilities = function(client)
   vim.api.nvim_buf_set_lines(popup.bufnr, 3, 4, false, lines)
 end
 
-require("cosmic-ui").setup()
 local key_mappings = {
   { "documentFormattingProvider", "n",          "<space>lf",  "<Cmd>lua vim.lsp.buf.format()<CR>" },
   -- { "documentRangeFormattingProvider", "v", "gq", "<Esc><Cmd>lua vim.lsp.buf.range_formatting()<CR>" },
@@ -45,9 +39,8 @@ local key_mappings = {
   { "implementation",             "n",          "<space>gi",  "<Cmd>lua vim.lsp.buf.implementation()<CR>" },
   { "definitionProvider",         "n",          "gd",         "<Cmd>lua vim.lsp.buf.definition()<CR>" },
   -- { "signatureHelpProvider", "i", "<c-space>", "<Cmd>lua vim.lsp.buf.signature_help()<CR>" },
-  { "renameProvider",             "n",          "<space>rn",  '<cmd>lua require("cosmic-ui").rename()<cr>' },
+  { "renameProvider",             "n",          "<space>rn",  "<cmd>:Lspsaga rename<cr>" },
   -- { "workspaceSymbolProvider", "n", "gW", "<Cmd>lua vim.lsp.buf.workspace_symbol()<CR>" },
-  -- { "codeActionProvider", { "n", "v" }, "<leader>cl", '<Cmd>lua require("cosmic-ui").code_actions()<CR>' },
   { "codeActionProvider",         { "n", "v" }, "<leader>cl", "<Cmd>lua vim.lsp.buf.code_action()<CR>" },
   -- { "codeActionProvider", "n", "<leader>r", "<Cmd>lua vim.lsp.buf.code_action { only = 'refactor' }<CR>" },
 }
@@ -89,7 +82,6 @@ local function on_attach(client, bufnr, attach_opts)
     api.nvim_buf_set_keymap(bufnr, "n", "<leader>cr", "<Cmd>lua vim.lsp.codelens.refresh()<CR>", opts)
   end
   vim.cmd("augroup end")
-
 end
 
 M.on_attach = on_attach

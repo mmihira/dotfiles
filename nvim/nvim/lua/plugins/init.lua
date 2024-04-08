@@ -84,6 +84,12 @@ packer.startup(function(use)
       require("CopilotChat").setup({})
     end,
   })
+  use({
+    "nvimdev/lspsaga.nvim",
+    config = function()
+      require("lspsaga").setup({})
+    end,
+  })
 
   -- Syntax
   use("euclidianAce/BetterLua.vim")
@@ -145,7 +151,6 @@ packer.startup(function(use)
   use("itchyny/lightline.vim")
   use("echasnovski/mini.starter")
   use("MunifTanjim/nui.nvim")
-  use("CosmicNvim/cosmic-ui")
   use({
     "b0o/incline.nvim",
     config = function()

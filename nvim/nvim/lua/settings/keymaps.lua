@@ -1,7 +1,6 @@
 local opts = { noremap = true, silent = true }
 local keymap = vim.api.nvim_set_keymap
 
-
 keymap("", "<Space>", "<Nop>", opts)
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
@@ -70,6 +69,8 @@ keymap("t", "<leader>qq", "<C-\\><C-n><CR>", opts)
 keymap("n", "<leader>t", ":TestNearest<CR>", opts)
 keymap("n", "<leader>T", ":TestFile<CR>", opts)
 keymap("n", "<leader>C", ":T clear<CR>", opts)
+-- CopilotChat
+keymap("n", "<leader>cp", ":CopilotChat<CR>", opts)
 -- Goto preview
 keymap("n", "gv", "<Cmd>vsplit | lua vim.lsp.buf.definition()<CR>", opts)
 keymap("n", "gp", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", opts)
