@@ -84,12 +84,6 @@ packer.startup(function(use)
       require("CopilotChat").setup({})
     end,
   })
-  use({
-    "nvimdev/lspsaga.nvim",
-    config = function()
-      require("lspsaga").setup({})
-    end,
-  })
 
   -- Syntax
   use("euclidianAce/BetterLua.vim")
@@ -103,7 +97,9 @@ packer.startup(function(use)
     "Wansmer/treesj",
     requires = { "nvim-treesitter/nvim-treesitter" },
     config = function()
-      require("treesj").setup({})
+      require("treesj").setup({
+        max_join_length = 10000,
+      })
     end,
   })
 
@@ -133,7 +129,7 @@ packer.startup(function(use)
 
   -- Navigation
   use("kwkarlwang/bufjump.nvim")
-  use("folke/flash.nvim")
+  use({ "bloznelis/before.nvim" })
 
   -- Tree
   use({
@@ -141,7 +137,7 @@ packer.startup(function(use)
     branch = "v2.x",
     requires = {
       "nvim-lua/plenary.nvim",
-      "kyazdani42/nvim-web-devicons",
+      "nvim-tree/nvim-web-devicons",
       "MunifTanjim/nui.nvim",
     },
   })

@@ -31,9 +31,11 @@ keymap("c", "jj", "<Esc>", opts)
 -- " Map line matching omnicomplete
 -- inoremap <C-l> <C-x><C-o>
 
+-- TreeSJ
+keymap("n", "t", ":TSJToggle<CR>", opts)
 -- Telescope
 keymap("n", "<c-k>", ":Telescope buffers<CR>", opts)
-keymap("n", "<c-l>", ":Telescope lsp_document_symbols symbol_width=60 ignore_symbols=field,struct<CR>", opts)
+keymap("n", "<c-l>", ":Sym<CR>", opts)
 keymap("n", "<leader>k", ":Telescope live_grep<CR>", opts)
 keymap(
   "n",

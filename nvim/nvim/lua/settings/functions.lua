@@ -7,7 +7,13 @@ end, { nargs = 0 })
 local present, diffview = pcall(require, "diffview")
 if present then
   vim.api.nvim_create_user_command("Diff", function(opts)
-    diffview.open()
+    local lib = require("diffview.lib")
+    local view = lib.get_current_view()
+    if view then
+      vim.cmd.DiffviewClose()
+    else
+      diffview.open()
+    end
   end, { nargs = 0 })
 end
 
@@ -49,15 +55,15 @@ vim.api.nvim_create_user_command("Old", function(opts)
 end, { nargs = 0 })
 
 vim.api.nvim_create_user_command("Ref", function(opts)
-  vim.api.nvim_command(":Telescope lsp_references")
+  vim.api.nvim_command(":Trouble lsp_references")
 end, { nargs = 0 })
 
 vim.api.nvim_create_user_command("Imp", function(opts)
-  vim.api.nvim_command(":Telescope lsp_implementations")
+  vim.api.nvim_command(":Trouble lsp_implementations")
 end, { nargs = 0 })
 
 vim.api.nvim_create_user_command("Sym", function(opts)
-  vim.api.nvim_command(":Telescope lsp_document_symbols ignore_symbols=field")
+  vim.api.nvim_command(":Trouble lsp_document_symbols lsp_doc_float")
 end, { nargs = 0 })
 
 vim.api.nvim_create_user_command("Nocmp", function(opts)
@@ -82,6 +88,10 @@ end, { nargs = 0 })
 
 vim.api.nvim_create_user_command("GhistBranch", function(opts)
   vim.api.nvim_command("DiffviewFileHistory")
+end, { nargs = 0 })
+
+vim.api.nvim_create_user_command("Issues", function(opts)
+  vim.api.nvim_command(":Trouble diagnostics")
 end, { nargs = 0 })
 
 -- Telekasten

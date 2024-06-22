@@ -39,7 +39,7 @@ local key_mappings = {
   { "implementation",             "n",          "<space>gi",  "<Cmd>lua vim.lsp.buf.implementation()<CR>" },
   { "definitionProvider",         "n",          "gd",         "<Cmd>lua vim.lsp.buf.definition()<CR>" },
   -- { "signatureHelpProvider", "i", "<c-space>", "<Cmd>lua vim.lsp.buf.signature_help()<CR>" },
-  { "renameProvider",             "n",          "<space>rn",  "<cmd>:Lspsaga rename<cr>" },
+  { "renameProvider",             "n",          "<space>rn",  "<cmd>lua vim.lsp.buf.rename()<cr>" },
   -- { "workspaceSymbolProvider", "n", "gW", "<Cmd>lua vim.lsp.buf.workspace_symbol()<CR>" },
   { "codeActionProvider",         { "n", "v" }, "<leader>cl", "<Cmd>lua vim.lsp.buf.code_action()<CR>" },
   -- { "codeActionProvider", "n", "<leader>r", "<Cmd>lua vim.lsp.buf.code_action { only = 'refactor' }<CR>" },
@@ -79,7 +79,7 @@ local function on_attach(client, bufnr, attach_opts)
   end
 
   if vim.lsp.codelens and client.server_capabilities["codeLensProvider"] then
-    api.nvim_buf_set_keymap(bufnr, "n", "<leader>cr", "<Cmd>lua vim.lsp.codelens.refresh()<CR>", opts)
+    api.nvim_buf_set_keymap(bufnr, "n", "<leader>cr", "<Cmd>lua vim.lsp.codelens.refresh()<CR>", { silent = true })
   end
   vim.cmd("augroup end")
 end

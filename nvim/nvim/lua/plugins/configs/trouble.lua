@@ -3,17 +3,50 @@ if not present then
   return
 end
 
--- Setup Trouble
 trouble.setup({
-  icons = true,
-  fold_open = "v", -- icon used for open folds
-  fold_closed = ">", -- icon used for closed folds
-  indent_lines = false, -- add an indent guide below the fold icons
-  signs = {
-    error = "error",
-    warning = "warn",
-    hint = "hint",
-    information = "info",
+  focus = true,
+  modes = {
+    lsp_doc_float = {
+      mode = "lsp_document_symbols",
+      win = {
+        type = "float",
+        relative = "editor",
+        border = "rounded",
+        title = "Document Symbols",
+        title_pos = "center",
+        position = { 0, -2 },
+        size = { width = 0.35, height = 1 },
+        zindex = 200,
+      },
+      filter = {
+        kind = "Method",
+      },
+    },
+    ref_float = {
+      mode = "lsp_references",
+      win = {
+        type = "float",
+        relative = "editor",
+        border = "rounded",
+        title = "Document Symbols",
+        title_pos = "center",
+        position = { 0, -2 },
+        size = { width = 0.35, height = 1 },
+        zindex = 200,
+      },
+    },
+    imp_float = {
+      mode = "lsp_impementations",
+      win = {
+        type = "float",
+        relative = "editor",
+        border = "rounded",
+        title = "Document Symbols",
+        title_pos = "center",
+        position = { 0, -2 },
+        size = { width = 0.35, height = 1 },
+        zindex = 200,
+      },
+    },
   },
 })
-

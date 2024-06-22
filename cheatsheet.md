@@ -51,6 +51,7 @@ Lsp
 <space>im           Implement a go interface for a type 
 <C-a>               Switch to alternatve in golang
 :Sp                 TSJToggle
+:Issues             See list of diagnositcs
 
 Git
 --------------------------------------------------------------------------------------
@@ -80,6 +81,8 @@ Surround
 --------------------------------------------------------------------------------------
 ysiw"               Surround the word
 ys$"                Surround till end of line
+s"                  In visual mode just press s then "
+ds"                 Use d followed by s then " to remove a surround
 
 Macquarie
 --------------------------------------------------------------------------------------
