@@ -8,6 +8,9 @@ trouble.setup({
   modes = {
     lsp_doc_float = {
       mode = "lsp_document_symbols",
+      keys = {
+        ["<cr>"] = "jump_close",
+      },
       win = {
         type = "float",
         relative = "editor",

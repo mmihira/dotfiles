@@ -120,8 +120,17 @@ packer.startup(function(use)
 
   -- Git
   use("itchyny/vim-gitbranch")
-  use("lewis6991/gitsigns.nvim")
   use("sindrets/diffview.nvim")
+  use({
+    "echasnovski/mini.diff",
+    config = function()
+      require("mini.diff").setup({
+        view = {
+          style = "sign", -- doesn't work
+        },
+      })
+    end,
+  })
 
   -- Finders
   use("nvim-telescope/telescope.nvim") -- finder, requires fzf and ripgrep

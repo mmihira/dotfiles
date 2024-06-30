@@ -61,7 +61,8 @@ keymap("v", "<leader>r", '"0y :%s/<C-r>0', opts)
 -- Run
 keymap("n", "<leader>r", ":Run<CR>", opts)
 -- Git view
-keymap("n", "<leader>ss", ":Diff<CR>", opts)
+keymap("n", "<leader>ss", ":Telescope git_status<CR>", opts)
+keymap("n", "<leader>sg", ":lua MiniDiff.toggle_overlay()<CR>", opts)
 -- Floaterm
 keymap("n", "<leader>mm", ":StartMainFloat<CR>", opts)
 keymap("t", "<leader>mm", "<C-\\><C-n>:FloatermToggle<CR>", opts)
