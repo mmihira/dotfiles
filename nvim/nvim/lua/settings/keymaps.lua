@@ -77,6 +77,20 @@ keymap("n", "<leader>cp", ":CopilotChat<CR>", opts)
 -- Goto preview
 keymap("n", "gv", "<Cmd>vsplit | lua vim.lsp.buf.definition()<CR>", opts)
 keymap("n", "gp", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", opts)
+-- Debug
+vim.keymap.set("n", "<F5>", function()
+  require("dap").continue()
+end)
+vim.keymap.set("n", "<F3>", function()
+  require("dap-go").debug_last_test()
+end)
+vim.keymap.set("n", "_", function()
+  require("dap").step_over()
+end)
+vim.keymap.set({ "n", "v" }, "<Leader>dk", function()
+  require("dapui").eval()
+end)
+
 -- Refactoring Inline variable can also pick up the identifier currently under the cursor without visual mode
 vim.api.nvim_set_keymap(
   "n",

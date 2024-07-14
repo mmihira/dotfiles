@@ -3,20 +3,6 @@ vim.api.nvim_create_user_command("Run", function(opts)
   require("scripts/run").run_file()
 end, { nargs = 0 })
 
--- Show git diff
-local present, diffview = pcall(require, "diffview")
-if present then
-  vim.api.nvim_create_user_command("Diff", function(opts)
-    local lib = require("diffview.lib")
-    local view = lib.get_current_view()
-    if view then
-      vim.cmd.DiffviewClose()
-    else
-      diffview.open()
-    end
-  end, { nargs = 0 })
-end
-
 -- Open init.vim
 vim.api.nvim_create_user_command("Vimfile", function(opts)
   local file_path = vim.fn.expand("~/.config/nvim/lua/plugins/init.lua")
@@ -93,6 +79,19 @@ end, { nargs = 0 })
 vim.api.nvim_create_user_command("Issues", function(opts)
   vim.api.nvim_command(":Trouble diagnostics")
 end, { nargs = 0 })
+
+vim.api.nvim_create_user_command("Debug", function(opts)
+  require("dap-go").debug_test()
+end, { nargs = 0 })
+
+vim.api.nvim_create_user_command("Break", function(opts)
+  require("dap").toggle_breakpoint()
+end, { nargs = 0 })
+vim.api.nvim_create_user_command("Dap", function(opts)
+  require("dap").repl.open()
+end, { nargs = 0 })
+
+-- vim.api.nvim_set_keymap('n', '<Leader>dr', function() require('dap').repl.open() end)
 
 -- Telekasten
 vim.api.nvim_create_user_command("Notes", function(opts)

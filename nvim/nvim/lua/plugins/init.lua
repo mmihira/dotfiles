@@ -103,6 +103,20 @@ packer.startup(function(use)
     end,
   })
 
+  -- Debug
+  use("mfussenegger/nvim-dap")
+  use({
+    "leoluz/nvim-dap-go",
+    ft = "go",
+    config = function()
+      require("dap-go").setup()
+    end,
+  })
+  use({
+    "rcarriga/nvim-dap-ui",
+    requires = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
+  })
+
   -- Completion
   use("hrsh7th/nvim-cmp")
   use("hrsh7th/cmp-buffer")
@@ -126,7 +140,7 @@ packer.startup(function(use)
     config = function()
       require("mini.diff").setup({
         view = {
-          style = "sign", -- doesn't work
+          style = "number",
         },
       })
     end,
