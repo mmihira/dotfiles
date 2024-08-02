@@ -60,6 +60,8 @@ Git
 :GhistBranch        View history for current branch
 <leader>q           Quit the diff
 gf                  Open file
+<leader>ss          Diff in telescope
+<leader>sg          View diff overlay
 <C-h>               Jump to next hunk
 -                   To stage the file
 

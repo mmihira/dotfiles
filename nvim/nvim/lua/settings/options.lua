@@ -6,6 +6,7 @@ opt.rnu=true               -- Set relative numbering
 opt.nu=true                -- Set numbering
 opt.ruler=true             -- Show line numbering
 opt.number=true            -- Ensure we see line numbers
+opt.signcolumn="yes"       -- Always show sign column
 opt.tabstop=2
 opt.shiftwidth=2
 opt.showcmd=true           -- Show (partial) command in status line.
