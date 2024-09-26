@@ -63,10 +63,9 @@ keymap("n", "<leader>r", ":Run<CR>", opts)
 -- Git 
 keymap("n", "<leader>ss", ":Telescope git_status<CR>", opts)
 keymap("n", "<leader>sg", ":lua MiniDiff.toggle_overlay()<CR>", opts)
--- Floaterm
-keymap("n", "<leader>mm", ":StartMainFloat<CR>", opts)
-keymap("t", "<leader>mm", "<C-\\><C-n>:FloatermToggle<CR>", opts)
-keymap("n", "<F9>", "<C-\\><C-n>:FloaTermToggleLayout<CR>", opts)
+-- ToggleTerm
+keymap("n", "<leader>mm", ":ToggleTerm name=\"main_term\"<CR>", opts)
+keymap("t", "<leader>mm", "<C-\\><C-n>:ToggleTerm name=\"main_term\"<CR>", opts)
 keymap("t", "<leader>qq", "<C-\\><C-n><CR>", opts)
 -- Vim-Test
 keymap("n", "<leader>t", ":TestNearest<CR>", opts)

@@ -69,9 +69,9 @@ gf                  Open file
 <C-h>               Jump to next hunk
 -                   To stage the file
 
-Floaterm
+ToggleTerm
 --------------------------------------------------------------------------------------
-<leader>mm          Open a new floating terminal, or open the existing one
+<leader>mm          Toggle a terminal, or open the existing one. Can be used even when in insert mode in terminal
 <leader>qq          Exit out of insert mode in terminal
 F9                  Toggle between float, and botright
 

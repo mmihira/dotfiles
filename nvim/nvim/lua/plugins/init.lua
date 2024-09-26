@@ -31,7 +31,15 @@ packer.startup(function(use)
   use("nvim-lua/popup.nvim")
 
   -- Terminal
-  use("voldikss/vim-floaterm")
+  use({
+    "akinsho/toggleterm.nvim",
+    tag = "*",
+    config = function()
+      require("toggleterm").setup({
+        direction = "float",
+      })
+    end,
+  })
 
   -- LSP
   use({

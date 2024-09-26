@@ -1,16 +1,9 @@
 local M = {}
 
-local exec_floaterm = function(command)
-  local main = vim.api.nvim_call_function("floaterm#terminal#get_bufnr", { "main_term" })
-  if main then
-    vim.api.nvim_command(":FloatermToggle main_term")
-  else
-    vim.api.nvim_command(":FloatermNew! --wintype=float --name=main_term --width=0.8 --height=0.8")
-  end
+tterm = require("toggleterm")
 
-  local main = vim.api.nvim_call_function("floaterm#terminal#get_bufnr", { "main_term" })
-  vim.call("floaterm#terminal#send", main, { command })
-  vim.api.nvim_command(":stopinsert")
+local exec_in_term = function(command)
+  tterm.exec(command, nil, nil, nil, nil, "main_term", false, true)
 end
 
 local run_lua = function()
@@ -21,7 +14,7 @@ local run_bash = function(file_path)
   local parent_path = file_path:parent()
   local rel = file_path:make_relative(parent_path:absolute())
   local _cmd = "(cd " .. parent_path:absolute() .. "; " .. "./" .. rel .. ")"
-  exec_floaterm(_cmd)
+  exec_in_term(_cmd)
 end
 
 local run_go = function(file_path)
@@ -54,11 +47,10 @@ local run_go = function(file_path)
     local rel = file_path:make_relative(parent_path:absolute())
     local go_build_cmd = "go build -o go_app"
     local _cmd = "(cd " .. parent_path:absolute() .. "; make run" .. ")"
-    exec_floaterm(_cmd)
+    exec_in_term(_cmd)
   else
     print("Could not found makefile")
   end
-
 end
 
 local run_file = function()
