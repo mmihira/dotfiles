@@ -92,7 +92,6 @@ packer.startup(function(use)
   use("jose-elias-alvarez/null-ls.nvim")
   use("cohama/lexima.vim")
   use("mechatroner/rainbow_csv")
-  use("hashivim/vim-terraform")
   use({
     "Wansmer/treesj",
     requires = { "nvim-treesitter/nvim-treesitter" },
@@ -141,6 +140,10 @@ packer.startup(function(use)
       require("mini.diff").setup({
         view = {
           style = "number",
+        },
+        mappings = {
+          apply = "",
+          goto_next = "<c-h>",
         },
       })
     end,

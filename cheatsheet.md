@@ -52,6 +52,10 @@ Lsp
 <C-a>               Switch to alternatve in golang
 :Sp                 TSJToggle
 :Issues             See list of diagnositcs
+<Ctrl-a>            Alternative file
+
+Debug
+--------------------------------------------------------------------------------------
 
 Git
 --------------------------------------------------------------------------------------

@@ -43,7 +43,7 @@ lspconfig.pyright.setup({})
 lspconfig.html.setup({})
 
 -- HTML
-lspconfig.tsserver.setup(defaultconfig)
+lspconfig.ts_ls.setup(defaultconfig)
 
 -- Hide the dianostic virtual text
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
