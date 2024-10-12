@@ -116,17 +116,36 @@ vim.api.nvim_create_user_command("TelescopeGitSigns", function(opts)
   require("telescope").extensions.git_signs.git_signs()
 end, { nargs = 0 })
 
-vim.api.nvim_create_user_command("Men", function(opts)
+vim.api.nvim_create_user_command("Mn", function(opts)
   require("menu").open({
+    {
+      name = "Git status",
+      cmd = function()
+        vim.api.nvim_command(":Telescope git_status")
+      end,
+      rtxt = "s",
+    },
+    {
+      name = "Buffer hunks",
+      cmd = function()
+        require("telescope").extensions.git_signs.git_signs()
+      end,
+      rtxt = "d",
+    },
     {
       name = "Reset Hunk",
       cmd = require("gitsigns").reset_hunk,
-      rtxt = "<leader>rh",
+      rtxt = "w",
     },
     {
       name = "Preview Hunk",
       cmd = require("gitsigns").preview_hunk,
-      rtxt = "<leader>ph",
+      rtxt = "e",
+    },
+    {
+      name = "Toggle split",
+      cmd = require('treesj').toggle,
+      rtxt = "l",
     },
   }, {
     mouse = false,

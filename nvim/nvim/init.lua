@@ -1,29 +1,29 @@
-require "plugins"
+require("plugins")
 
-require "settings/paths"
-require "settings/functions"
-require "settings/options"
-require "settings/keymaps"
-require "settings/highlights"
+require("settings/paths")
+require("settings/functions")
+require("settings/options")
+require("settings/keymaps")
+require("settings/highlights")
 
-require "plugins/configs/gruvbox"
-require "plugins/configs/starter"
-require "plugins/configs/buffjump"
-require "plugins/configs/cmp"
-require "plugins/configs/diffview"
-require "plugins/configs/lightline"
-require "plugins/configs/mason"
-require "plugins/configs/trouble"
-require "plugins/configs/null-ls"
-require "plugins/configs/lspconfig"
-require "plugins/configs/neo-tree"
-require "plugins/configs/nvim-surround"
-require "plugins/configs/telescope"
-require "plugins/configs/vim-test"
-require "plugins/configs/goto-preview"
-require "plugins/configs/treesitter"
-require "plugins/configs/refactoring"
-require "plugins/configs/telekasten"
-require "plugins/configs/flash"
-require "plugins/configs/dap"
-require "settings/gosnips"
+require("plugins/configs/gruvbox")
+require("plugins/configs/starter")
+require("plugins/configs/buffjump")
+require("plugins/configs/cmp")
+require("plugins/configs/diffview")
+require("plugins/configs/lightline")
+require("plugins/configs/mason")
+require("plugins/configs/trouble")
+require("plugins/configs/null-ls")
+require("plugins/configs/lspconfig")
+require("plugins/configs/neo-tree")
+require("plugins/configs/nvim-surround")
+require("plugins/configs/telescope")
+require("plugins/configs/vim-test")
+require("plugins/configs/goto-preview")
+require("plugins/configs/treesitter")
+require("plugins/configs/refactoring")
+require("plugins/configs/telekasten")
+require("plugins/configs/dap")
+require("plugins/configs/treesj")
+require("settings/gosnips")

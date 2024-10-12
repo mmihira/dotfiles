@@ -59,8 +59,7 @@ keymap("v", "<leader>r", '"0y :%s/<C-r>0', opts)
 -- Run
 keymap("n", "<leader>r", ":Run<CR>", opts)
 -- Git
-keymap("n", "<leader>ss", ":Telescope git_status<CR>", opts)
-keymap("n", "<leader>sg", ":TelescopeGitSigns<CR>", opts)
+keymap("n", "<leader>s", ":Mn<CR>", opts)
 -- ToggleTerm
 keymap("n", "<leader>mm", ':ToggleTerm name="main_term"<CR>', opts)
 keymap("t", "<leader>mm", '<C-\\><C-n>:ToggleTerm name="main_term"<CR>', opts)

@@ -103,11 +103,6 @@ packer.startup(function(use)
   use({
     "Wansmer/treesj",
     requires = { "nvim-treesitter/nvim-treesitter" },
-    config = function()
-      require("treesj").setup({
-        max_join_length = 10000,
-      })
-    end,
   })
 
   -- Debug
