@@ -111,3 +111,25 @@ vim.api.nvim_create_user_command("GhistPCR", function(opts)
     "DiffviewFileHistory" .. os.getenv("CODE_DIR") .. "/product-config-registry/products/ci-platform"
   )
 end, { nargs = 0 })
+
+vim.api.nvim_create_user_command("TelescopeGitSigns", function(opts)
+  require("telescope").extensions.git_signs.git_signs()
+end, { nargs = 0 })
+
+vim.api.nvim_create_user_command("Men", function(opts)
+  require("menu").open({
+    {
+      name = "Reset Hunk",
+      cmd = require("gitsigns").reset_hunk,
+      rtxt = "<leader>rh",
+    },
+    {
+      name = "Preview Hunk",
+      cmd = require("gitsigns").preview_hunk,
+      rtxt = "<leader>ph",
+    },
+  }, {
+    mouse = false,
+    border = true,
+  })
+end, { nargs = 0 })

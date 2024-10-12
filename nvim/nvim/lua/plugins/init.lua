@@ -35,9 +35,7 @@ packer.startup(function(use)
     "akinsho/toggleterm.nvim",
     tag = "*",
     config = function()
-      require("toggleterm").setup({
-        direction = "float",
-      })
+      require("toggleterm").setup({})
     end,
   })
 
@@ -94,12 +92,14 @@ packer.startup(function(use)
   })
 
   -- Syntax
+  use("jake-stewart/multicursor.nvim")
   use("euclidianAce/BetterLua.vim")
   use("tpope/vim-commentary")
   use({ "kylechui/nvim-surround", tag = "*" })
   use("jose-elias-alvarez/null-ls.nvim")
   use("cohama/lexima.vim")
   use("mechatroner/rainbow_csv")
+  -- For splitting joning nodes
   use({
     "Wansmer/treesj",
     requires = { "nvim-treesitter/nvim-treesitter" },
@@ -143,17 +143,19 @@ packer.startup(function(use)
   use("itchyny/vim-gitbranch")
   use("sindrets/diffview.nvim")
   use({
-    "echasnovski/mini.diff",
+    "lewis6991/gitsigns.nvim",
     config = function()
-      require("mini.diff").setup({
-        view = {
-          style = "number",
-        },
-        mappings = {
-          apply = "",
-          goto_next = "<c-h>",
-        },
-      })
+      require("gitsigns").setup()
+    end,
+  })
+  use({
+    "radyz/telescope-gitsigns",
+    requires = {
+      "lewis6991/gitsigns.nvim",
+      "nvim-telescope/telescope.nvim",
+    },
+    config = function()
+      require("telescope").load_extension("git_signs")
     end,
   })
 
@@ -164,6 +166,8 @@ packer.startup(function(use)
   -- Navigation
   use("kwkarlwang/bufjump.nvim")
   use({ "bloznelis/before.nvim" })
+  use({ "nvchad/volt" })
+  use({ "nvchad/menu" })
 
   -- Tree
   use({

@@ -95,3 +95,9 @@ Macquarie
 
 :ProdConfig         Open neotree in product config registry
 :GhistPCR           Show commit affecting ci-platform
+
+Command
+--------------------------------------------------------------------------------------
+
+Ctr+F               in command screen to open up buffer
+

@@ -47,8 +47,6 @@ keymap(
 -- Neotree
 keymap("n", "<leader>nn", "<CMD>Neotree position=float toggle=true reveal_force_cwd=true<CR>", opts)
 
--- Remap exit
-keymap("n", "<leader>q", ":close<CR>", opts)
 -- Remap cancel highlight
 keymap("n", "<leader>8", ":noh<CR>", opts)
 -- Remap paste from + buffer
@@ -60,13 +58,14 @@ keymap("v", "<leader>cc", '"+y <CR>', opts)
 keymap("v", "<leader>r", '"0y :%s/<C-r>0', opts)
 -- Run
 keymap("n", "<leader>r", ":Run<CR>", opts)
--- Git 
+-- Git
 keymap("n", "<leader>ss", ":Telescope git_status<CR>", opts)
-keymap("n", "<leader>sg", ":lua MiniDiff.toggle_overlay()<CR>", opts)
+keymap("n", "<leader>sg", ":TelescopeGitSigns<CR>", opts)
 -- ToggleTerm
-keymap("n", "<leader>mm", ":ToggleTerm name=\"main_term\"<CR>", opts)
-keymap("t", "<leader>mm", "<C-\\><C-n>:ToggleTerm name=\"main_term\"<CR>", opts)
+keymap("n", "<leader>mm", ':ToggleTerm name="main_term"<CR>', opts)
+keymap("t", "<leader>mm", '<C-\\><C-n>:ToggleTerm name="main_term"<CR>', opts)
 keymap("t", "<leader>qq", "<C-\\><C-n><CR>", opts)
+
 -- Vim-Test
 keymap("n", "<leader>t", ":TestNearest<CR>", opts)
 keymap("n", "<leader>T", ":TestFile<CR>", opts)

@@ -3,7 +3,7 @@ local M = {}
 tterm = require("toggleterm")
 
 local exec_in_term = function(command)
-  tterm.exec(command, nil, nil, nil, nil, "main_term", false, true)
+  tterm.exec(command, nil, nil, nil, "float", "main_term", false, true)
 end
 
 local run_lua = function()
