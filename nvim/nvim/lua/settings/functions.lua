@@ -116,6 +116,10 @@ vim.api.nvim_create_user_command("TelescopeGitSigns", function(opts)
   require("telescope").extensions.git_signs.git_signs()
 end, { nargs = 0 })
 
+vim.api.nvim_create_user_command("Stack", function(opts)
+  vim.api.nvim_command(":Trouble qflist qf_stack")
+end, { nargs = 0 })
+
 vim.api.nvim_create_user_command("Mn", function(opts)
   require("menu").open({
     {
@@ -144,7 +148,7 @@ vim.api.nvim_create_user_command("Mn", function(opts)
     },
     {
       name = "Toggle split",
-      cmd = require('treesj').toggle,
+      cmd = require("treesj").toggle,
       rtxt = "l",
     },
   }, {

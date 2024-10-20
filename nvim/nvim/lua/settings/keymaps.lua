@@ -65,6 +65,9 @@ keymap("n", "<leader>mm", ':ToggleTerm name="main_term"<CR>', opts)
 keymap("t", "<leader>mm", '<C-\\><C-n>:ToggleTerm name="main_term"<CR>', opts)
 keymap("t", "<leader>qq", "<C-\\><C-n><CR>", opts)
 
+keymap("n", "<leader>q", ":close<CR>", opts)
+keymap("n", "0", ':lua require("gitsigns").next_hunk()<CR>', opts)
+
 -- Vim-Test
 keymap("n", "<leader>t", ":TestNearest<CR>", opts)
 keymap("n", "<leader>T", ":TestFile<CR>", opts)

@@ -52,6 +52,7 @@ Lsp
 <C-a>               Switch to alternatve in golang
 :Sp                 TSJToggle
 :Issues             See list of diagnositcs
+:Stack              Trouble qflist specifically for stacktraces
 <Ctrl-a>            Alternative file
 
 Debug
@@ -66,8 +67,7 @@ Git
 gf                  Open file
 <leader>ss          Diff in telescope
 <leader>sg          View diff overlay
-<C-h>               Jump to next hunk
--                   To stage the file
+0                   Jump to next hunk
 
 ToggleTerm
 --------------------------------------------------------------------------------------
