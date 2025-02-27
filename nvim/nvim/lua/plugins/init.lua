@@ -87,6 +87,20 @@ packer.startup(function(use)
       require("CopilotChat").setup({})
     end,
   })
+  use({
+    "Goose97/timber.nvim",
+    tag = "*", -- Use for stability; omit to use `main` branch for the latest features
+    config = function()
+      require("timber").setup({
+        log_templates = {
+          default = {
+            go = [[fmt.Printf("%log_target: %v\n", %log_target)]],
+          },
+        },
+        default_keymaps_enabled = false,
+      })
+    end,
+  })
 
   -- Syntax
   use("jake-stewart/multicursor.nvim")

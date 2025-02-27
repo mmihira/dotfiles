@@ -14,12 +14,15 @@ function strsplit(inputstr, sep)
   return t
 end
 
+MAX_LOOKBACK = 100
+
 function populate_qf_with_go_stack(bn)
   qlistresults = {}
 
+  endinx = vim.api.nvim_buf_line_count(bn)
   inx = vim.api.nvim_buf_line_count(bn)
 
-  while inx > 0 do
+  while inx > 0 and (endinx - inx) < MAX_LOOKBACK do
     local bufrlines = vim.api.nvim_buf_get_lines(bn, inx - 1, inx, false)
 
     if string.match(bufrlines[1], ".+/.*.go:") then
@@ -55,6 +58,9 @@ end
 
 tterm.setup({
   on_close = function(t)
+    if t.display_name == "test_term" then
+      populate_qf_with_go_stack(t.bufnr)
+    end
     if t.display_name == "main_term" then
       populate_qf_with_go_stack(t.bufnr)
     end

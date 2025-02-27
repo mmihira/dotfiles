@@ -1,7 +1,7 @@
 tterm = require("toggleterm")
 
 local floa_vim_test_callback = function(opts)
-  tterm.exec(opts, nil, nil, nil, "float", "main_term", false, true)
+  tterm.exec(opts, 2, nil, nil, "float", "test_term", false, true)
 end
 
 vim.g["test#custom_strategies"] = { custom_toggleterm = floa_vim_test_callback }

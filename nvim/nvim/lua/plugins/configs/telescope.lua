@@ -17,6 +17,8 @@ telescope.setup({
     mappings = {
       n = {
         ["<leader>q"] = "close",
+        ["<C-d>"] = actions.results_scrolling_down,
+        ["<C-u>"] = actions.results_scrolling_up,
       },
     },
   },

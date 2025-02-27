@@ -35,7 +35,7 @@ keymap("c", "jj", "<Esc>", opts)
 keymap("n", "t", ":TSJToggle<CR>", opts)
 -- Telescope
 keymap("n", "<c-k>", ":Telescope buffers<CR>", opts)
-keymap("n", "<c-l>", ":Sym<CR>", opts)
+keymap("n", "<c-l>", ":lua require('telescope.builtin').lsp_document_symbols({ show_line=true, previewer=false, symbols={'method','function'} })<CR>", opts)
 keymap("n", "<leader>k", ":Telescope live_grep<CR>", opts)
 keymap(
   "n",

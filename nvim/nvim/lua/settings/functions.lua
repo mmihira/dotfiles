@@ -41,11 +41,11 @@ vim.api.nvim_create_user_command("Old", function(opts)
 end, { nargs = 0 })
 
 vim.api.nvim_create_user_command("Ref", function(opts)
-  vim.api.nvim_command(":Trouble lsp_references")
+  require("telescope.builtin").lsp_references()
 end, { nargs = 0 })
 
 vim.api.nvim_create_user_command("Imp", function(opts)
-  vim.api.nvim_command(":Trouble lsp_implementations")
+  require("telescope.builtin").lsp_implementations()
 end, { nargs = 0 })
 
 vim.api.nvim_create_user_command("Sym", function(opts)
@@ -145,6 +145,11 @@ vim.api.nvim_create_user_command("Mn", function(opts)
       name = "Preview Hunk",
       cmd = require("gitsigns").preview_hunk,
       rtxt = "e",
+    },
+    {
+      name = "Stage Hunk",
+      cmd = require("gitsigns").stage_hunk,
+      rtxt = "h",
     },
     {
       name = "Toggle split",

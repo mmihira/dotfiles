@@ -1,5 +1,6 @@
-local present, mc = pcall(require, "multicursor.nvim")
+local present, mc = pcall(require, "multicursor-nvim")
 if not present then
+  vim.print("Multicursor is not installed")
   return
 end
 
@@ -22,18 +23,18 @@ set({ "n", "v" }, "<leader><down>", function()
 end)
 
 -- Add or skip adding a new cursor by matching word/selection
-set({ "n", "v" }, "<leader>n", function()
-  mc.matchAddCursor(1)
-end)
-set({ "n", "v" }, "<leader>s", function()
-  mc.matchSkipCursor(1)
-end)
-set({ "n", "v" }, "<leader>N", function()
-  mc.matchAddCursor(-1)
-end)
-set({ "n", "v" }, "<leader>S", function()
-  mc.matchSkipCursor(-1)
-end)
+-- set({ "n", "v" }, "<leader>n", function()
+--   mc.matchAddCursor(1)
+-- end)
+-- set({ "n", "v" }, "<leader>s", function()
+--   mc.matchSkipCursor(1)
+-- end)
+-- set({ "n", "v" }, "<leader>N", function()
+--   mc.matchAddCursor(-1)
+-- end)
+-- set({ "n", "v" }, "<leader>S", function()
+--   mc.matchSkipCursor(-1)
+-- end)
 
 -- Add all matches in the document
 set({ "n", "v" }, "<leader>A", mc.matchAllAddCursors)
