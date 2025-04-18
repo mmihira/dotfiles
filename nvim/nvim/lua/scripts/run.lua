@@ -53,6 +53,51 @@ local run_go = function(file_path)
   end
 end
 
+local run_cpp = function(file_path)
+  local scan = require("plenary.scandir")
+
+  local findMakeLoop = true
+  local foundMake = false
+  local foundGit = false
+  local parent_path = file_path
+
+  while findMakeLoop do
+    parent_path = parent_path:parent()
+
+    local out = scan.scan_dir(parent_path:absolute(), { hidden = true, depth = 1 })
+    for _, item in ipairs(out) do
+      if string.find(item, ".git", 1, true) then
+        findMakeLoop = false
+        foundGit = true
+      end
+
+      if string.find(item, "Makefile", 1, true) then
+        findMakeLoop = false
+        foundMake = true
+      end
+    end
+  end
+
+  if not foundMake then
+    local debug_path = parent_path:joinpath("out", "Debug")
+    local out = scan.scan_dir(debug_path:absolute(), { hidden = true, depth = 1 })
+    for _, item in ipairs(out) do
+      if string.find(item, "Makefile", 1, true) then
+        foundMake = true
+        parent_path = debug_path
+        break
+      end
+    end
+  end
+
+  if foundMake then
+    local _cmd = "(cd " .. parent_path:absolute() .. "; make run" .. ")"
+    exec_in_term(_cmd)
+  else
+    print("Could not found makefile")
+  end
+end
+
 local run_file = function()
   local plenary = require("plenary")
   local path = require("plenary.path")
@@ -69,6 +114,9 @@ local run_file = function()
   end
   if filetype == "go" then
     run_go(file_path)
+  end
+  if filetype == "cpp" then
+    run_cpp(file_path)
   end
 end
 M.run_file = run_file

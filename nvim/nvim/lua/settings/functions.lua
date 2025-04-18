@@ -1,3 +1,14 @@
+-- NeoTree command
+vim.api.nvim_create_user_command("NOpen", function(opts)
+  local current_buffer_name = vim.api.nvim_buf_get_name(0)
+  local cwd = vim.fn.getcwd()
+  if current_buffer_name:find("ministarter") then
+    vim.cmd("Neotree position=float toggle=true dir=" .. cwd)
+  else
+    vim.cmd("Neotree position=float toggle=true reveal_force_cwd=true")
+  end
+end, { nargs = 0 })
+--
 -- Run command
 vim.api.nvim_create_user_command("Run", function(opts)
   require("scripts/run").run_file()
@@ -118,6 +129,28 @@ end, { nargs = 0 })
 
 vim.api.nvim_create_user_command("Stack", function(opts)
   vim.api.nvim_command(":Trouble qflist qf_stack")
+end, { nargs = 0 })
+
+vim.api.nvim_create_user_command("Make", function(opts)
+  require("menu").open({
+    {
+      name = "Generate",
+      cmd = function()
+        vim.api.nvim_command(":CMakeGenerate")
+      end,
+      rtxt = "m",
+    },
+    {
+      name = "Settings",
+      cmd = function()
+        vim.api.nvim_command(":CMakeSettings")
+      end,
+      rtxt = "s",
+    },
+  }, {
+    mouse = false,
+    border = true,
+  })
 end, { nargs = 0 })
 
 vim.api.nvim_create_user_command("Mn", function(opts)

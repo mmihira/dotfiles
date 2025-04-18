@@ -45,7 +45,8 @@ keymap(
 )
 
 -- Neotree
-keymap("n", "<leader>nn", "<CMD>Neotree position=float toggle=true reveal_force_cwd=true<CR>", opts)
+keymap("n", "<leader>nn", ":NOpen<CR>", opts)
+-- keymap("n", "<leader>nn", "<CMD>Neotree position=float toggle=true reveal_force_cwd=true<CR>", opts)
 
 -- Remap cancel highlight
 keymap("n", "<leader>8", ":noh<CR>", opts)

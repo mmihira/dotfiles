@@ -84,21 +84,15 @@ packer.startup(function(use)
   use({
     "CopilotC-Nvim/CopilotChat.nvim",
     config = function()
-      require("CopilotChat").setup({})
+      require("CopilotChat").setup({
+        -- model = "claude-3.7-sonnet",
+      })
     end,
   })
   use({
-    "Goose97/timber.nvim",
-    tag = "*", -- Use for stability; omit to use `main` branch for the latest features
+    "Civitasv/cmake-tools.nvim",
     config = function()
-      require("timber").setup({
-        log_templates = {
-          default = {
-            go = [[fmt.Printf("%log_target: %v\n", %log_target)]],
-          },
-        },
-        default_keymaps_enabled = false,
-      })
+      require("cmake-tools").setup({})
     end,
   })
 

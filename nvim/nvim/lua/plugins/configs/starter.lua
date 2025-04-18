@@ -3,4 +3,6 @@ if not present then
   return
 end
 
-starter.setup()
+starter.setup({
+  query_updaters = "",
+})

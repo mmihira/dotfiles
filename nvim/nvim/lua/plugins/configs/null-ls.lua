@@ -10,6 +10,7 @@ null.setup({
     null.builtins.formatting.stylua,
 
     null.builtins.diagnostics.golangci_lint,
+    null.builtins.diagnostics.cpplint,
     null.builtins.formatting.gofmt,
     null.builtins.formatting.goimports,
     null.builtins.formatting.goimports_reviser,
