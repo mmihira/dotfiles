@@ -88,12 +88,7 @@ packer.startup(function(use)
       })
     end,
   })
-  use({
-    "Civitasv/cmake-tools.nvim",
-    config = function()
-      require("cmake-tools").setup({})
-    end,
-  })
+  use({ "Civitasv/cmake-tools.nvim" })
 
   -- Syntax
   use("jake-stewart/multicursor.nvim")
