@@ -56,7 +56,6 @@ packer.startup(function(use)
     end,
   })
   use({ "rmagatti/goto-preview" })
-  use({ "ThePrimeagen/refactoring.nvim" })
   use({
     "edolphin-ydf/goimpl.nvim",
     config = function()
@@ -101,7 +100,7 @@ packer.startup(function(use)
   use("euclidianAce/BetterLua.vim")
   use("tpope/vim-commentary")
   use({ "kylechui/nvim-surround", tag = "*" })
-  use("jose-elias-alvarez/null-ls.nvim")
+  use("nvimtools/none-ls.nvim")
   use("cohama/lexima.vim")
   use("mechatroner/rainbow_csv")
   -- For splitting joning nodes
@@ -130,8 +129,6 @@ packer.startup(function(use)
   use("hrsh7th/cmp-path")
   use("hrsh7th/cmp-cmdline")
   use("hrsh7th/cmp-nvim-lsp")
-  -- use("hrsh7th/cmp-nvim-lsp-signature-help")
-  use("ray-x/lsp_signature.nvim")
   use("L3MON4D3/LuaSnip")
   use("saadparwaiz1/cmp_luasnip")
   use("rafamadriz/friendly-snippets")
@@ -191,6 +188,29 @@ packer.startup(function(use)
       require("incline").setup()
     end,
   }) -- floating status line
+  use({
+    "rcarriga/nvim-notify",
+    config = function()
+      require("notify").setup({
+        stages = "fade",
+        timeout = 2000,
+        background_colour = "#000000",
+      })
+    end,
+  })
+
+  -- Image
+  use({
+    "3rd/image.nvim",
+    requires = { "nvim-lua/plenary.nvim" },
+    opts = { processor = "magick_cli" },
+    config = function()
+      require("image").setup({
+        backend = "kitty",
+        processor = "magick_cli",
+      })
+    end,
+  })
 
   -- Color Schemes
   use("ellisonleao/gruvbox.nvim")

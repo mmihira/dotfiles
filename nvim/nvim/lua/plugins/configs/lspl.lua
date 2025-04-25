@@ -31,6 +31,67 @@ local show_client_capabilities = function(client)
   vim.api.nvim_buf_set_lines(popup.bufnr, 3, 4, false, lines)
 end
 
+local function find_symbol_position(bufnr, symbol_name)
+  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+  for i, line in ipairs(lines) do
+    local col = line:find(symbol_name, 1, true)
+    if col then
+      return i - 1, col - 1 -- Convert to 0-based for LSP
+    end
+  end
+  return nil, nil
+end
+
+local function find_ref_by_symbol(client, bufnr, symbol_name)
+  if not client.supports_method("textDocument/implementation") then
+    vim.notify(
+      string.format("LSP client %s does not support textDocument/implementation", client.name),
+      vim.log.levels.WARN
+    )
+    return
+  end
+
+  -- Find the symbol's position
+  local line, col = find_symbol_position(bufnr, symbol_name)
+  if not line or not col then
+    vim.notify(string.format("Symbol %s not found in buffer", symbol_name), vim.log.levels.ERROR)
+    return
+  end
+  require("notify")("Found symbol " .. symbol_name .. " at line " .. line .. ", col " .. col)
+
+  -- Construct parameters
+  local params = {
+    textDocument = vim.lsp.util.make_text_document_params(bufnr),
+    position = { line = line, character = col },
+  }
+
+  -- Handler to populate quickfix list
+  local handler = function(err, result, ctx, config)
+    if err then
+      vim.notify("Error fetching implementations: " .. err.message, vim.log.levels.ERROR)
+      return
+    end
+    if not result or vim.tbl_isempty(result) then
+      vim.notify(string.format("No implementations found for %s", symbol_name), vim.log.levels.INFO)
+      return
+    end
+
+    -- Print each reference
+    for i, loc in ipairs(result) do
+      local uri = loc.uri or loc.targetUri
+      local range = loc.range or loc.targetSelectionRange
+      local filename = vim.uri_to_fname(uri)
+      local line = range.start.line + 1  -- Convert to 1-based
+      local col = range.start.character + 1 -- Convert to 1-based
+      local text = vim.api.nvim_buf_get_lines(bufnr, range.start.line, range.start.line + 1, false)[1] or ""
+      vim.notify(string.format("Reference %d: %s:%d:%d - %s", i, filename, line, col, text), vim.log.levels.INFO)
+    end
+  end
+
+  -- Send request
+  client.request("textDocument/references", params, handler, bufnr)
+end
+
 local key_mappings = {
   { "documentFormattingProvider", "n",          "<space>lf",  "<Cmd>lua vim.lsp.buf.format()<CR>" },
   -- { "documentRangeFormattingProvider", "v", "gq", "<Esc><Cmd>lua vim.lsp.buf.range_formatting()<CR>" },
@@ -54,6 +115,14 @@ local function on_attach(client, bufnr, attach_opts)
     show_client_capabilities(client)
   end, { nargs = 0 })
 
+  vim.api.nvim_create_user_command("Test", function(opts)
+    require("notify")("Here")
+
+    local bufnr = vim.api.nvim_get_current_buf()
+
+    find_ref_by_symbol(client, bufnr, "boundingBox")
+  end, { nargs = 0 })
+
   if client.server_capabilities.goto_definition then
     api.nvim_buf_set_option(bufnr, "tagfunc", "v:lua.vim.lsp.tagfunc")
   end
@@ -62,12 +131,9 @@ local function on_attach(client, bufnr, attach_opts)
   for _, mappings in pairs(key_mappings) do
     local capability, mode, lhs, rhs = unpack(mappings)
     if client.server_capabilities[capability] then
-      -- api.nvim_buf_set_keymap(bufnr, mode, lhs, rhs, opts)
       vim.keymap.set(mode, lhs, rhs, opts)
     end
   end
-
-  -- api.nvim_buf_set_keymap(bufnr, "i", "<c-n>", "<Cmd>lua require('lsp_compl').trigger_completion()<CR>", opts)
 
   -- On hover over syntax highlight the term
   vim.cmd("augroup lsp_aucmds")

@@ -95,19 +95,6 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagn
 -- Show diagnostics on hover
 vim.api.nvim_command("autocmd CursorHold * lua vim.diagnostic.open_float(nil, {focusable = false})")
 
--- Vanity
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
-vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
+vim.diagnostic.config({ virtual_text = { current_line = true } })
+vim.o.winborder = 'single'
 
-vim.diagnostic.config({
-  float = { border = "rounded" },
-})
-
--- Signature help, doesn't work in attach func, so putting it here
-local signature_config = {
-  debug = true,
-  hint_enable = false,
-  handler_opts = { border = "rounded" },
-  max_width = 80,
-}
-require("lsp_signature").setup(signature_config)

@@ -32,4 +32,5 @@ opt.splitright=true        -- Open vertical splits to the right
 opt.updatetime=800
 opt.laststatus=0
 opt.swapfile=false
+opt.termguicolors=true
 -- opt.filetype=off

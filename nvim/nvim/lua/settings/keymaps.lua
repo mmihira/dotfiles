@@ -91,11 +91,3 @@ end)
 vim.keymap.set({ "n", "v" }, "<Leader>dk", function()
   require("dapui").eval()
 end)
-
--- Refactoring Inline variable can also pick up the identifier currently under the cursor without visual mode
-vim.api.nvim_set_keymap(
-  "n",
-  "<leader>ri",
-  [[ <Cmd>lua require('refactoring').refactor('Inline Variable')<CR>]],
-  { noremap = true, silent = true, expr = false }
-)
