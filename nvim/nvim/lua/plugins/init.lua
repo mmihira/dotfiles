@@ -95,7 +95,10 @@ packer.startup(function(use)
   use("euclidianAce/BetterLua.vim")
   use("tpope/vim-commentary")
   use({ "kylechui/nvim-surround", tag = "*" })
-  use("nvimtools/none-ls.nvim")
+  use({
+    "nvimtools/none-ls.nvim", 
+    requires = { "nvimtools/none-ls-extras.nvim" }
+  })
   use("cohama/lexima.vim")
   use("mechatroner/rainbow_csv")
   -- For splitting joning nodes
@@ -154,6 +157,8 @@ packer.startup(function(use)
   -- Finders
   use("nvim-telescope/telescope.nvim") -- finder, requires fzf and ripgrep
   use("nvim-telescope/telescope-ui-select.nvim")
+  -- use("crispgm/telescope-heading.nvim")
+
 
   -- Navigation
   use("kwkarlwang/bufjump.nvim")

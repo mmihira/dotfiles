@@ -39,6 +39,7 @@ Telescope
 <Space>k            Live grep search
                     j,k if not typing. Else C-n,p for up/down
 <C-t>               To send file list to trouble quickfix list
+Telescope headings  For navigating markdown files
 
 Lsp
 --------------------------------------------------------------------------------------

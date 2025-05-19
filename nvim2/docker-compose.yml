@@ -1,0 +1,14 @@
+services:
+  nvimdev:
+    restart: always
+    build: .
+    platform: linux/arm64
+    volumes:
+      - ~/c:/Users/mihira
+      - ~/.zshrc:/Users/mihira/.zshrc
+      - ~/.oh-my-zsh:/Users/mihira/.oh-my-zsh
+      - nvim-data:/local/share
+      - ~/c/dotfiles/nvim2:/Users/mihira/.config
+volumes:
+  nvim-data:
+  nvim-config:

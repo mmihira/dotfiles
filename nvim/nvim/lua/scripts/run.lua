@@ -91,7 +91,7 @@ local run_cpp = function(file_path)
   end
 
   if foundMake then
-    local _cmd = "(cd " .. parent_path:absolute() .. "; make run" .. ")"
+    local _cmd = "(cd " .. parent_path:absolute() .. "; make run -j 8" .. ")"
     exec_in_term(_cmd)
   else
     print("Could not found makefile")

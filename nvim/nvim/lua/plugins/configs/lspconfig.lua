@@ -83,6 +83,9 @@ local cppconfig = {
 }
 -- C++
 lspconfig.clangd.setup(cppconfig)
+-- vim.lsp.set_log_level("debug")
+-- vim.lsp.config('clangd', cppconfig)
+-- vim.lsp.enable('clangd')
 
 -- Hide the dianostic virtual text
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
