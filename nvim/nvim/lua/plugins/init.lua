@@ -157,7 +157,7 @@ packer.startup(function(use)
   -- Finders
   use("nvim-telescope/telescope.nvim") -- finder, requires fzf and ripgrep
   use("nvim-telescope/telescope-ui-select.nvim")
-  -- use("crispgm/telescope-heading.nvim")
+  use("crispgm/telescope-heading.nvim")
 
 
   -- Navigation

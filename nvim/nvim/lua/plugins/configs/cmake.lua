@@ -5,14 +5,15 @@ end
 
 cmake.setup({
   cmake_executor = {
-    name = "terminal",
+    name = "toggleterm",
     default_opts = {
-      terminal = {
-        name = "cmake",
-        split_direction = "vertical",
-        split_size = 80,
-        focus = true,
+      toggleterm = {
+        direction = "float",
+        close_on_exit = true,
+        auto_scroll = true,
+        singleton = true,
       },
+
     },
   },
 })
