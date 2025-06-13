@@ -118,6 +118,10 @@ local run_file = function()
   if filetype == "cpp" then
     run_cpp(file_path)
   end
+  if filetype == "h" then
+    run_cpp(file_path)
+  end
+
 end
 M.run_file = run_file
 
