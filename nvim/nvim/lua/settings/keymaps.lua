@@ -62,8 +62,9 @@ keymap("n", "<leader>r", ":Run<CR>", opts)
 -- Git
 keymap("n", "<leader>s", ":Mn<CR>", opts)
 -- ToggleTerm
-keymap("n", "<leader>mm", ':ToggleTerm name="main_term"<CR>', opts)
-keymap("t", "<leader>mm", '<C-\\><C-n>:ToggleTerm name="main_term"<CR>', opts)
+keymap("n", "<leader>a", ':3ToggleTerm name="claude" direction="vertical" size=100<CR>', opts)
+keymap("n", "<leader>mm", ':ToggleTerm<CR>', opts)
+keymap("t", "<leader>mm", '<C-\\><C-n>:ToggleTerm<CR>', opts)
 keymap("t", "<leader>qq", "<C-\\><C-n><CR>", opts)
 
 keymap("n", "<leader>q", ":close<CR>", opts)
