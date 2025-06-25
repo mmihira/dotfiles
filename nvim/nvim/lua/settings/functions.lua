@@ -14,6 +14,20 @@ vim.api.nvim_create_user_command("Run", function(opts)
   require("scripts/run").run_file()
 end, { nargs = 0 })
 
+-- Events
+vim.api.nvim_create_user_command("Events", function(opts)
+  local edl = require("scripts/event_dispatcher_lookup")
+
+  local pos = vim.api.nvim_win_get_cursor(0)
+  local file_path = vim.api.nvim_buf_get_name(0)
+  local line_number = pos[1]
+  local column = pos[2] + 1
+
+  -- edl.main()
+  local className = edl.get_class_from_lsp(file_path, line_number, column)
+  edl.get_dispatcher_calls_for_class(className, "file_hashes.json")
+end, { nargs = 0 })
+
 -- Open init.vim
 vim.api.nvim_create_user_command("Vimfile", function(opts)
   local file_path = vim.fn.expand("~/.config/nvim/lua/plugins/init.lua")
