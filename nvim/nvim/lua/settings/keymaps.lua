@@ -34,8 +34,10 @@ keymap("c", "jj", "<Esc>", opts)
 -- TreeSJ
 keymap("n", "t", ":TSJToggle<CR>", opts)
 -- Telescope
-keymap("n", "<c-k>", ":Telescope buffers<CR>", opts)
-keymap("n", "<c-l>", ":lua require('telescope.builtin').lsp_document_symbols({ show_line=true, previewer=false, symbols={'method','function'} })<CR>", opts)
+keymap("n", "<c-k>", ":Telescope git_files<CR>", opts)
+keymap("n", "<c-l>",
+  ":lua require('telescope.builtin').lsp_document_symbols({ show_line=true, previewer=false, symbols={'method','function'} })<CR>",
+  opts)
 keymap("n", "<leader>k", ":Telescope live_grep<CR>", opts)
 keymap(
   "n",
@@ -60,9 +62,10 @@ keymap("v", "<leader>r", '"0y :%s/<C-r>0', opts)
 -- Run
 keymap("n", "<leader>r", ":Run<CR>", opts)
 -- Git
-keymap("n", "<leader>s", ":Mn<CR>", opts)
+keymap("n", "<leader>s", ":GitMn<CR>", opts)
 -- ToggleTerm
-keymap("n", "<leader>a", ':3ToggleTerm name="claude" direction="vertical" size=100<CR>', opts)
+keymap("n", "<c-,>", ':3ToggleTerm name=claude direction=float size=100<CR>', opts)
+keymap("t", "<c-,>", '<C-\\><C-n>:ToggleTerm<CR>', opts)
 keymap("n", "<leader>mm", ':ToggleTerm<CR>', opts)
 keymap("t", "<leader>mm", '<C-\\><C-n>:ToggleTerm<CR>', opts)
 keymap("t", "<leader>qq", "<C-\\><C-n><CR>", opts)

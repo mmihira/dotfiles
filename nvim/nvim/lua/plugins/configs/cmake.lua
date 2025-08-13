@@ -4,16 +4,16 @@ if not present then
 end
 
 cmake.setup({
-  cmake_executor = {
-    name = "toggleterm",
-    default_opts = {
-      toggleterm = {
-        direction = "float",
-        close_on_exit = true,
-        auto_scroll = true,
-        singleton = true,
-      },
+  -- cmake_executor = {
+  --   name = "toggleterm",
+  --   default_opts = {
+  --     toggleterm = {
+  --       direction = "float",
+  --       close_on_exit = false,
+  --       auto_scroll = true,
+  --       singleton = false,
+  --     },
 
-    },
-  },
+  --   },
+  -- },
 })

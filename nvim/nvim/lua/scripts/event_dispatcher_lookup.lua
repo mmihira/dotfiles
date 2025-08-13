@@ -179,13 +179,12 @@ local function parse_dispatcher_calls(filepath)
 	local line_number = 1
 
 	for line in content:gmatch("[^\r\n]+") do
-		-- Match dispatcher.enqueue<Type>
-		local type_match = line:match("dispatcher%.enqueue%s*<%s*([^>]+)%s*>")
+		-- Match sceneDispatcher.enqueue<Type> or gameDispatcher.enqueue<Type>
+		local type_match = line:match("(sceneDispatcher%.enqueue%s*<%s*[^>]+%s*>)") or line:match("(gameDispatcher%.enqueue%s*<%s*[^>]+%s*>)")
 		if type_match then
 			local class_name = find_enclosing_class(content, line_number)
 			table.insert(dispatcher_calls, {
-				type = type_match:gsub("%s+", ""), -- Remove extra whitespace
-				line = line_number,
+				type = type_match:match("<%s*([^>]+)%s*>"):gsub("%s+", ""), -- Remove extra whitespace
 				column = line:find("dispatcher%.enqueue") or 1,
 				class = class_name,
 			})

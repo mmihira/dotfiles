@@ -106,6 +106,15 @@ packer.startup(function(use)
 		"Wansmer/treesj",
 		requires = { "nvim-treesitter/nvim-treesitter" },
 	})
+	use({
+		"MeanderingProgrammer/render-markdown.nvim",
+		after = { "nvim-treesitter" },
+		requires = { "echasnovski/mini.icons", opt = true }, -- if you use standalone mini plugins
+		-- requires = { 'nvim-tree/nvim-web-devicons', opt = true }, -- if you prefer nvim-web-devicons
+		config = function()
+			require("render-markdown").setup({})
+		end,
+	})
 
 	-- Debug
 	use("mfussenegger/nvim-dap")
@@ -118,6 +127,10 @@ packer.startup(function(use)
 	})
 	use({
 		"rcarriga/nvim-dap-ui",
+		requires = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
+	})
+	use({
+		"julianolf/nvim-dap-lldb",
 		requires = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
 	})
 

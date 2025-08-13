@@ -14,7 +14,7 @@ telescope.setup({
   defaults = {
     initial_mode = "normal",
     layout_config = { prompt_position = "top" },
-    border  = false, -- temporary until telescope fixes for neovim v0.11
+    border  = true,
     mappings = {
       n = {
         ["<leader>q"] = "close",

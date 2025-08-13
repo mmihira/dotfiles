@@ -15,6 +15,11 @@ vim.api.nvim_create_user_command("Run", function(opts)
 end, { nargs = 0 })
 
 -- Events
+vim.api.nvim_create_user_command("EventsSync", function(opts)
+  local edl = require("scripts/event_dispatcher_lookup")
+  edl.main()
+end, { nargs = 0 })
+
 vim.api.nvim_create_user_command("Events", function(opts)
   local edl = require("scripts/event_dispatcher_lookup")
 
@@ -106,6 +111,10 @@ vim.api.nvim_create_user_command("Dap", function(opts)
   require("dap").repl.open()
 end, { nargs = 0 })
 
+vim.api.nvim_create_user_command("DapUi", function(opts)
+  require("dapui").open()
+end, { nargs = 0 })
+
 -- vim.api.nvim_set_keymap('n', '<Leader>dr', function() require('dap').repl.open() end)
 
 -- Telekasten
@@ -157,7 +166,7 @@ vim.api.nvim_create_user_command("Make", function(opts)
   })
 end, { nargs = 0 })
 
-vim.api.nvim_create_user_command("Mn", function(opts)
+vim.api.nvim_create_user_command("GitMn", function(opts)
   require("menu").open({
     {
       name = "Git status",
