@@ -35,15 +35,18 @@ keymap("c", "jj", "<Esc>", opts)
 keymap("n", "t", ":TSJToggle<CR>", opts)
 -- Telescope
 keymap("n", "<c-k>", ":Telescope git_files<CR>", opts)
-keymap("n", "<c-l>",
-  ":lua require('telescope.builtin').lsp_document_symbols({ show_line=true, previewer=false, symbols={'method','function'} })<CR>",
-  opts)
+keymap(
+	"n",
+	"<c-l>",
+	":lua require('telescope.builtin').lsp_document_symbols({ show_line=true, previewer=false, symbols={'method','function'} })<CR>",
+	opts
+)
 keymap("n", "<leader>k", ":Telescope live_grep<CR>", opts)
 keymap(
-  "n",
-  "<leader>im",
-  [[<cmd>lua require'telescope'.extensions.goimpl.goimpl{}<CR>]],
-  { noremap = true, silent = true }
+	"n",
+	"<leader>im",
+	[[<cmd>lua require'telescope'.extensions.goimpl.goimpl{}<CR>]],
+	{ noremap = true, silent = true }
 )
 
 -- Neotree
@@ -64,10 +67,23 @@ keymap("n", "<leader>r", ":Run<CR>", opts)
 -- Git
 keymap("n", "<leader>s", ":GitMn<CR>", opts)
 -- ToggleTerm
-keymap("n", "<c-,>", ':3ToggleTerm name=claude direction=float size=100<CR>', opts)
-keymap("t", "<c-,>", '<C-\\><C-n>:ToggleTerm<CR>', opts)
-keymap("n", "<leader>mm", ':ToggleTerm<CR>', opts)
-keymap("t", "<leader>mm", '<C-\\><C-n>:ToggleTerm<CR>', opts)
+local function toggle_claude()
+	local terms = require("toggleterm.terminal")
+	local existing_term = terms.find(function(t)
+		return t.display_name == "claude"
+	end)
+
+	if existing_term then
+		existing_term:toggle()
+	else
+		vim.cmd('3TermExec cmd="claude" name=claude direction=float size=100')
+	end
+end
+
+keymap("n", "<c-,>", "", { noremap = true, silent = true, callback = toggle_claude })
+keymap("t", "<c-,>", "<C-\\><C-n>:ToggleTerm<CR>", opts)
+keymap("n", "<leader>mm", ":ToggleTerm<CR>", opts)
+keymap("t", "<leader>mm", "<C-\\><C-n>:ToggleTerm<CR>", opts)
 keymap("t", "<leader>qq", "<C-\\><C-n><CR>", opts)
 
 keymap("n", "<leader>q", ":close<CR>", opts)
@@ -82,16 +98,26 @@ keymap("n", "<leader>cp", ":CopilotChat<CR>", opts)
 -- Goto preview
 keymap("n", "gv", "<Cmd>vsplit | lua vim.lsp.buf.definition()<CR>", opts)
 keymap("n", "gp", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", opts)
+
 -- Debug
+keymap("n", "<leader>d", ":DapMn<CR>", opts)
+vim.keymap.set("n", "<F4>", function()
+	require("dap").continue()
+end)
+
 vim.keymap.set("n", "<F5>", function()
-  require("dap").continue()
+	require("dap").continue()
 end)
-vim.keymap.set("n", "<F3>", function()
-  require("dap-go").debug_last_test()
-end)
+
 vim.keymap.set("n", "_", function()
-  require("dap").step_over()
+	local dap = require("dap")
+	if dap.session() then
+		dap.step_over()
+	else
+		require("dap").toggle_breakpoint()
+	end
 end)
+
 vim.keymap.set({ "n", "v" }, "<Leader>dk", function()
-  require("dapui").eval()
+	require("dapui").eval()
 end)

@@ -1,6 +1,17 @@
 local dap, dapui = require("dap"), require("dapui")
 
-dapui.setup()
+dapui.setup({
+	layouts = {
+		{
+			elements = {
+				{ id = "scopes", size = 0.75 },
+				{ id = "stacks", size = 0.25 },
+			},
+			position = "left",
+			size = 40,
+		},
+	},
+})
 dap.listeners.before.attach.dapui_config = function()
 	dapui.open()
 end
@@ -15,27 +26,27 @@ dap.listeners.before.event_exited.dapui_config = function()
 end
 
 local cfg = {
-   configurations = {
-      -- C lang configurations
-      cpp = {
-         {
-            name = "Launch debugger",
-            type = "lldb",
-            request = "launch",
-            cwd = "${workspaceFolder}",
-            program = function()
-               -- Build with debug symbols
-               local out = vim.fn.system({"cd", "./out/debug"}, {"make", "build -j 8"})
-               -- Check for errors
-               if vim.v.shell_error ~= 0 then
-                  vim.notify(out, vim.log.levels.ERROR)
-                  return nil
-               end
-              return "~/c/ove/out/Debug/ove"
-            end,
-         },
-      },
-   },
+	configurations = {
+		-- C lang configurations
+		cpp = {
+			{
+				name = "Launch debugger",
+				type = "lldb",
+				request = "launch",
+				cwd = "${workspaceFolder}",
+				program = function()
+					-- Build with debug symbols
+					local out = vim.fn.system({ "cd", "./out/debug" }, { "make", "build -j 8" })
+					-- Check for errors
+					if vim.v.shell_error ~= 0 then
+						vim.notify(out, vim.log.levels.ERROR)
+						return nil
+					end
+					return "~/c/ove/out/Debug/ove"
+				end,
+			},
+		},
+	},
 }
 
 require("dap-lldb").setup(cfg)
