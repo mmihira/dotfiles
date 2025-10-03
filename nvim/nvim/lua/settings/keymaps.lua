@@ -38,7 +38,7 @@ keymap("n", "<c-k>", ":Telescope git_files<CR>", opts)
 keymap(
 	"n",
 	"<c-l>",
-	":lua require('telescope.builtin').lsp_document_symbols({ show_line=true, previewer=false, symbols={'method','function'} })<CR>",
+	":lua require('telescope.builtin').lsp_document_symbols({ show_line=true, previewer=false, symbols={'method','function', 'class'}, symbol_filter=function(symbol) return not string.match(symbol.name, '^exec') end })<CR>",
 	opts
 )
 keymap("n", "<leader>k", ":Telescope live_grep<CR>", opts)
@@ -66,22 +66,17 @@ keymap("v", "<leader>r", '"0y :%s/<C-r>0', opts)
 keymap("n", "<leader>r", ":Run<CR>", opts)
 -- Git
 keymap("n", "<leader>s", ":GitMn<CR>", opts)
--- ToggleTerm
-local function toggle_claude()
-	local terms = require("toggleterm.terminal")
-	local existing_term = terms.find(function(t)
-		return t.display_name == "claude"
-	end)
 
-	if existing_term then
-		existing_term:toggle()
-	else
-		vim.cmd('3TermExec cmd="claude" name=claude direction=float size=100')
+vim.keymap.set("n", "<c-,>", function()
+	require("sidekick.cli").toggle({ name = "claude", focus = true })
+end, { noremap = true, silent = true })
+
+vim.keymap.set("n", "tab", function()
+	if not require("sidekick").nes_jump_or_apply() then
+		return "<Tab>" -- fallback to normal tab
 	end
-end
+end, { noremap = true, silent = true })
 
-keymap("n", "<c-,>", "", { noremap = true, silent = true, callback = toggle_claude })
-keymap("t", "<c-,>", "<C-\\><C-n>:ToggleTerm<CR>", opts)
 keymap("n", "<leader>mm", ":ToggleTerm<CR>", opts)
 keymap("t", "<leader>mm", "<C-\\><C-n>:ToggleTerm<CR>", opts)
 keymap("t", "<leader>qq", "<C-\\><C-n><CR>", opts)

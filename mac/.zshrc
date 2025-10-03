@@ -62,4 +62,4 @@ export SDKMAN_DIR="$HOME/.sdkman"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
-alias claude="/Users/mihira/.config/claude/local/claude"
+alias claude="/Users/mihira/.claude/local/claude"

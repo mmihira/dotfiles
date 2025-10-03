@@ -83,12 +83,11 @@ packer.startup(function(use)
 	use({
 		"CopilotC-Nvim/CopilotChat.nvim",
 		config = function()
-			require("CopilotChat").setup({
-				-- model = "claude-3.7-sonnet",
-			})
+			require("CopilotChat").setup({})
 		end,
 	})
 	use({ "Civitasv/cmake-tools.nvim" })
+	use({ "folke/sidekick.nvim" })
 
 	-- Syntax
 	use("jake-stewart/multicursor.nvim")

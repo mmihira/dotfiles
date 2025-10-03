@@ -29,42 +29,47 @@ local goplsconfig = {
 }
 
 -- Gopls
-lspconfig.gopls.setup(goplsconfig)
+vim.lsp.config("gopls", goplsconfig)
+vim.lsp.enable("gopls")
 
 -- Lua
 luaconfig = lsplib.mk_config()
 luaconfig.settings = { Lua = { diagnostics = { globals = { "vim" } } } }
-lspconfig.lua_ls.setup(luaconfig)
+luaconfig = lsplib.mk_config()
+vim.lsp.enable("lua_ls", luaconfig)
 
 -- Python
-lspconfig.pyright.setup({})
+vim.lsp.enable("pyright")
 
 -- HTML
-lspconfig.html.setup({})
+vim.lsp.enable("html")
 
 -- HTML
-lspconfig.ts_ls.setup(defaultconfig)
+vim.lsp.config("ts_ls", defaultconfig)
+vim.lsp.enable("ts_ls")
 
-local cppconfig = {
-	on_attach = lsplib.mk_config().on_attach,
+local cppconfig = lsplib.mk_config()
+-- default is here https://github.com/neovim/nvim-lspconfig/blob/master/lsp/clangd.lua
+cppconfig = vim.tbl_deep_extend("force", cppconfig, {
 	keys = {
 		{ "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header (C/C++)" },
 	},
-	root_dir = function(fname)
-		return require("lspconfig.util").root_pattern(
-			"Makefile",
-			"configure.ac",
-			"configure.in",
-			"config.h.in",
-			"meson.build",
-			"meson_options.txt",
-			"build.ninja"
-		)(fname) or require("lspconfig.util").root_pattern("compile_commands.json", "compile_flags.txt")(fname) or require(
-			"lspconfig.util"
-		).find_git_ancestor(fname)
-	end,
+	root_markers = {
+		".clangd",
+		".clang-tidy",
+		".clang-format",
+		"compile_commands.json",
+		"compile_flags.txt",
+		"configure.ac",
+		".git",
+	},
 	capabilities = {
-		offsetEncoding = { "utf-16" },
+		offsetEncoding = { "utf-8", "utf-16" },
+		textDocument = {
+			completion = {
+				editsNearCursor = true,
+			},
+		},
 	},
 	cmd = {
 		"clangd",
@@ -75,17 +80,20 @@ local cppconfig = {
 		"--function-arg-placeholders",
 		"--fallback-style=llvm",
 	},
+	filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
 	init_options = {
 		usePlaceholders = true,
 		completeUnimported = true,
 		clangdFileStatus = true,
 	},
-}
+})
+
 -- C++
-lspconfig.clangd.setup(cppconfig)
--- vim.lsp.set_log_level("debug")
--- vim.lsp.config('clangd', cppconfig)
--- vim.lsp.enable('clangd')
+vim.lsp.config("clangd", cppconfig)
+vim.lsp.enable("clangd")
+
+vim.lsp.config("copilot", lspconfig.copilot)
+vim.lsp.enable("copilot")
 
 -- Hide the dianostic virtual text
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
