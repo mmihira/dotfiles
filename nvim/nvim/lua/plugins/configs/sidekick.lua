@@ -4,6 +4,11 @@ if not present then
 end
 
 sidekick.setup({
+	nes = {
+		enabled = function(buf)
+			return false
+		end,
+	},
 	cli = {
 		win = {
 			layout = "float",

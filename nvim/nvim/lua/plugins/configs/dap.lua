@@ -42,7 +42,7 @@ local cfg = {
 						vim.notify(out, vim.log.levels.ERROR)
 						return nil
 					end
-					return "~/c/ove/out/Debug/ove"
+					return "${workspaceFolder}/out/debug/ove"
 				end,
 			},
 		},

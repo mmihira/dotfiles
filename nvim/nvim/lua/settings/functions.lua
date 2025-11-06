@@ -101,7 +101,8 @@ vim.api.nvim_create_user_command("Issues", function(opts)
 end, { nargs = 0 })
 
 vim.api.nvim_create_user_command("Debug", function(opts)
-	require("dap-go").debug_test()
+	require("dap").set_breakpoint()
+	require("dap").continue()
 end, { nargs = 0 })
 
 vim.api.nvim_create_user_command("Break", function(opts)

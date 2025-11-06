@@ -88,6 +88,12 @@ packer.startup(function(use)
 	})
 	use({ "Civitasv/cmake-tools.nvim" })
 	use({ "folke/sidekick.nvim" })
+	use({
+		"hedyhli/markdown-toc.nvim",
+		config = function()
+			require("mtoc").setup()
+		end,
+	})
 
 	-- Syntax
 	use("jake-stewart/multicursor.nvim")
@@ -111,7 +117,9 @@ packer.startup(function(use)
 		requires = { "echasnovski/mini.icons", opt = true }, -- if you use standalone mini plugins
 		-- requires = { 'nvim-tree/nvim-web-devicons', opt = true }, -- if you prefer nvim-web-devicons
 		config = function()
-			require("render-markdown").setup({})
+			require("render-markdown").setup({
+				link = {},
+			})
 		end,
 	})
 

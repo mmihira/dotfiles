@@ -1,8 +1,3 @@
-local present, lspconfig = pcall(require, "lspconfig")
-if not present then
-	return
-end
-
 local present, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
 if not present then
 	return
@@ -27,6 +22,14 @@ local goplsconfig = {
 		usePlaceholders = true,
 	},
 }
+
+-- gls
+vim.lsp.config("glsl_analyzer", defaultconfig)
+vim.lsp.enable("glsl_analyzer")
+
+-- Markdown
+vim.lsp.config("marksman", defaultconfig)
+vim.lsp.enable("marksman")
 
 -- Gopls
 vim.lsp.config("gopls", goplsconfig)
@@ -72,7 +75,7 @@ cppconfig = vim.tbl_deep_extend("force", cppconfig, {
 		},
 	},
 	cmd = {
-		"clangd",
+		"/Users/mihira/.local/share/nvim/mason/bin/clangd",
 		"--background-index",
 		"--clang-tidy",
 		"--header-insertion=iwyu",
@@ -92,7 +95,7 @@ cppconfig = vim.tbl_deep_extend("force", cppconfig, {
 vim.lsp.config("clangd", cppconfig)
 vim.lsp.enable("clangd")
 
-vim.lsp.config("copilot", lspconfig.copilot)
+vim.lsp.config("copilot", {})
 vim.lsp.enable("copilot")
 
 -- Hide the dianostic virtual text

@@ -30,14 +30,14 @@ local floa_vim_test_callback = function(opts)
 			local file_dir = vim.fn.expand("%:p:h")
 			local rel_path = file_dir:match("test/(.*)")
 			local file_dir_name = rel_path and rel_path:gsub("/", "_") or ""
-			local cmd = "(cd ./out/Debug && make run_tests_target_" .. file_dir_name .. " -j 8)"
+			local cmd = "(cd ./out/Debug && ninja run_tests_target_" .. file_dir_name .. " -j 8)"
 			tterm.exec(cmd, 2, nil, nil, "float", "test_term", false, true)
 		elseif has_bench then
 			local file_dir = vim.fn.expand("%:p:h")
 			local file_dir_name = vim.fn.fnamemodify(file_dir, ":t")
 			-- local cmd = "(cd ./out/Debug && make run_benchmarks_target_" .. file_dir_name .. " -j 8)"
 			print("Running benchmarks for " .. file_dir_name)
-			local cmd = "(cd ./out/Debug && make run_benchmark_" .. file_dir_name .. " -j 8)"
+			local cmd = "(cd ./out/Debug && ninja run_benchmark_" .. file_dir_name .. " -j 8)"
 			-- local cmd = "(cd ./out/Debug && make run_benchmark_entt -j 8)"
 			tterm.exec(cmd, 2, nil, nil, "float", "test_term", false, true)
 		else

@@ -1,19 +1,19 @@
 local present, cmake = pcall(require, "cmake-tools")
 if not present then
-  return
+	return
 end
 
 cmake.setup({
-  -- cmake_executor = {
-  --   name = "toggleterm",
-  --   default_opts = {
-  --     toggleterm = {
-  --       direction = "float",
-  --       close_on_exit = false,
-  --       auto_scroll = true,
-  --       singleton = false,
-  --     },
-
-  --   },
-  -- },
+	cmake_generate_options = { "-G", "Ninja" },
+	cmake_executor = {
+		name = "toggleterm",
+		default_opts = {
+			toggleterm = {
+				direction = "float",
+				close_on_exit = false,
+				auto_scroll = true,
+				singleton = false,
+			},
+		},
+	},
 })

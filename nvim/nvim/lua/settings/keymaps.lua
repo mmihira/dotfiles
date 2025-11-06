@@ -71,7 +71,7 @@ vim.keymap.set("n", "<c-,>", function()
 	require("sidekick.cli").toggle({ name = "claude", focus = true })
 end, { noremap = true, silent = true })
 
-vim.keymap.set("n", "tab", function()
+vim.keymap.set("n", "<Tab>", function()
 	if not require("sidekick").nes_jump_or_apply() then
 		return "<Tab>" -- fallback to normal tab
 	end
@@ -101,7 +101,11 @@ vim.keymap.set("n", "<F4>", function()
 end)
 
 vim.keymap.set("n", "<F5>", function()
-	require("dap").continue()
+	require("dap").step_over()
+end)
+
+vim.keymap.set("n", "<F6>", function()
+	require("dap").step_into()
 end)
 
 vim.keymap.set("n", "_", function()

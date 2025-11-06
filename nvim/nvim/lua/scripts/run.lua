@@ -82,7 +82,7 @@ local run_cpp = function(file_path)
 		local debug_path = parent_path:joinpath("out", "Debug")
 		local out = scan.scan_dir(debug_path:absolute(), { hidden = true, depth = 1 })
 		for _, item in ipairs(out) do
-			if string.find(item, "Makefile", 1, true) then
+			if string.find(item, "build.ninja", 1, true) then
 				foundMake = true
 				parent_path = debug_path
 				break
@@ -91,7 +91,7 @@ local run_cpp = function(file_path)
 	end
 
 	if foundMake then
-		local _cmd = "(cd " .. parent_path:absolute() .. "; make run -j 8" .. ")"
+		local _cmd = "(cd " .. parent_path:absolute() .. "; ninja run -j 8" .. ")"
 		exec_in_term(_cmd)
 	else
 		print("Could not found makefile")
