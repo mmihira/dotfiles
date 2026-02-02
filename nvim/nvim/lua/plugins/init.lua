@@ -80,12 +80,12 @@ packer.startup(function(use)
 			require("copilot_cmp").setup()
 		end,
 	})
-	use({
-		"CopilotC-Nvim/CopilotChat.nvim",
-		config = function()
-			require("CopilotChat").setup({})
-		end,
-	})
+	-- use({
+	-- 	"CopilotC-Nvim/CopilotChat.nvim",
+	-- 	config = function()
+	-- 		require("CopilotChat").setup({})
+	-- 	end,
+	-- })
 	use({ "Civitasv/cmake-tools.nvim" })
 	use({ "folke/sidekick.nvim" })
 	use({
@@ -125,6 +125,7 @@ packer.startup(function(use)
 
 	-- Debug
 	use("mfussenegger/nvim-dap")
+  use("theHamsta/nvim-dap-virtual-text")
 	use({
 		"leoluz/nvim-dap-go",
 		ft = "go",
@@ -133,8 +134,7 @@ packer.startup(function(use)
 		end,
 	})
 	use({
-		"rcarriga/nvim-dap-ui",
-		requires = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
+		"igorlfs/nvim-dap-view",
 	})
 	use({
 		"julianolf/nvim-dap-lldb",

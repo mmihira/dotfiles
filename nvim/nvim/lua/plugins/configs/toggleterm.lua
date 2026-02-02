@@ -37,7 +37,14 @@ function populate_qf_with_cpp_errors(bn)
 				type = err_type:match("error") and "E" or "W",
 				text = (err_type .. ": " .. message):gsub("%s+", " "),
 			}
-			table.insert(qlistresults, item)
+
+			if item.type == "E" then
+				-- Prioritize errors by inserting them at the beginning
+				table.insert(qlistresults, 1, item)
+			else
+				-- Warnings go to the end
+				table.insert(qlistresults, item)
+			end
 		end
 	end
 
@@ -125,18 +132,14 @@ tterm.setup({
 			vim.fn.setqflist({}, "r", { title = "C++ Build Errors" })
 		end
 	end,
-	on_stdout = function(t, job, data, name)
-		if t.display_name == "main_term" or t.display_name == "build_term" then
-			-- Schedule processing in next event loop to avoid blocking stdout
-			vim.schedule(function()
-				if is_cpp_project() then
-					for _, line in ipairs(data) do
-						if line and line ~= "" then
-							process_cpp_build_line(line)
-						end
-					end
-				end
-			end)
-		end
+	on_close = function(t)
+		-- if t.display_name == "main_term" or t.display_name == "build_term" then
+		-- 	-- Schedule processing in next event loop to avoid blocking stdout
+		-- 	vim.schedule(function()
+		-- 		if is_cpp_project() then
+		-- 			populate_qf_with_cpp_errors(t.bufnr)
+		-- 		end
+		-- 	end)
+		-- end
 	end,
 })

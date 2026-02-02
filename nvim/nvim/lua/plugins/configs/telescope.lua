@@ -20,6 +20,7 @@ telescope.setup({
         ["<leader>q"] = "close",
         ["<C-d>"] = actions.results_scrolling_down,
         ["<C-u>"] = actions.results_scrolling_up,
+        ["<C-t>"] = actions.smart_send_to_qflist + actions.open_qflist,
       },
     },
   },

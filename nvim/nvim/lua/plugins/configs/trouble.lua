@@ -6,6 +6,7 @@ end
 trouble.setup({
   focus = true,
   follow = false,
+  pinned = true,
   modes = {
     lsp_doc_float = {
       mode = "lsp_document_symbols",

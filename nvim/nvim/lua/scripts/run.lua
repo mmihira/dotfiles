@@ -98,6 +98,22 @@ local run_cpp = function(file_path)
 	end
 end
 
+local run_dot = function(file_path)
+	local absolute_path = file_path:absolute()
+	local filename = absolute_path:match("^.+/(.+)$")
+	local output_name = filename:gsub("%.dot$", ".png")
+	local output_path = "/tmp/" .. output_name
+
+	local _cmd = "dot -Tpng " .. absolute_path .. " -o " .. output_path .. " && open -a 'Google Chrome' " .. output_path
+	exec_in_term(_cmd)
+end
+
+local run_csv = function(file_path)
+	local root_path = vim.fn.expand("~/c/ove/")
+	local _cmd = "(cd " .. root_path .. "; ./out/Debug/ove --stats)"
+	exec_in_term(_cmd)
+end
+
 local run_file = function()
 	local plenary = require("plenary")
 	local path = require("plenary.path")
@@ -120,6 +136,12 @@ local run_file = function()
 	end
 	if filetype == "c" then
 		run_cpp(file_path)
+	end
+	if filetype == "dot" then
+		run_dot(file_path)
+	end
+	if filetype == "csv" then
+		run_csv(file_path)
 	end
 end
 M.run_file = run_file

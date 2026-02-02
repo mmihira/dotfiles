@@ -177,6 +177,22 @@ vim.api.nvim_create_user_command("GitMn", function(opts)
 			rtxt = "s",
 		},
 		{
+			name = "Side kick here",
+			cmd = function()
+				local sidekick = require("sidekick.cli")
+
+				local template = "In {file} at {position}"
+
+				local rendered_msg = sidekick.render(template)
+
+				if rendered_msg then
+					sidekick.show({ name = "claude" })
+					sidekick.send({ msg = rendered_msg })
+				end
+			end,
+			rtxt = "a",
+		},
+		{
 			name = "Buffer hunks",
 			cmd = function()
 				require("telescope").extensions.git_signs.git_signs()
@@ -230,5 +246,5 @@ vim.api.nvim_create_user_command("DapMn", function(opts)
 end, { nargs = 0 })
 
 vim.api.nvim_create_user_command("Dp", function(opts)
-  require("dap").toggle_breakpoint()
+	require("dap").toggle_breakpoint()
 end, { nargs = 0 })

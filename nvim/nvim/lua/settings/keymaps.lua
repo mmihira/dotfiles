@@ -37,6 +37,12 @@ keymap("n", "t", ":TSJToggle<CR>", opts)
 keymap("n", "<c-k>", ":Telescope git_files<CR>", opts)
 keymap(
 	"n",
+	"<c-b>",
+	":lua require('telescope.builtin').live_grep({ cwd = 'src/entities', initial_mode = 'insert' })<CR>",
+	opts
+)
+keymap(
+	"n",
 	"<c-l>",
 	":lua require('telescope.builtin').lsp_document_symbols({ show_line=true, previewer=false, symbols={'method','function', 'class'}, symbol_filter=function(symbol) return not string.match(symbol.name, '^exec') end })<CR>",
 	opts
@@ -71,10 +77,8 @@ vim.keymap.set("n", "<c-,>", function()
 	require("sidekick.cli").toggle({ name = "claude", focus = true })
 end, { noremap = true, silent = true })
 
-vim.keymap.set("n", "<Tab>", function()
-	if not require("sidekick").nes_jump_or_apply() then
-		return "<Tab>" -- fallback to normal tab
-	end
+vim.keymap.set("v", "<leader>av", function()
+	require("sidekick.cli").send({ msg = "in file {selection}" })
 end, { noremap = true, silent = true })
 
 keymap("n", "<leader>mm", ":ToggleTerm<CR>", opts)
@@ -118,5 +122,5 @@ vim.keymap.set("n", "_", function()
 end)
 
 vim.keymap.set({ "n", "v" }, "<Leader>dk", function()
-	require("dapui").eval()
+	require("dap.ui.widgets").hover(nil, { border = "rounded" })
 end)
