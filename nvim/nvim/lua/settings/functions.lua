@@ -193,6 +193,13 @@ vim.api.nvim_create_user_command("GitMn", function(opts)
 			rtxt = "a",
 		},
 		{
+			name = "Build cpp",
+			cmd = function()
+				require("scripts.build").build_file()
+			end,
+			rtxt = "b",
+		},
+		{
 			name = "Buffer hunks",
 			cmd = function()
 				require("telescope").extensions.git_signs.git_signs()

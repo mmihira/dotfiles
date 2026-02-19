@@ -125,7 +125,7 @@ packer.startup(function(use)
 
 	-- Debug
 	use("mfussenegger/nvim-dap")
-  use("theHamsta/nvim-dap-virtual-text")
+	use("theHamsta/nvim-dap-virtual-text")
 	use({
 		"leoluz/nvim-dap-go",
 		ft = "go",
@@ -184,6 +184,7 @@ packer.startup(function(use)
 	use({ "bloznelis/before.nvim" })
 	use({ "nvchad/volt" })
 	use({ "nvchad/menu" })
+	use({ "yochem/jq-playground.nvim" })
 
 	-- Tree
 	use({

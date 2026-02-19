@@ -92,8 +92,6 @@ keymap("n", "0", ':lua require("gitsigns").next_hunk()<CR>', opts)
 keymap("n", "<leader>t", ":TestNearest<CR>", opts)
 keymap("n", "<leader>T", ":TestFile<CR>", opts)
 keymap("n", "<leader>C", ":T clear<CR>", opts)
--- CopilotChat
-keymap("n", "<leader>cp", ":CopilotChat<CR>", opts)
 -- Goto preview
 keymap("n", "gv", "<Cmd>vsplit | lua vim.lsp.buf.definition()<CR>", opts)
 keymap("n", "gp", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", opts)
