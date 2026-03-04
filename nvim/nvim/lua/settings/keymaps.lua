@@ -119,6 +119,8 @@ vim.keymap.set("n", "_", function()
 	end
 end)
 
+keymap("n", "<leader>f", ":FindMn<CR>", opts)
+
 vim.keymap.set({ "n", "v" }, "<Leader>dk", function()
 	require("dap.ui.widgets").hover(nil, { border = "rounded" })
 end)

@@ -3,8 +3,4 @@ if not present then
   return
 end
 
-nvim_surround.setup({
-  keymaps = {
-    visual = "s",
-  },
-})
+nvim_surround.setup({})

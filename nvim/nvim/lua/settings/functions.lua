@@ -255,3 +255,38 @@ end, { nargs = 0 })
 vim.api.nvim_create_user_command("Dp", function(opts)
 	require("dap").toggle_breakpoint()
 end, { nargs = 0 })
+
+vim.api.nvim_create_user_command("FindMn", function(opts)
+	require("menu").open({
+		{
+			name = "Event handler",
+			cmd = function()
+				local word = vim.fn.expand("<cword>")
+				local event_name = word:gsub("^e", "")
+				local pattern = "handle[A-Za-z]*" .. event_name
+				require("telescope.builtin").grep_string({
+					search = pattern,
+					use_regex = true,
+					glob_pattern = "*.{cpp,h}",
+				})
+			end,
+			rtxt = "h",
+		},
+		{
+			name = "Event triggers",
+			cmd = function()
+				local word = vim.fn.expand("<cword>")
+				local pattern = "(enqueue|trigger)[A-Za-z]*[<(][A-Za-z:]*" .. word
+				require("telescope.builtin").grep_string({
+					search = pattern,
+					use_regex = true,
+					glob_pattern = "*.{cpp,h}",
+				})
+			end,
+			rtxt = "t",
+		},
+	}, {
+		mouse = false,
+		border = true,
+	})
+end, { nargs = 0 })

@@ -19,4 +19,5 @@ cmake.setup({
     },
   },
   cmake_use_preset = false,
+  cmake_use_scratch_buffer = false -- set true to see command
 })
