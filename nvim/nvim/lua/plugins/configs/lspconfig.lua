@@ -51,6 +51,33 @@ vim.lsp.enable("html")
 vim.lsp.config("ts_ls", defaultconfig)
 vim.lsp.enable("ts_ls")
 
+-- C++ LSP: clice (uncomment to use instead of clangd, requires .clice/ dir in project)
+-- local use_clice = vim.fn.isdirectory(vim.fn.getcwd() .. "/.clice") == 1
+-- if use_clice then
+-- 	vim.lsp.config("clice", {
+-- 		cmd = { "/Users/mihira/c/clice/build/macosx/arm64/release/clice", "--mode=pipe" },
+-- 		filetypes = { "c", "cpp" },
+-- 		root_markers = {
+-- 			".git/",
+-- 			"clice.toml",
+-- 			".clang-tidy",
+-- 			".clang-format",
+-- 			"compile_commands.json",
+-- 			"compile_flags.txt",
+-- 			"configure.ac",
+-- 		},
+-- 		capabilities = {
+-- 			textDocument = {
+-- 				completion = {
+-- 					editsNearCursor = true,
+-- 				},
+-- 			},
+-- 			offsetEncoding = { "utf-8" },
+-- 		},
+-- 	})
+-- 	vim.lsp.enable("clice")
+-- end
+
 local cppconfig = lsplib.mk_config()
 -- default is here https://github.com/neovim/nvim-lspconfig/blob/master/lsp/clangd.lua
 cppconfig = vim.tbl_deep_extend("force", cppconfig, {
@@ -75,28 +102,31 @@ cppconfig = vim.tbl_deep_extend("force", cppconfig, {
 		},
 	},
 	cmd = {
-		"/Users/mihira/.local/share/nvim/mason/bin/clangd",
-		"--background-index",
+		"/opt/homebrew/opt/llvm/bin/clangd",
 		"--clang-tidy",
-		"--header-insertion=iwyu",
-		"--completion-style=detailed",
-		"--function-arg-placeholders",
+		"--experimental-modules-support",
 		"--fallback-style=llvm",
 	},
-	filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
+	-- cmd = {
+	-- 	-- "/Users/mihira/.local/share/nvim/mason/bin/clangd",
+	-- 	"/opt/homebrew/opt/llvm/bin/clangd",
+	-- 	"--background-index",
+	-- 	"--clang-tidy",
+	-- 	"--header-insertion=iwyu",
+	-- 	"--completion-style=detailed",
+	-- 	"--experimental-modules-support",
+	-- 	"--function-arg-placeholders",
+	-- 	"--fallback-style=llvm",
+	-- },
+	filetypes = { "c", "cpp", "cppm", "h", "proto" },
 	init_options = {
 		usePlaceholders = true,
 		completeUnimported = true,
 		clangdFileStatus = true,
 	},
 })
-
--- C++
 vim.lsp.config("clangd", cppconfig)
 vim.lsp.enable("clangd")
-
-vim.lsp.config("copilot", {})
-vim.lsp.enable("copilot")
 
 -- Hide the dianostic virtual text
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {

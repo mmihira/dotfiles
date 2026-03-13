@@ -9,24 +9,29 @@ local floa_vim_test_callback = function(opts)
 
 		local has_gtest = false
 		local has_bench = false
+		local has_ut = false
 
 		for _, line in ipairs(file_content) do
 			if line:match('#include%s*[<"]gtest/gtest%.h[>"]') then
 				has_gtest = true
 				break
+			elseif line:match('import boost.ut') then
+				has_ut = true
+				break
+			elseif line:match('#include%s*[<"]benchmark/benchmark%.h[>"]') then
+				has_bench = true
+				break
 			end
 		end
 
-		if not has_gtest then
-			for _, line in ipairs(file_content) do
-				if line:match('#include%s*[<"]benchmark/benchmark%.h[>"]') then
-					has_bench = true
-					break
-				end
-			end
-		end
-
-		if has_gtest then
+		if has_ut then
+			local file_dir = vim.fn.expand("%:p:h")
+			local file_name = vim.fn.expand("%:t:r")
+			local rel_path = file_dir:match("tests/(.*)")
+			local target_name = rel_path and (rel_path:gsub("/", "_") .. "_" .. file_name) or file_name
+			local cmd = "cmake --build out/Debug --target run_tests_target_" .. target_name
+			tterm.exec(cmd, 2, nil, nil, "float", "test_term", false, true)
+		elseif has_gtest then
 			local file_dir = vim.fn.expand("%:p:h")
 			local rel_path = file_dir:match("test/(.*)")
 			local file_dir_name = rel_path and rel_path:gsub("/", "_") or ""

@@ -187,10 +187,11 @@ local function on_init(client)
 end
 
 local function on_exit(client, bufnr)
-	require("me.lsp.ext").detach(client.id, bufnr)
-	vim.cmd("augroup lsp_aucmds")
-	vim.cmd(string.format("au! * <buffer=%d>", bufnr))
-	vim.cmd("augroup end")
+	vim.schedule(function()
+		vim.cmd("augroup lsp_aucmds")
+		vim.cmd(string.format("au! * <buffer=%d>", bufnr))
+		vim.cmd("augroup end")
+	end)
 end
 
 local function mk_config()

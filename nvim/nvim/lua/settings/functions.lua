@@ -14,6 +14,11 @@ vim.api.nvim_create_user_command("Run", function(opts)
 	require("scripts/run").run_file()
 end, { nargs = 0 })
 
+-- Import inserter
+vim.api.nvim_create_user_command("ImportInsert", function(opts)
+	require("scripts/import_inserter").run()
+end, { nargs = 0 })
+
 -- Events
 vim.api.nvim_create_user_command("EventsSync", function(opts)
 	local edl = require("scripts/event_dispatcher_lookup")
