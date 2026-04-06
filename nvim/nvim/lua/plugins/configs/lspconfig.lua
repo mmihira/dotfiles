@@ -51,89 +51,107 @@ vim.lsp.enable("html")
 vim.lsp.config("ts_ls", defaultconfig)
 vim.lsp.enable("ts_ls")
 
--- C++ LSP: clice (uncomment to use instead of clangd, requires .clice/ dir in project)
--- local use_clice = vim.fn.isdirectory(vim.fn.getcwd() .. "/.clice") == 1
--- if use_clice then
--- 	vim.lsp.config("clice", {
--- 		cmd = { "/Users/mihira/c/clice/build/macosx/arm64/release/clice", "--mode=pipe" },
--- 		filetypes = { "c", "cpp" },
--- 		root_markers = {
--- 			".git/",
--- 			"clice.toml",
--- 			".clang-tidy",
--- 			".clang-format",
--- 			"compile_commands.json",
--- 			"compile_flags.txt",
--- 			"configure.ac",
--- 		},
--- 		capabilities = {
--- 			textDocument = {
--- 				completion = {
--- 					editsNearCursor = true,
--- 				},
--- 			},
--- 			offsetEncoding = { "utf-8" },
--- 		},
--- 	})
--- 	vim.lsp.enable("clice")
--- end
+-- C++ LSPs
+local cpplspconfig = vim.tbl_deep_extend("force", lsplib.mk_config(), {
+  capabilities = {
+    offsetEncoding = { "utf-8", "utf-16" },
+    textDocument = {
+      completion = {
+        editsNearCursor = true,
+      },
+    },
+  },
+  cmd = { "/Users/mihira/c/cpplsp/build/macosx/arm64/debug/cpplsp", "--lsp" },
+  filetypes = { "c", "cpp", "cc", "cxx", "h", "hpp", "hh", "hxx", "cppm" },
+  root_markers = { "xmake.lua", "CMakeLists.txt", ".git" },
+})
+vim.lsp.config("cpplsp", cpplspconfig)
+vim.lsp.enable("cpplsp")
+vim.opt.runtimepath:append("/Users/mihira/c/cpplsp")
+require("cpplsp").setup()
+
+-- clangd: set to "format_only" to just use clang-format, or "full" for all capabilities
+local clangd_mode = "format_only"
+-- local clangd_mode = "all"
 
 local cppconfig = lsplib.mk_config()
 -- default is here https://github.com/neovim/nvim-lspconfig/blob/master/lsp/clangd.lua
 cppconfig = vim.tbl_deep_extend("force", cppconfig, {
-	keys = {
-		{ "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header (C/C++)" },
-	},
-	root_markers = {
-		".clangd",
-		".clang-tidy",
-		".clang-format",
-		"compile_commands.json",
-		"compile_flags.txt",
-		"configure.ac",
-		".git",
-	},
-	capabilities = {
-		offsetEncoding = { "utf-8", "utf-16" },
-		textDocument = {
-			completion = {
-				editsNearCursor = true,
-			},
-		},
-	},
-	cmd = {
-		"/opt/homebrew/opt/llvm/bin/clangd",
-		"--clang-tidy",
-		"--experimental-modules-support",
-		"--fallback-style=llvm",
-	},
-	-- cmd = {
-	-- 	-- "/Users/mihira/.local/share/nvim/mason/bin/clangd",
-	-- 	"/opt/homebrew/opt/llvm/bin/clangd",
-	-- 	"--background-index",
-	-- 	"--clang-tidy",
-	-- 	"--header-insertion=iwyu",
-	-- 	"--completion-style=detailed",
-	-- 	"--experimental-modules-support",
-	-- 	"--function-arg-placeholders",
-	-- 	"--fallback-style=llvm",
-	-- },
-	filetypes = { "c", "cpp", "cppm", "h", "proto" },
-	init_options = {
-		usePlaceholders = true,
-		completeUnimported = true,
-		clangdFileStatus = true,
-	},
+  keys = {
+    { "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header (C/C++)" },
+  },
+  root_markers = {
+    ".clangd",
+    ".clang-tidy",
+    ".clang-format",
+    "compile_commands.json",
+    "compile_flags.txt",
+    "configure.ac",
+    ".git",
+  },
+  capabilities = {
+    offsetEncoding = { "utf-8", "utf-16" },
+    textDocument = {
+      completion = {
+        editsNearCursor = true,
+      },
+    },
+  },
+  cmd = {
+    "/opt/homebrew/opt/llvm/bin/clangd",
+    "--clang-tidy",
+    "--experimental-modules-support",
+    "--fallback-style=llvm",
+  },
+  -- cmd = {
+  -- 	-- "/Users/mihira/.local/share/nvim/mason/bin/clangd",
+  -- 	"/opt/homebrew/opt/llvm/bin/clangd",
+  -- 	"--background-index",
+  -- 	"--clang-tidy",
+  -- 	"--header-insertion=iwyu",
+  -- 	"--completion-style=detailed",
+  -- 	"--experimental-modules-support",
+  -- 	"--function-arg-placeholders",
+  -- 	"--fallback-style=llvm",
+  -- },
+  filetypes = { "c", "cpp", "cppm", "h", "proto" },
+  init_options = {
+    usePlaceholders = true,
+    completeUnimported = true,
+    clangdFileStatus = true,
+  },
 })
+
+if clangd_mode == "format_only" then
+  local full_on_attach = cppconfig.on_attach
+  cppconfig.on_attach = function(client, bufnr)
+    if full_on_attach then
+      full_on_attach(client, bufnr)
+    end
+    -- Disable everything except formatting so clangd doesn't conflict with cpplsp
+    client.server_capabilities.completionProvider = nil
+    client.server_capabilities.hoverProvider = false
+    client.server_capabilities.definitionProvider = false
+    client.server_capabilities.referencesProvider = false
+    client.server_capabilities.signatureHelpProvider = nil
+    client.server_capabilities.diagnosticProvider = nil
+    client.server_capabilities.codeActionProvider = false
+    client.server_capabilities.documentHighlightProvider = false
+    client.server_capabilities.renameProvider = false
+    client.server_capabilities.semanticTokensProvider = nil
+    client.server_capabilities.inlayHintProvider = nil
+  end
+end
+
 vim.lsp.config("clangd", cppconfig)
 vim.lsp.enable("clangd")
 
 -- Hide the dianostic virtual text
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-	virtual_text = false,
-	signs = true,
-	update_in_insert = false,
-	underline = false,
+  virtual_text = false,
+  signs = true,
+  update_in_insert = false,
+  underline = false,
 })
 
 -- Show diagnostics on hover

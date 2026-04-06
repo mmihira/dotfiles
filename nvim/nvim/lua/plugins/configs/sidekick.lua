@@ -23,6 +23,10 @@ sidekick.setup({
 				cmd = { "/Users/mihira/.local/bin/claude" },
 				url = "https://github.com/anthropics/claude-code",
 			},
+			codex = {
+				cmd = { "/opt/homebrew/bin/codex" },
+				url = "https://github.com/openai/codex",
+			},
 		},
 	},
 })

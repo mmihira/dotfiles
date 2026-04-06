@@ -185,24 +185,25 @@ vim.api.nvim_create_user_command("GitMn", function(opts)
 			name = "Side kick here",
 			cmd = function()
 				local sidekick = require("sidekick.cli")
-
+				local tool = _G._ai_tool or "claude"
 				local template = "In {file} at {position}"
-
 				local rendered_msg = sidekick.render(template)
-
 				if rendered_msg then
-					sidekick.show({ name = "claude" })
-					sidekick.send({ msg = rendered_msg })
+					sidekick.send({ name = tool, msg = rendered_msg })
 				end
 			end,
 			rtxt = "a",
 		},
 		{
-			name = "Build cpp",
+			name = "Switch AI tool",
 			cmd = function()
-				require("scripts.build").build_file()
+				vim.ui.select({ "claude", "codex", "gemini" }, { prompt = "Switch AI tool: " }, function(choice)
+					if choice then
+						_G._ai_tool = choice
+					end
+				end)
 			end,
-			rtxt = "b",
+			rtxt = "i",
 		},
 		{
 			name = "Buffer hunks",
@@ -220,11 +221,6 @@ vim.api.nvim_create_user_command("GitMn", function(opts)
 			name = "Preview Hunk",
 			cmd = require("gitsigns").preview_hunk,
 			rtxt = "e",
-		},
-		{
-			name = "Stage Hunk",
-			cmd = require("gitsigns").stage_hunk,
-			rtxt = "h",
 		},
 		{
 			name = "Toggle split",
@@ -259,6 +255,10 @@ end, { nargs = 0 })
 
 vim.api.nvim_create_user_command("Dp", function(opts)
 	require("dap").toggle_breakpoint()
+end, { nargs = 0 })
+
+vim.api.nvim_create_user_command("Ft", function(opts)
+	require("scripts/floating_window").toggle()
 end, { nargs = 0 })
 
 vim.api.nvim_create_user_command("FindMn", function(opts)

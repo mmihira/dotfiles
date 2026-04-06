@@ -57,9 +57,15 @@ packer.startup(function(use)
 	use("mfussenegger/nvim-jdtls")
 	use({
 		"j-hui/fidget.nvim", -- for nicely displaying lsp startup progress
-		tag = "legacy",
 		config = function()
-			require("fidget").setup({})
+			require("fidget").setup({
+				notification = {
+					window = {
+						normal_hl = "NormalFloat",
+						winblend = 0,
+					},
+				},
+			})
 		end,
 	})
 	use({ "rmagatti/goto-preview" })
@@ -67,6 +73,67 @@ packer.startup(function(use)
 		"edolphin-ydf/goimpl.nvim",
 		config = function()
 			require("telescope").load_extension("goimpl")
+		end,
+	})
+	use({
+		"supermaven-inc/supermaven-nvim",
+		config = function()
+			-- require("supermaven-nvim").setup({})
+		end,
+	})
+	use({
+		"milanglacier/minuet-ai.nvim",
+		config = function()
+			-- require("minuet").setup({
+			-- 	-- request_timeout = 10,
+			-- 	-- We use the FIM (Fill-In-The-Middle) provider for the best autocomplete experience
+			-- 	-- provider = "openai_fim_compatible",
+			-- 	-- provider_options = {
+			-- 	-- 	openai_fim_compatible = {
+			-- 	-- 		api_key = "TERM", -- Ollama doesn't use this, but the API expects a non-empty string
+			-- 	-- 		name = "Ollama",
+			-- 	-- 		end_point = "http://localhost:11434/v1/completions",
+			-- 	-- 		model = "qwen2.5-coder:7b",
+			-- 	-- 		optional = {
+			-- 	-- 			max_tokens = 256,
+			-- 	-- 			top_p = 0.9,
+			-- 	-- 		},
+			-- 	-- 	},
+			-- 	-- },
+			-- 	n_completions = 1, -- recommend for local model for resource saving
+			-- 	-- I recommend beginning with a small context window size and incrementally
+			-- 	-- expanding it, depending on your local computing power. A context window
+			-- 	-- of 512, serves as an good starting point to estimate your computing
+			-- 	-- power. Once you have a reliable estimate of your local computing power,
+			-- 	-- you should adjust the context window to a larger value.
+			-- 	context_window = 512,
+			-- 	provider_options = {
+			-- 		openai_fim_compatible = {
+			-- 			-- For Windows users, TERM may not be present in environment variables.
+			-- 			-- Consider using APPDATA instead.
+			-- 			api_key = "TERM",
+			-- 			name = "Ollama",
+			-- 			end_point = "http://localhost:11434/v1/completions",
+			-- 			model = "qwen2.5-coder:7b",
+			-- 			optional = {
+			-- 				max_tokens = 56,
+			-- 				top_p = 0.5,
+			-- 			},
+			-- 		},
+			-- 	},
+			-- 	virtualtext = {
+			-- 		-- Autotrigger completion specifically for your primary languages
+			-- 		auto_trigger_ft = { "cpp", "lua" },
+			-- 		keymap = {
+			-- 			accept = "<A-A>", -- Alt+Shift+A accepts the whole block
+			-- 			accept_line = "<A-a>", -- Alt+a accepts a single line
+			-- 			accept_n_lines = "<A-z>", -- Alt+z prompts you for how many lines to accept
+			-- 			prev = "<A-[>",
+			-- 			next = "<A-]>",
+			-- 			dismiss = "<A-e>",
+			-- 		},
+			-- 	},
+			-- })
 		end,
 	})
 	use({
@@ -106,12 +173,6 @@ packer.startup(function(use)
 			require("copilot_cmp").setup()
 		end,
 	})
-	-- use({
-	-- 	"CopilotC-Nvim/CopilotChat.nvim",
-	-- 	config = function()
-	-- 		require("CopilotChat").setup({})
-	-- 	end,
-	-- })
 	use({ "Civitasv/cmake-tools.nvim" })
 	use({ "folke/sidekick.nvim" })
 	use({

@@ -47,35 +47,42 @@ local run_bash = function(file_path)
 	exec_in_term(_cmd)
 end
 
-local run_go = function(file_path)
+local find_project_root = function(file_path, marker_names)
 	local scan = require("plenary.scandir")
+	local parent_path = file_path
 
-	local findMakeLoop = true
-	local foundMake = false
-	local parent_path = file_path:parent()
+	while true do
+		local next_parent = parent_path:parent()
+		if next_parent:absolute() == parent_path:absolute() then
+			return nil
+		end
+		parent_path = next_parent
+		local absolute = parent_path:absolute()
+		local out = scan.scan_dir(absolute, { hidden = true, depth = 1, add_dirs = true })
+		local found_git = false
 
-	while findMakeLoop do
-		local out = scan.scan_dir(parent_path:absolute(), { hidden = true, depth = 1 })
 		for _, item in ipairs(out) do
 			if string.find(item, ".git", 1, true) then
-				print("Found git without finding Makefile")
-				findMakeLoop = false
+				found_git = true
 			end
 
-			if string.find(item, "Makefile", 1, true) then
-				findMakeLoop = false
-				foundMake = true
+			for _, marker in ipairs(marker_names) do
+				if string.find(item, marker, 1, true) then
+					return parent_path
+				end
 			end
 		end
 
-		if findMakeLoop then
-			parent_path = parent_path:parent()
+		if found_git then
+			return nil
 		end
 	end
+end
 
-	if foundMake then
-		local rel = file_path:make_relative(parent_path:absolute())
-		local go_build_cmd = "go build -o go_app"
+local run_go = function(file_path)
+	local parent_path = find_project_root(file_path, { "Makefile" })
+
+	if parent_path then
 		local _cmd = "(cd " .. parent_path:absolute() .. "; make run" .. ")"
 		exec_in_term(_cmd)
 	else
@@ -83,8 +90,50 @@ local run_go = function(file_path)
 	end
 end
 
+local find_manifest_path = function(project_root)
+	local manifests = vim.fn.globpath(project_root .. "/build", "**/dll_manifest.jsonl", false, true)
+	table.sort(manifests)
+	return manifests[1]
+end
+
+-- Returns xmake_target string if file_full_path belongs to a hot-reload DLL,
+-- nil otherwise. Reads build/**/dll_manifest.jsonl from the project root.
+local find_dll_target = function(project_root, file_full_path)
+	local manifest_path = find_manifest_path(project_root)
+	if not manifest_path or manifest_path == "" then return nil end
+
+	local f = io.open(manifest_path, "r")
+	if not f then return nil end
+
+	for line in f:lines() do
+		local target = line:match('"xmake_target"%s*:%s*"([^"]+)"')
+		local sources_str = line:match('"sources"%s*:%s*%[([^%]]*)%]')
+		if target and sources_str then
+			for src in sources_str:gmatch('"([^"]+)"') do
+				if file_full_path == project_root .. "/" .. src then
+					f:close()
+					return target
+				end
+			end
+		end
+	end
+	f:close()
+	return nil
+end
+
 local run_cpp = function(file_path)
 	local scan = require("plenary.scandir")
+	local xmake_root = find_project_root(file_path, { "xmake.lua" })
+
+	if xmake_root then
+		local dll_target = find_dll_target(xmake_root:absolute(), file_path:absolute())
+		if dll_target then
+			exec_in_term(string.format("(cd '%s' && xmake build %s)", xmake_root:absolute(), dll_target))
+		else
+			exec_in_term(string.format("(cd '%s' && xmake run)", xmake_root:absolute()))
+		end
+		return
+	end
 
 	local findMakeLoop = true
 	local foundMake = false
@@ -119,12 +168,22 @@ local run_cpp = function(file_path)
 	end
 
 	if foundMake then
-		local run_cmd = string.format(
-			"(cd '%s' && "
-				.. "(ninja -C out/Debug check_module_imports -j 8 || cmake -B out/Debug -G Ninja) && "
-				.. "ninja -C out/Debug run -j 8)",
-			parent_path:absolute()
-		)
+		local dll_target = find_dll_target(parent_path:absolute(), file_path:absolute())
+		local run_cmd
+		if dll_target then
+			run_cmd = string.format(
+				"(cd '%s' && ninja -C out/Debug %s)",
+				parent_path:absolute(),
+				dll_target
+			)
+		else
+			run_cmd = string.format(
+				"(cd '%s' && "
+					.. "(ninja -C out/Debug check_module_imports -j 8 || cmake -B out/Debug -G Ninja) && "
+					.. "ninja -C out/Debug run -j 8)",
+				parent_path:absolute()
+			)
+		end
 		exec_in_term(run_cmd)
 	else
 		print("Could not found makefile")

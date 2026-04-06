@@ -67,11 +67,20 @@ cmp.setup({
 		end, { "i", "s" }),
 	},
 	sources = {
-		{ name = "copilot", group_index = 2, priority = 3 },
-		{ name = "nvim_lsp", group_index = 2, priority = 2, max_item_count = 5 },
+		{ name = "copilot", group_index = 3, priority = 5 },
+		{ name = "supermaven", group_index = 3, priority = 4 },
+		-- { name = "minuet", group_index = 2, priority = 3 },
+		{ name = "buffer", group_index = 1, priority = 3, max_item_count = 5 },
+		{ name = "nvim_lsp", group_index = 2, priority = 2, max_item_count = 8 },
 		{ name = "luasnip", group_index = 1, priority = 1 },
-		{ name = "buffer", group_index = 2, priority = 1, max_item_count = 5 },
 		-- { name = "path" },
+	},
+	performance = {
+		-- It is recommended to increase the timeout duration due to
+		-- the typically slower response speed of LLMs compared to
+		-- other completion sources. This is not needed when you only
+		-- need manual completion.
+		fetching_timeout = 1500,
 	},
 	window = {
 		documentation = {

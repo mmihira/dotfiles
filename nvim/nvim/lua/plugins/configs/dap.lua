@@ -107,7 +107,7 @@ local cfg = {
             vim.notify(out, vim.log.levels.ERROR)
             return nil
           end
-          return "${workspaceFolder}/out/debug/ove"
+          return "${workspaceFolder}/out/debug/cppmodule"
         end,
       },
     },

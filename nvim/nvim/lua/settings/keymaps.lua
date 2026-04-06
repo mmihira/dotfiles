@@ -41,12 +41,59 @@ keymap(
 	":lua require('telescope.builtin').live_grep({ cwd = 'src/entities', initial_mode = 'insert' })<CR>",
 	opts
 )
-keymap(
-	"n",
-	"<c-l>",
-	":lua require('telescope.builtin').lsp_document_symbols({ show_line=true, previewer=false, symbols={'method','function', 'class'}, symbol_filter=function(symbol) return not string.match(symbol.name, '^exec') end })<CR>",
-	opts
-)
+vim.keymap.set("n", "<c-l>", function()
+	require("menu").open({
+		{
+			name = "Document symbols",
+			cmd = function()
+				require("telescope.builtin").lsp_document_symbols({
+					show_line = true,
+					previewer = false,
+					symbols = { "method", "function", "class" },
+					symbol_filter = function(symbol)
+						return not string.match(symbol.name, "^exec")
+					end,
+				})
+			end,
+			rtxt = "l",
+		},
+		{
+			name = "Workspace symbols",
+			cmd = function()
+				local make_entry = require("telescope.make_entry")
+				local default_maker = make_entry.gen_from_lsp_symbols({ show_line = true })
+				require("telescope.builtin").lsp_workspace_symbols({
+					show_line = true,
+					previewer = false,
+					symbols = { "method", "function", "class", "field" },
+					entry_maker = function(entry)
+						local result = default_maker(entry)
+						if result then
+							-- entry.text is "[Kind] symbolName" — match only against symbol name
+							result.ordinal = entry.text:match("^%[.-%] (.+)$") or entry.text
+						end
+						return result
+					end,
+				})
+			end,
+			rtxt = "k",
+		},
+		{
+			name = "LSP UI",
+			cmd = function()
+				vim.cmd("Cpplsp")
+			end,
+			rtxt = "s",
+		},
+		{
+			name = "AST Inspector",
+			cmd = function()
+				require("cpplsp.ast_inspect").open()
+			end,
+			rtxt = "a",
+		},
+	}, { mouse = false, border = true })
+end, { noremap = true, silent = true })
 keymap("n", "<leader>k", ":Telescope live_grep<CR>", opts)
 keymap(
 	"n",
@@ -54,6 +101,33 @@ keymap(
 	[[<cmd>lua require'telescope'.extensions.goimpl.goimpl{}<CR>]],
 	{ noremap = true, silent = true }
 )
+
+vim.api.nvim_create_user_command("Pcm", function()
+	-- Find only the cpplsp client
+	local clients = vim.lsp.get_clients({ name = "cpplsp" })
+	if #clients == 0 then
+		vim.notify("cpplsp: no active client", vim.log.levels.WARN)
+		return
+	end
+
+	local params = {
+		textDocument = vim.lsp.util.make_text_document_params(),
+	}
+
+	-- Only send the request to the cpplsp client
+	clients[1].request("cpplsp/buildPcm", params, function(err, result)
+		if err then
+			vim.notify("cpplsp: PCM build failed (RPC error): " .. tostring(err), vim.log.levels.ERROR)
+			return
+		end
+		if result and result.status == "success" then
+			vim.notify("cpplsp: PCM built successfully -> " .. result.pcm_path, vim.log.levels.INFO)
+		else
+			local msg = result and result.error or "unknown error"
+			vim.notify("cpplsp: PCM build failed: " .. msg, vim.log.levels.WARN)
+		end
+	end)
+end, { desc = "Build PCM for the current C++ module" })
 
 -- Neotree
 keymap("n", "<leader>nn", ":NOpen<CR>", opts)
@@ -73,12 +147,20 @@ keymap("n", "<leader>r", ":Run<CR>", opts)
 -- Git
 keymap("n", "<leader>s", ":GitMn<CR>", opts)
 
-vim.keymap.set("n", "<c-,>", function()
-	require("sidekick.cli").toggle({ name = "claude", focus = true })
-end, { noremap = true, silent = true })
+-- AI CLI (claude/codex) - prompt on first use, remembered for session
+_G._ai_tool = _G._ai_tool or nil
 
-vim.keymap.set("v", "<leader>av", function()
-	require("sidekick.cli").send({ msg = "in file {selection}" })
+vim.keymap.set("n", "<c-,>", function()
+	if _G._ai_tool then
+		require("sidekick.cli").toggle({ name = _G._ai_tool, focus = true })
+	else
+		vim.ui.select({ "claude", "codex", "gemini" }, { prompt = "Select AI tool: " }, function(choice)
+			if choice then
+				_G._ai_tool = choice
+				require("sidekick.cli").toggle({ name = _G._ai_tool, focus = true })
+			end
+		end)
+	end
 end, { noremap = true, silent = true })
 
 keymap("n", "<leader>mm", ":ToggleTerm<CR>", opts)
