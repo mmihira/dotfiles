@@ -31,3 +31,5 @@ require("plugins/configs/cmake")
 require("plugins/configs/sidekick")
 require("settings/gosnips")
 require("settings/cppsnips")
+
+require("scripts/build_capture")

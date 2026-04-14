@@ -5,7 +5,7 @@ end
 
 gruvbox.setup({
   invert_selection = false,
-  transparent_mode = true,
+  transparent_mode = false,
   contrast = "soft",
 })
 

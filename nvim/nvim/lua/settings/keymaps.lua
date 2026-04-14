@@ -41,59 +41,7 @@ keymap(
 	":lua require('telescope.builtin').live_grep({ cwd = 'src/entities', initial_mode = 'insert' })<CR>",
 	opts
 )
-vim.keymap.set("n", "<c-l>", function()
-	require("menu").open({
-		{
-			name = "Document symbols",
-			cmd = function()
-				require("telescope.builtin").lsp_document_symbols({
-					show_line = true,
-					previewer = false,
-					symbols = { "method", "function", "class" },
-					symbol_filter = function(symbol)
-						return not string.match(symbol.name, "^exec")
-					end,
-				})
-			end,
-			rtxt = "l",
-		},
-		{
-			name = "Workspace symbols",
-			cmd = function()
-				local make_entry = require("telescope.make_entry")
-				local default_maker = make_entry.gen_from_lsp_symbols({ show_line = true })
-				require("telescope.builtin").lsp_workspace_symbols({
-					show_line = true,
-					previewer = false,
-					symbols = { "method", "function", "class", "field" },
-					entry_maker = function(entry)
-						local result = default_maker(entry)
-						if result then
-							-- entry.text is "[Kind] symbolName" — match only against symbol name
-							result.ordinal = entry.text:match("^%[.-%] (.+)$") or entry.text
-						end
-						return result
-					end,
-				})
-			end,
-			rtxt = "k",
-		},
-		{
-			name = "LSP UI",
-			cmd = function()
-				vim.cmd("Cpplsp")
-			end,
-			rtxt = "s",
-		},
-		{
-			name = "AST Inspector",
-			cmd = function()
-				require("cpplsp.ast_inspect").open()
-			end,
-			rtxt = "a",
-		},
-	}, { mouse = false, border = true })
-end, { noremap = true, silent = true })
+keymap("n", "<c-l>", ":LspMn<CR>", opts)
 keymap("n", "<leader>k", ":Telescope live_grep<CR>", opts)
 keymap(
 	"n",
@@ -154,7 +102,7 @@ vim.keymap.set("n", "<c-,>", function()
 	if _G._ai_tool then
 		require("sidekick.cli").toggle({ name = _G._ai_tool, focus = true })
 	else
-		vim.ui.select({ "claude", "codex", "gemini" }, { prompt = "Select AI tool: " }, function(choice)
+		vim.ui.select({ "claude", "codex", "copilot", "gemini" }, { prompt = "Select AI tool: " }, function(choice)
 			if choice then
 				_G._ai_tool = choice
 				require("sidekick.cli").toggle({ name = _G._ai_tool, focus = true })
@@ -179,7 +127,69 @@ keymap("n", "gv", "<Cmd>vsplit | lua vim.lsp.buf.definition()<CR>", opts)
 keymap("n", "gp", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", opts)
 
 -- Debug
-keymap("n", "<leader>d", ":DapMn<CR>", opts)
+vim.keymap.set("n", "<leader>d", function()
+	local cwd = vim.fn.getcwd()
+
+	if vim.fn.filereadable(cwd .. "/xmake.lua") ~= 1 then
+		vim.cmd("DapMn")
+		return
+	end
+
+	local function strip_ansi(s)
+		return s:gsub("\27%[[%d;]*%a", "")
+	end
+
+	-- Parse xmake.lua for the target marked set_default(true), else first target
+	local xmake_lua = io.open(cwd .. "/xmake.lua", "r")
+	if not xmake_lua then
+		vim.notify("xmake: could not open xmake.lua", vim.log.levels.WARN)
+		return
+	end
+	local xmake_content = xmake_lua:read("*a")
+	xmake_lua:close()
+
+	local default_target = nil
+	local current_target = nil
+	local first_target = nil
+	for line in xmake_content:gmatch("[^\n]+") do
+		local t = line:match('target%("([^"]+)"')
+		if t then
+			current_target = t
+			if not first_target then first_target = t end
+		end
+		if current_target and line:match("set_default%(true%)") then
+			default_target = current_target
+			break
+		end
+	end
+	default_target = default_target or first_target
+
+	if not default_target then
+		vim.notify("xmake: no target() found in xmake.lua", vim.log.levels.WARN)
+		return
+	end
+
+	-- Get the binary path for that target
+	local target_out = strip_ansi(vim.fn.system("xmake show -t " .. vim.fn.shellescape(default_target) .. " 2>/dev/null"))
+	local target_file = target_out:match("targetfile:%s*([^\n]+)")
+	if not target_file then
+		vim.notify("xmake: could not find targetfile for " .. default_target, vim.log.levels.WARN)
+		return
+	end
+	target_file = target_file:gsub("^%s+", ""):gsub("%s+$", "")
+
+	if not target_file:match("^/") then
+		target_file = cwd .. "/" .. target_file
+	end
+
+	require("dap").run({
+		name = "xmake: " .. default_target,
+		type = "lldb",
+		request = "launch",
+		program = target_file,
+		cwd = cwd,
+	})
+end, opts)
 vim.keymap.set("n", "<F4>", function()
 	require("dap").continue()
 end)

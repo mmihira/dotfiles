@@ -172,6 +172,124 @@ vim.api.nvim_create_user_command("Make", function(opts)
 	})
 end, { nargs = 0 })
 
+vim.api.nvim_create_user_command("LspMn", function(opts)
+	require("menu").open({
+		{
+			name = "Document symbols",
+			cmd = function()
+				require("telescope.builtin").lsp_document_symbols({
+					show_line = true,
+					previewer = false,
+					-- symbols = { "method", "function", "class" },
+					symbol_filter = function(symbol)
+						return not string.match(symbol.name, "^exec")
+					end,
+				})
+			end,
+			rtxt = "l",
+		},
+		{
+			name = "Workspace symbols",
+			cmd = function()
+				local make_entry = require("telescope.make_entry")
+				local default_maker = make_entry.gen_from_lsp_symbols({ show_line = true })
+				require("telescope.builtin").lsp_workspace_symbols({
+					show_line = true,
+					previewer = false,
+					symbols = { "method", "function", "class", "field" },
+					entry_maker = function(entry)
+						local result = default_maker(entry)
+						if result then
+							-- entry.text is "[Kind] symbolName" — match only against symbol name
+							result.ordinal = entry.text:match("^%[.-%] (.+)$") or entry.text
+						end
+						return result
+					end,
+				})
+			end,
+			rtxt = "w",
+		},
+		{
+			name = "LSP UI",
+			cmd = function()
+				vim.cmd("Cpplsp")
+			end,
+			rtxt = "s",
+		},
+		{
+			name = "LSP Ast",
+			cmd = function()
+				require("cpplsp.ast_inspect").open()
+			end,
+			rtxt = "a",
+		},
+		{
+			name = "LSP Init",
+			cmd = function()
+				local clients = vim.lsp.get_clients({ bufnr = 0, name = "cpplsp" })
+				if #clients == 0 then
+					vim.notify("cpplsp not attached", vim.log.levels.ERROR)
+					return
+				end
+				clients[1]:request("cpplsp/reinit", vim.NIL, function(err, result)
+					if err then
+						vim.notify("reinit failed: " .. vim.inspect(err), vim.log.levels.ERROR)
+					else
+						vim.notify("reinit triggered")
+					end
+				end)
+			end,
+			rtxt = "i",
+		},
+		{
+			name = "LSP Restart",
+			cmd = function()
+				vim.api.nvim_command(":LspRestart")
+			end,
+			rtxt = "r",
+		},
+		{
+			name = "LSP Buffer Info",
+			cmd = function()
+				vim.api.nvim_command(":CpplspBufferInfo")
+			end,
+			rtxt = "p",
+		},
+		{
+			name = "LSP Artifact Registry",
+			cmd = function()
+				vim.api.nvim_command(":CpplspArtifactRegistry")
+			end,
+			rtxt = "ag",
+		},
+		{
+			name = "LSP Logs",
+			cmd = function()
+				vim.api.nvim_command(":CpplspLogs")
+			end,
+			rtxt = "g",
+		},
+		{
+			name = "LSP Compile Env Script",
+			cmd = function()
+				vim.api.nvim_command(":CpplspCompileCommands")
+			end,
+			rtxt = "ce",
+		},
+		{
+			name = "Build Capture + Diagnostics",
+			cmd = function()
+				vim.api.nvim_command(":BuildCaptureLoad")
+				vim.api.nvim_command(":Trouble diagnostics")
+			end,
+			rtxt = "bd",
+		},
+	}, {
+		mouse = false,
+		border = true,
+	})
+end, { nargs = 0 })
+
 vim.api.nvim_create_user_command("GitMn", function(opts)
 	require("menu").open({
 		{
@@ -197,11 +315,15 @@ vim.api.nvim_create_user_command("GitMn", function(opts)
 		{
 			name = "Switch AI tool",
 			cmd = function()
-				vim.ui.select({ "claude", "codex", "gemini" }, { prompt = "Switch AI tool: " }, function(choice)
-					if choice then
-						_G._ai_tool = choice
+				vim.ui.select(
+					{ "claude", "codex", "copilot", "gemini" },
+					{ prompt = "Switch AI tool: " },
+					function(choice)
+						if choice then
+							_G._ai_tool = choice
+						end
 					end
-				end)
+				)
 			end,
 			rtxt = "i",
 		},

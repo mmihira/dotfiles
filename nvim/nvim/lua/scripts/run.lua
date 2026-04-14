@@ -29,14 +29,17 @@ local parse_run_block = function(file_full_path)
 	return table.concat(cmd_parts, " ")
 end
 
-local run_lua = function()
-	local file_full_path = vim.api.nvim_buf_get_name(0)
+local run_lua = function(file_path)
+	local file_full_path = file_path:absolute()
 	local cmd = parse_run_block(file_full_path)
 	if cmd then
 		local parent_dir = vim.fn.fnamemodify(file_full_path, ":h")
 		exec_in_term("(cd " .. parent_dir .. "; " .. cmd .. ")")
 	else
-		vim.api.nvim_command(":luafile %")
+		local parent_path = file_path:parent()
+		local rel = file_path:make_relative(parent_path:absolute())
+		local _cmd = "(cd " .. parent_path:absolute() .. "; " .. "luajit " .. rel .. ")"
+		exec_in_term(_cmd)
 	end
 end
 
@@ -96,14 +99,30 @@ local find_manifest_path = function(project_root)
 	return manifests[1]
 end
 
+local find_manifest_path = function(project_root)
+	local manifests = vim.fn.globpath(project_root .. "/build", "**/dll_manifest.jsonl", false, true)
+	table.sort(manifests)
+	return manifests[1]
+end
+
+local touch_state_constructors = function(project_root, target)
+	local touch_hotreload = dofile(project_root .. "/tools/touch_hotreload.lua")
+	local manifest_path = find_manifest_path(project_root)
+	touch_hotreload.touch(manifest_path, "gameeditor")
+end
+
 -- Returns xmake_target string if file_full_path belongs to a hot-reload DLL,
 -- nil otherwise. Reads build/**/dll_manifest.jsonl from the project root.
 local find_dll_target = function(project_root, file_full_path)
 	local manifest_path = find_manifest_path(project_root)
-	if not manifest_path or manifest_path == "" then return nil end
+	if not manifest_path or manifest_path == "" then
+		return nil
+	end
 
 	local f = io.open(manifest_path, "r")
-	if not f then return nil end
+	if not f then
+		return nil
+	end
 
 	for line in f:lines() do
 		local target = line:match('"xmake_target"%s*:%s*"([^"]+)"')
@@ -128,7 +147,19 @@ local run_cpp = function(file_path)
 	if xmake_root then
 		local dll_target = find_dll_target(xmake_root:absolute(), file_path:absolute())
 		if dll_target then
-			exec_in_term(string.format("(cd '%s' && xmake build %s)", xmake_root:absolute(), dll_target))
+			-- touch_state_constructors(xmake_root:absolute(), dll_target)
+			local manifest_path = find_manifest_path(xmake_root:absolute())
+			exec_in_term(
+				string.format(
+					"(cd '%s' && luajit tools/touch_hotreload.lua "
+						.. manifest_path
+            .. " "
+						.. dll_target
+						.. " && xmake build-capture %s)",
+					xmake_root:absolute(),
+					dll_target
+				)
+			)
 		else
 			exec_in_term(string.format("(cd '%s' && xmake run)", xmake_root:absolute()))
 		end
@@ -171,11 +202,7 @@ local run_cpp = function(file_path)
 		local dll_target = find_dll_target(parent_path:absolute(), file_path:absolute())
 		local run_cmd
 		if dll_target then
-			run_cmd = string.format(
-				"(cd '%s' && ninja -C out/Debug %s)",
-				parent_path:absolute(),
-				dll_target
-			)
+			run_cmd = string.format("(cd '%s' && ninja -C out/Debug %s)", parent_path:absolute(), dll_target)
 		else
 			run_cmd = string.format(
 				"(cd '%s' && "
@@ -215,7 +242,7 @@ local run_file = function()
 	local filetype = plenary.filetype.detect_from_extension(file_full_path)
 
 	if filetype == "lua" then
-		run_lua()
+		run_lua(file_path)
 	end
 	if filetype == "sh" then
 		run_bash(file_path)

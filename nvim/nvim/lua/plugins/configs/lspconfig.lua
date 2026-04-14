@@ -28,7 +28,11 @@ vim.lsp.config("glsl_analyzer", defaultconfig)
 vim.lsp.enable("glsl_analyzer")
 
 -- Markdown
-vim.lsp.config("marksman", defaultconfig)
+vim.lsp.config("marksman", {
+	on_attach = lsplib.mk_config().on_attach,
+	filetypes = { "markdown", "markdown.mdx" },
+	root_markers = { ".marksman.toml", ".git" },
+})
 vim.lsp.enable("marksman")
 
 -- Gopls
@@ -61,7 +65,7 @@ local cpplspconfig = vim.tbl_deep_extend("force", lsplib.mk_config(), {
       },
     },
   },
-  cmd = { "/Users/mihira/c/cpplsp/build/macosx/arm64/debug/cpplsp", "--lsp" },
+  cmd = { "/Users/mihira/c/cpplsp/build/macosx/arm64/release/cpplsp", "--lsp" },
   filetypes = { "c", "cpp", "cc", "cxx", "h", "hpp", "hh", "hxx", "cppm" },
   root_markers = { "xmake.lua", "CMakeLists.txt", ".git" },
 })
@@ -138,8 +142,13 @@ if clangd_mode == "format_only" then
     client.server_capabilities.codeActionProvider = false
     client.server_capabilities.documentHighlightProvider = false
     client.server_capabilities.renameProvider = false
+    client.server_capabilities.workspaceSymbolProvider = false
+    client.server_capabilities.documentSymbolProvider = false
     client.server_capabilities.semanticTokensProvider = nil
     client.server_capabilities.inlayHintProvider = nil
+    -- Suppress push-based diagnostics (publishDiagnostics notifications)
+    client.handlers = client.handlers or {}
+    client.handlers["textDocument/publishDiagnostics"] = function() end
   end
 end
 
@@ -154,8 +163,8 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagn
   underline = false,
 })
 
--- Show diagnostics on hover
-vim.api.nvim_command("autocmd CursorHold * lua vim.diagnostic.open_float(nil, {focusable = false})")
+-- Show diagnostics on hover (disabled in favour of tiny-inline-diagnostic)
+-- vim.api.nvim_command("autocmd CursorHold * lua vim.diagnostic.open_float(nil, {focusable = false})")
 
 vim.diagnostic.config({ virtual_text = { current_line = true } })
 vim.o.winborder = "single"

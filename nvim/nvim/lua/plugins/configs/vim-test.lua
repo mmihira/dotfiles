@@ -29,7 +29,8 @@ local floa_vim_test_callback = function(opts)
 			local file_name = vim.fn.expand("%:t:r")
 			local rel_path = file_dir:match("tests/(.*)")
 			local target_name = rel_path and (rel_path:gsub("/", "_") .. "_" .. file_name) or file_name
-			local cmd = "cmake --build out/Debug --target run_tests_target_" .. target_name
+			-- local cmd = "cmake --build out/Debug --target run_tests_target_" .. target_name
+			local cmd = "xmake run test_" .. target_name
 			tterm.exec(cmd, 2, nil, nil, "float", "test_term", false, true)
 		elseif has_gtest then
 			local file_dir = vim.fn.expand("%:p:h")

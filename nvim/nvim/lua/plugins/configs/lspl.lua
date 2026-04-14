@@ -94,15 +94,6 @@ local function on_attach(client, bufnr, attach_opts)
 		end
 	end
 
-	-- On hover over syntax highlight the term
-	vim.cmd("augroup lsp_aucmds")
-	vim.cmd(string.format("au! * <buffer=%d>", bufnr))
-	if client.server_capabilities["documentHighlightProvider"] then
-		vim.cmd(string.format("au CursorHold  <buffer=%d> lua vim.lsp.buf.document_highlight()", bufnr))
-		vim.cmd(string.format("au CursorHoldI <buffer=%d> lua vim.lsp.buf.document_highlight()", bufnr))
-		vim.cmd(string.format("au CursorMoved <buffer=%d> lua vim.lsp.buf.clear_references()", bufnr))
-	end
-
 	if vim.lsp.codelens and client.server_capabilities["codeLensProvider"] then
 		api.nvim_buf_set_keymap(bufnr, "n", "<leader>cr", "<Cmd>lua vim.lsp.codelens.refresh()<CR>", { silent = true })
 	end
