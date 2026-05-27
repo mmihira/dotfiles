@@ -4,7 +4,7 @@ if not present then
 end
 
 treesitterconfig.setup({
-  ensure_installed = { "go", "lua" },
+  ensure_installed = { "cpp", "go", "lua" },
   sync_install = false,
   auto_install = false,
   ignore_install = { "javascript" },

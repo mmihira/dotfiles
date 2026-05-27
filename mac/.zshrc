@@ -65,3 +65,6 @@ export PATH="$(brew --prefix llvm)/bin:$PATH"
 export LLVM_SYMBOLIZER_PATH=/opt/homebrew/opt/llvm/bin/llvm-symbolizer
 export CLAUDE_CODE_ATTRIBUTION_HEADER=false
 
+# >>> xmake >>>
+test -f "/Users/mihira/.xmake/profile" && source "/Users/mihira/.xmake/profile"
+# <<< xmake <<<

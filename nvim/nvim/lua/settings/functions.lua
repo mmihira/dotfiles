@@ -26,15 +26,52 @@ vim.api.nvim_create_user_command("Run", function(opts)
       end,
       rtxt = "n",
     },
+    {
+      name = "Reload game",
+      cmd = function()
+        local job_id = vim.fn.jobstart({ "pm2", "restart", "ove" }, {
+          stdout_buffered = true,
+          stderr_buffered = true,
+          on_exit = function(_, code)
+            vim.schedule(function()
+              if code ~= 0 then
+                vim.notify("pm2 restart ove failed", vim.log.levels.ERROR)
+              end
+            end)
+          end,
+        })
+
+        if job_id <= 0 then
+          vim.notify("failed to start pm2 restart ove", vim.log.levels.ERROR)
+        end
+      end,
+      rtxt = "n",
+    },
+    {
+      name = "Stop game",
+      cmd = function()
+        local job_id = vim.fn.jobstart({ "pm2", "stop", "ove" }, {
+          stdout_buffered = true,
+          stderr_buffered = true,
+          on_exit = function(_, code)
+            vim.schedule(function()
+              if code ~= 0 then
+                vim.notify("pm2 stop ove failed", vim.log.levels.ERROR)
+              end
+            end)
+          end,
+        })
+
+        if job_id <= 0 then
+          vim.notify("failed to pm2 stopo ove", vim.log.levels.ERROR)
+        end
+      end,
+      rtxt = "n",
+    },
   }, {
     mouse = false,
     border = true,
   })
-end, { nargs = 0 })
-
--- Import inserter
-vim.api.nvim_create_user_command("ImportInsert", function(opts)
-  require("scripts/import_inserter").run()
 end, { nargs = 0 })
 
 -- Events
@@ -327,7 +364,7 @@ vim.api.nvim_create_user_command("LspMn", function(opts)
       cmd = function()
         vim.api.nvim_command(":CpplspGraphChrome")
       end,
-      rtxt = "wui",
+      rtxt = "eui",
     },
     {
       name = "LSP Module Dependents",
@@ -336,6 +373,34 @@ vim.api.nvim_create_user_command("LspMn", function(opts)
       end,
       rtxt = "md",
     },
+    {
+      name = "Entity Templates",
+      cmd = function()
+        vim.api.nvim_command(":CmpTemplaterGenerate")
+      end,
+      rtxt = "ct",
+    },
+    {
+      name = "Reload Spec Entry",
+      cmd = function()
+        vim.api.nvim_command(":CpplspHotReloadSpec")
+      end,
+      rtxt = "ht",
+    },
+    -- {
+    -- 	name = "Dll codegen",
+    -- 	cmd = function()
+    -- 		local chunk, err = loadfile("/Users/mihira/c/cppmodule/modules/dllcodegen.lua")
+    -- 		if not chunk then
+    -- 			vim.notify("dllcodegen: load failed: " .. tostring(err), vim.log.levels.ERROR)
+    -- 			return
+    -- 		end
+
+    -- 		local dllcodegen = chunk()
+    -- 		dllcodegen.generate_statetree_fns()
+    -- 	end,
+    -- 	rtxt = "cg",
+    -- },
     {
       name = "Build Capture + Diagnostics",
       cmd = function()

@@ -85,12 +85,6 @@ packer.startup(function(use)
     end,
   })
   use({
-    "supermaven-inc/supermaven-nvim",
-    config = function()
-      -- require("supermaven-nvim").setup({})
-    end,
-  })
-  use({
     "milanglacier/minuet-ai.nvim",
     config = function()
       -- require("minuet").setup({
@@ -207,38 +201,6 @@ packer.startup(function(use)
     "Wansmer/treesj",
     requires = { "nvim-treesitter/nvim-treesitter" },
   })
-  -- use({
-  --   "chrisgrieser/nvim-origami",
-  --   config = function()
-  --     require("origami").setup({
-  --       useLspFoldsWithTreesitterFallback = {
-  --         enabled = false,
-  --         foldmethodIfNeitherIsAvailable = "indent", ---@type string|fun(bufnr: number): string
-  --       },
-  --       pauseFoldsOnSearch = true,
-  --       foldtext = {
-  --         enabled = true,
-  --         padding = 3,
-  --         lineCount = {
-  --           template = "%d lines", -- `%d` is replaced with the number of folded lines
-  --           hlgroup = "Comment",
-  --         },
-  --         diagnosticsCount = true, -- uses hlgroups and icons from `vim.diagnostic.config().signs`
-  --         gitsignsCount = true, -- requires `gitsigns.nvim`
-  --         disableOnFt = { "snacks_picker_input" }, ---@type string[]
-  --       },
-  --       autoFold = {
-  --         enabled = false,
-  --         kinds = { "comment", "imports" }, ---@type lsp.FoldingRangeKind[]
-  --       },
-  --       foldKeymaps = {
-  --         setup = true,              -- modifies `h`, `l`, `^`, and `$`
-  --         closeOnlyOnFirstColumn = false, -- `h` and `^` only fold in the 1st column
-  --         scrollLeftOnCaret = false, -- `^` should scroll left (basically mapped to `0^`)
-  --       },
-  --     })
-  --   end,
-  -- })
   use({
     "MeanderingProgrammer/render-markdown.nvim",
     after = { "nvim-treesitter" },
@@ -345,6 +307,7 @@ packer.startup(function(use)
         timeout = 2000,
         background_colour = "#000000",
       })
+      -- vim.notify = require("notify")
     end,
   })
 
