@@ -16,6 +16,7 @@ local Menu = require("nui.menu")
 local M = {}
 
 local NS = vim.api.nvim_create_namespace("entt_assert_viewer")
+local NS_BOX = vim.api.nvim_create_namespace("entt_assert_viewer_active_box")
 
 local state = {
 	tabpage = nil,
@@ -25,6 +26,9 @@ local state = {
 	block_idx = nil,
 	visible_frames = nil,
 	targets = nil,
+	at_rows = nil,
+	boxes = nil,
+	cursor_au = nil,
 	user_only = false,
 	prev_win = nil,
 	prev_tab = nil,
@@ -41,6 +45,8 @@ local function set_highlights()
 	vim.api.nvim_set_hl(0, "EnttAssertExtFrame", { bg = "#1d2a3a", fg = "#8fbfff" })
 	vim.api.nvim_set_hl(0, "EnttAssertFocusLine", { bg = "#393342", fg = "#ffa577", bold = true })
 	vim.api.nvim_set_hl(0, "EnttAssertSepRule", { fg = "#6c7086" })
+	vim.api.nvim_set_hl(0, "EnttAssertBoxBorder", { fg = "#5a637a" })
+	vim.api.nvim_set_hl(0, "EnttAssertBoxBorderActive", { fg = "#ffa577", bold = true })
 	vim.api.nvim_set_hl(0, "Comment", { fg = "#eff5fc" })
 end
 set_highlights()
@@ -362,13 +368,15 @@ local SEP_RULE = string.rep("─", 300) -- long enough to span any window width
 
 local function render_all(block, visible_frames)
 	local lines = {}
-	local hl = {} -- list of { group, row }; whole-line highlight
+	local hl = {} -- list of { row (0-indexed), line_hl_group }
 	local targets = {} -- row → { file, line, col }
+	local at_rows = {} -- 1-indexed rows of "  at <file>:<line>" entries, in order
+	local boxes = {} -- list of { at_row, top, bot, side_rows, left_col, right_col }
 
 	local function add(line, group, target)
 		lines[#lines + 1] = line
 		if group then
-			hl[#hl + 1] = { group, #lines - 1 }
+			hl[#hl + 1] = { line_hl_group = group, row = #lines - 1 }
 		end
 		if target then
 			targets[#lines] = target
@@ -407,6 +415,7 @@ local function render_all(block, visible_frames)
 			add(SEP_RULE, "EnttAssertSepRule", frame_target)
 		end
 
+		local frame_at_row = nil
 		if f.file then
 			local loc = f.file
 			if f.line then
@@ -416,27 +425,70 @@ local function render_all(block, visible_frames)
 				loc = loc .. ":" .. f.col
 			end
 			add("    at " .. loc, "Comment", frame_target)
+			at_rows[#at_rows + 1] = #lines
+			frame_at_row = #lines
 		end
 
 		if #f.snippet > 0 then
+			-- Snippet rows use indent "    │ " (6 cols), caret rows use "    │" (5 cols)
+			-- — the 1-col difference preserves the original alignment between source
+			-- text and cpptrace's caret. Pad each row to a common width so the right
+			-- "│" lines up.
+			local max_total = 0
 			for _, sn in ipairs(f.snippet) do
-				if sn.caret then
-					add("   " .. sn.text, nil, frame_target)
-				else
-					local prefix = sn.focus and ">" or " "
-					local snippet_target = f.file and { file = f.file, line = sn.lnum, col = nil } or nil
-					add(
-						string.format("    %s %5d: %s", prefix, sn.lnum, sn.text),
-						sn.focus and "EnttAssertFocusLine" or nil,
-						snippet_target
-					)
+				local cols = sn.caret and (5 + #sn.text) or (15 + #sn.text)
+				if cols > max_total then
+					max_total = cols
 				end
 			end
+
+			local rule = string.rep("─", max_total - 4)
+			-- Borders are intentionally added without a highlight group; paint_active_box
+			-- is the single source of truth and repaints both inactive and active states
+			-- in NS_BOX on every CursorMoved.
+			add("    ┌" .. rule .. "┐", nil, frame_target)
+			local box_top = #lines
+			local side_rows = {}
+
+			for _, sn in ipairs(f.snippet) do
+				local content, cols, hl_group, target
+				if sn.caret then
+					content = "    │" .. sn.text
+					cols = 5 + #sn.text
+					target = frame_target
+				else
+					local prefix = sn.focus and ">" or " "
+					content = string.format("    │ %s %5d: %s", prefix, sn.lnum, sn.text)
+					cols = 15 + #sn.text
+					hl_group = sn.focus and "EnttAssertFocusLine" or nil
+					target = f.file and { file = f.file, line = sn.lnum, col = nil } or frame_target
+				end
+				local pad = string.rep(" ", max_total - cols)
+				add(content .. pad .. " │", hl_group, target)
+				side_rows[#side_rows + 1] = #lines
+			end
+
+			add("    └" .. rule .. "┘", nil, frame_target)
+			local box_bot = #lines
+
+			-- "│" is 3 bytes, 1 col. After padding, every content row is max_total+2
+			-- cols / max_total+6 bytes, so the left/right "│" byte ranges are fixed.
+			local left_col_start, left_col_end = 4, 7
+			local right_col_start, right_col_end = max_total + 3, max_total + 6
+
+			boxes[#boxes + 1] = {
+				at_row = frame_at_row,
+				top = box_top,
+				bot = box_bot,
+				side_rows = side_rows,
+				left_col = { left_col_start, left_col_end },
+				right_col = { right_col_start, right_col_end },
+			}
 		end
 		add("")
 	end
 
-	return lines, hl, targets
+	return lines, hl, targets, at_rows, boxes
 end
 
 local function set_buf_lines(bufnr, lines)
@@ -449,12 +501,39 @@ end
 local function apply_highlights(bufnr, hl)
 	vim.api.nvim_buf_clear_namespace(bufnr, NS, 0, -1)
 	for _, h in ipairs(hl) do
-		local group, row = h[1], h[2]
-		-- line_hl_group paints the entire line including past EOL, so bg
-		-- colors render as a full-width section bar.
-		pcall(vim.api.nvim_buf_set_extmark, bufnr, NS, row, 0, {
+		pcall(vim.api.nvim_buf_set_extmark, bufnr, NS, h.row, 0, {
+			line_hl_group = h.line_hl_group,
+		})
+	end
+end
+
+local function paint_active_box()
+	if not state.bufnr or not vim.api.nvim_buf_is_valid(state.bufnr) then
+		return
+	end
+	vim.api.nvim_buf_clear_namespace(state.bufnr, NS_BOX, 0, -1)
+	if not state.boxes or not state.winid or not vim.api.nvim_win_is_valid(state.winid) then
+		return
+	end
+	local cursor_row = vim.api.nvim_win_get_cursor(state.winid)[1]
+	for _, box in ipairs(state.boxes) do
+		local group = (box.at_row == cursor_row) and "EnttAssertBoxBorderActive" or "EnttAssertBoxBorder"
+		pcall(vim.api.nvim_buf_set_extmark, state.bufnr, NS_BOX, box.top - 1, 0, {
 			line_hl_group = group,
 		})
+		pcall(vim.api.nvim_buf_set_extmark, state.bufnr, NS_BOX, box.bot - 1, 0, {
+			line_hl_group = group,
+		})
+		for _, srow in ipairs(box.side_rows) do
+			pcall(vim.api.nvim_buf_set_extmark, state.bufnr, NS_BOX, srow - 1, box.left_col[1], {
+				end_col = box.left_col[2],
+				hl_group = group,
+			})
+			pcall(vim.api.nvim_buf_set_extmark, state.bufnr, NS_BOX, srow - 1, box.right_col[1], {
+				end_col = box.right_col[2],
+				hl_group = group,
+			})
+		end
 	end
 end
 
@@ -482,6 +561,12 @@ local function close()
 	state.block_idx = nil
 	state.visible_frames = nil
 	state.targets = nil
+	state.at_rows = nil
+	state.boxes = nil
+	if state.cursor_au then
+		pcall(vim.api.nvim_del_autocmd, state.cursor_au)
+		state.cursor_au = nil
+	end
 end
 
 local function current_target()
@@ -499,12 +584,15 @@ local function refresh_view()
 	local block = state.blocks[state.block_idx]
 	state.visible_frames = build_visible_frames(block, state.user_only)
 
-	local lines, hl, targets = render_all(block, state.visible_frames)
+	local lines, hl, targets, at_rows, boxes = render_all(block, state.visible_frames)
 	set_buf_lines(state.bufnr, lines)
 	apply_highlights(state.bufnr, hl)
 	state.targets = targets
+	state.at_rows = at_rows
+	state.boxes = boxes
+	paint_active_box()
 
-	local hint = "<CR>/gf jump · c copy · u user-only · [ ] block · q close"
+	local hint = "<CR>/gf jump · J/U next/prev frame · c copy · u user-only · q close"
 	local title =
 		string.format(" ENTT_ASSERT [%d/%d]  logs:%d   %s ", state.block_idx, #state.blocks, block.start_lnum, hint)
 	vim.api.nvim_set_option_value("winbar", title, { win = state.winid })
@@ -564,6 +652,33 @@ local function step_block(delta)
 	refresh_view()
 end
 
+local function step_at_line(delta)
+	if not state.at_rows or #state.at_rows == 0 or not state.winid then
+		return
+	end
+	local cur = vim.api.nvim_win_get_cursor(state.winid)[1]
+	local target
+	if delta > 0 then
+		for _, r in ipairs(state.at_rows) do
+			if r > cur then
+				target = r
+				break
+			end
+		end
+	else
+		for i = #state.at_rows, 1, -1 do
+			local r = state.at_rows[i]
+			if r < cur then
+				target = r
+				break
+			end
+		end
+	end
+	if target then
+		pcall(vim.api.nvim_win_set_cursor, state.winid, { target, 0 })
+	end
+end
+
 local function toggle_user_only()
 	state.user_only = not state.user_only
 	refresh_view()
@@ -577,11 +692,11 @@ local function bind_keys(bufnr)
 	vim.keymap.set("n", "gf", jump_to_current, opts)
 	vim.keymap.set("n", "c", copy_current_location, opts)
 	vim.keymap.set("n", "u", toggle_user_only, opts)
-	vim.keymap.set("n", "[", function()
-		step_block(-1)
+	vim.keymap.set("n", "J", function()
+		step_at_line(1)
 	end, opts)
-	vim.keymap.set("n", "]", function()
-		step_block(1)
+	vim.keymap.set("n", "U", function()
+		step_at_line(-1)
 	end, opts)
 end
 
@@ -615,6 +730,11 @@ local function open_viewer(blocks, idx)
 	vim.wo[state.winid].winhighlight = "CursorLine:EnttAssertCursorLine"
 
 	bind_keys(state.bufnr)
+
+	state.cursor_au = vim.api.nvim_create_autocmd("CursorMoved", {
+		buffer = state.bufnr,
+		callback = paint_active_box,
+	})
 
 	-- If the user closes the tab manually (e.g. :tabclose), clear state.
 	vim.api.nvim_create_autocmd("BufWipeout", {
