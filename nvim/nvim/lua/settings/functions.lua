@@ -15,14 +15,14 @@ vim.api.nvim_create_user_command("Run", function(opts)
 		{
 			name = "Build target",
 			cmd = function()
-				require("scripts/run").build_file_target()
+				vim.api.nvim_command(":OverseerRun xmake_build")
 			end,
 			rtxt = ";",
 		},
 		{
-			name = "Run",
+			name = "Hot reload",
 			cmd = function()
-				require("scripts/run").run_file()
+				vim.api.nvim_command(":OverseerRun xmake_hotreload")
 			end,
 			rtxt = "n",
 		},
@@ -45,7 +45,7 @@ vim.api.nvim_create_user_command("Run", function(opts)
 					vim.notify("failed to start pm2 restart ove", vim.log.levels.ERROR)
 				end
 			end,
-			rtxt = "n",
+			rtxt = "r",
 		},
 		{
 			name = "Stop game",
@@ -66,7 +66,14 @@ vim.api.nvim_create_user_command("Run", function(opts)
 					vim.notify("failed to pm2 stopo ove", vim.log.levels.ERROR)
 				end
 			end,
-			rtxt = "n",
+			rtxt = "s",
+		},
+		{
+			name = "Overseer open",
+			cmd = function()
+				vim.api.nvim_command("OverseerOpen")
+			end,
+			rtxt = "o",
 		},
 	}, {
 		mouse = false,
