@@ -1,5 +1,5 @@
 return {
-	name = "xmake_build",
+	name = "xmake_clean_remake",
 	builder = function()
 		local xmake = require("scripts.run.xmake")
 		local errorformat = table.concat({
@@ -20,17 +20,9 @@ return {
 			return
 		end
 
-		if not build.target then
-			vim.notify("Could not find xmake target for " .. build.rel, vim.log.levels.WARN)
-			return
-		end
-
 		return {
-			cmd = { "xmake", "build", build.target },
+			cmd = "xmake clean && xmake build",
 			cwd = build.root,
-			-- attach a component to the task that will pipe the output to the quickfix.
-			-- components customize the behavior of a task.
-			-- see :help overseer-components for a list of all components.
 			components = {
 				{
 					"on_output_quickfix",

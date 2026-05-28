@@ -73,7 +73,33 @@ vim.api.nvim_create_user_command("Run", function(opts)
 			cmd = function()
 				vim.api.nvim_command("OverseerOpen")
 			end,
-			rtxt = "o",
+			rtxt = "oo",
+		},
+		{
+			name = "Overseer actions",
+			cmd = function()
+				vim.api.nvim_command("OverseerTaskAction")
+			end,
+			rtxt = "oa",
+		},
+		{
+			name = "Game logs",
+			cmd = function()
+				local overseer = require("overseer")
+				for _, task in ipairs(overseer.list_tasks()) do
+					if task.name == "pm2_ove_logs" and task:is_running() then
+						task:open_output("float")
+						return
+					end
+				end
+
+				overseer.run_task({ name = "pm2_ove_logs" }, function(task)
+					if task then
+						task:open_output("float")
+					end
+				end)
+			end,
+			rtxt = "l",
 		},
 	}, {
 		mouse = false,
