@@ -34,3 +34,4 @@ require("settings/cppsnips")
 
 require("scripts/build_capture")
 require("scripts/cmp_templater")
+require("scripts/entt_assert_viewer")

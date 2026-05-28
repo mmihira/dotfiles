@@ -56,23 +56,31 @@ vim.lsp.config("ts_ls", defaultconfig)
 vim.lsp.enable("ts_ls")
 
 -- C++ LSPs
+--
 local cpplspconfig = vim.tbl_deep_extend("force", lsplib.mk_config(), {
-  capabilities = {
-    offsetEncoding = { "utf-8", "utf-16" },
-    textDocument = {
-      completion = {
-        editsNearCursor = true,
-      },
-    },
-  },
-  cmd = { "/Users/mihira/c/cpplsp/build/macosx/arm64/release/cpplsp", "--lsp" },
-  filetypes = { "c", "cpp", "cc", "cxx", "h", "hpp", "hh", "hxx", "cppm" },
-  root_markers = { "xmake.lua", "CMakeLists.txt", ".git" },
+	capabilities = {
+		offsetEncoding = { "utf-8", "utf-16" },
+		textDocument = {
+			completion = {
+				editsNearCursor = true,
+			},
+		},
+	},
+	cmd = { "/Users/mihira/c/cpplsp/build/macosx/arm64/release/cpplsp", "--lsp" },
+	filetypes = { "c", "cpp", "cc", "cxx", "h", "hpp", "hh", "hxx", "cppm" },
+	root_markers = { "xmake.lua", "CMakeLists.txt", ".git" },
 })
 vim.lsp.config("cpplsp", cpplspconfig)
 vim.lsp.enable("cpplsp")
 vim.opt.runtimepath:append("/Users/mihira/c/cpplsp")
 require("cpplsp").setup()
+
+-- ctags
+vim.lsp.config("ctags_lsp", {
+	cmd = { "ctags-lsp", "--ctags-bin", "/Users/mihira/c/dotfiles/nvim/bin/ctags-cppm" },
+	filetypes = { "cpp", "cppm" },
+})
+-- vim.lsp.enable("ctags_lsp")
 
 -- clangd: set to "format_only" to just use clang-format, or "full" for all capabilities
 local clangd_mode = "format_only"
@@ -81,75 +89,75 @@ local clangd_mode = "format_only"
 local cppconfig = lsplib.mk_config()
 -- default is here https://github.com/neovim/nvim-lspconfig/blob/master/lsp/clangd.lua
 cppconfig = vim.tbl_deep_extend("force", cppconfig, {
-  keys = {
-    { "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header (C/C++)" },
-  },
-  root_markers = {
-    ".clangd",
-    ".clang-tidy",
-    ".clang-format",
-    "compile_commands.json",
-    "compile_flags.txt",
-    "configure.ac",
-    ".git",
-  },
-  capabilities = {
-    offsetEncoding = { "utf-8", "utf-16" },
-    textDocument = {
-      completion = {
-        editsNearCursor = true,
-      },
-    },
-  },
-  cmd = {
-    "/opt/homebrew/opt/llvm/bin/clangd",
-    "--clang-tidy",
-    "--experimental-modules-support",
-    "--fallback-style=llvm",
-  },
-  -- cmd = {
-  -- 	-- "/Users/mihira/.local/share/nvim/mason/bin/clangd",
-  -- 	"/opt/homebrew/opt/llvm/bin/clangd",
-  -- 	"--background-index",
-  -- 	"--clang-tidy",
-  -- 	"--header-insertion=iwyu",
-  -- 	"--completion-style=detailed",
-  -- 	"--experimental-modules-support",
-  -- 	"--function-arg-placeholders",
-  -- 	"--fallback-style=llvm",
-  -- },
-  filetypes = { "c", "cpp", "cppm", "h", "proto" },
-  init_options = {
-    usePlaceholders = true,
-    completeUnimported = true,
-    clangdFileStatus = true,
-  },
+	keys = {
+		{ "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header (C/C++)" },
+	},
+	root_markers = {
+		".clangd",
+		".clang-tidy",
+		".clang-format",
+		"compile_commands.json",
+		"compile_flags.txt",
+		"configure.ac",
+		".git",
+	},
+	capabilities = {
+		offsetEncoding = { "utf-8", "utf-16" },
+		textDocument = {
+			completion = {
+				editsNearCursor = true,
+			},
+		},
+	},
+	cmd = {
+		"/opt/homebrew/opt/llvm/bin/clangd",
+		"--clang-tidy",
+		"--experimental-modules-support",
+		"--fallback-style=llvm",
+	},
+	-- cmd = {
+	-- 	-- "/Users/mihira/.local/share/nvim/mason/bin/clangd",
+	-- 	"/opt/homebrew/opt/llvm/bin/clangd",
+	-- 	"--background-index",
+	-- 	"--clang-tidy",
+	-- 	"--header-insertion=iwyu",
+	-- 	"--completion-style=detailed",
+	-- 	"--experimental-modules-support",
+	-- 	"--function-arg-placeholders",
+	-- 	"--fallback-style=llvm",
+	-- },
+	filetypes = { "c", "cpp", "cppm", "h", "proto" },
+	init_options = {
+		usePlaceholders = true,
+		completeUnimported = true,
+		clangdFileStatus = true,
+	},
 })
 
 if clangd_mode == "format_only" then
-  local full_on_attach = cppconfig.on_attach
-  cppconfig.on_attach = function(client, bufnr)
-    if full_on_attach then
-      full_on_attach(client, bufnr)
-    end
-    -- Disable everything except formatting so clangd doesn't conflict with cpplsp
-    client.server_capabilities.completionProvider = nil
-    client.server_capabilities.hoverProvider = false
-    client.server_capabilities.definitionProvider = false
-    client.server_capabilities.referencesProvider = false
-    client.server_capabilities.signatureHelpProvider = nil
-    client.server_capabilities.diagnosticProvider = nil
-    client.server_capabilities.codeActionProvider = false
-    client.server_capabilities.documentHighlightProvider = false
-    client.server_capabilities.renameProvider = false
-    client.server_capabilities.workspaceSymbolProvider = false
-    client.server_capabilities.documentSymbolProvider = false
-    client.server_capabilities.semanticTokensProvider = nil
-    client.server_capabilities.inlayHintProvider = nil
-    -- Suppress push-based diagnostics (publishDiagnostics notifications)
-    client.handlers = client.handlers or {}
-    client.handlers["textDocument/publishDiagnostics"] = function() end
-  end
+	local full_on_attach = cppconfig.on_attach
+	cppconfig.on_attach = function(client, bufnr)
+		if full_on_attach then
+			full_on_attach(client, bufnr)
+		end
+		-- Disable everything except formatting so clangd doesn't conflict with cpplsp
+		client.server_capabilities.completionProvider = nil
+		client.server_capabilities.hoverProvider = false
+		client.server_capabilities.definitionProvider = false
+		client.server_capabilities.referencesProvider = false
+		client.server_capabilities.signatureHelpProvider = nil
+		client.server_capabilities.diagnosticProvider = nil
+		client.server_capabilities.codeActionProvider = false
+		client.server_capabilities.documentHighlightProvider = false
+		client.server_capabilities.renameProvider = false
+		client.server_capabilities.workspaceSymbolProvider = false
+		client.server_capabilities.documentSymbolProvider = false
+		client.server_capabilities.semanticTokensProvider = nil
+		client.server_capabilities.inlayHintProvider = nil
+		-- Suppress push-based diagnostics (publishDiagnostics notifications)
+		client.handlers = client.handlers or {}
+		client.handlers["textDocument/publishDiagnostics"] = function() end
+	end
 end
 
 vim.lsp.config("clangd", cppconfig)
@@ -157,10 +165,10 @@ vim.lsp.enable("clangd")
 
 -- Hide the dianostic virtual text
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-  virtual_text = false,
-  signs = true,
-  update_in_insert = false,
-  underline = false,
+	virtual_text = false,
+	signs = true,
+	update_in_insert = false,
+	underline = false,
 })
 
 -- Show diagnostics on hover (disabled in favour of tiny-inline-diagnostic)
