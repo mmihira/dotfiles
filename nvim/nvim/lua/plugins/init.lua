@@ -35,10 +35,31 @@ packer.startup(function(use)
     "akinsho/toggleterm.nvim",
     tag = "*",
   })
+  use("stevearc/overseer.nvim")
   use({
-    "stevearc/overseer.nvim",
+    "nvim-lualine/lualine.nvim",
     config = function()
-      require("overseer").setup()
+      local overseer = require("overseer")
+      require("lualine").setup({
+        sections = {
+          lualine_x = {
+            {
+              "overseer",
+              label = "", -- Prefix for task counts
+              colored = true, -- Color the task icons and counts
+              symbols = {
+                [overseer.STATUS.FAILURE] = "F:",
+                [overseer.STATUS.CANCELED] = "C:",
+                [overseer.STATUS.SUCCESS] = "S:",
+                [overseer.STATUS.RUNNING] = "R:",
+              },
+              unique = false, -- Unique-ify non-running task count by name
+              status = nil, -- List of task statuses to display
+              filter = nil, -- Function to filter out tasks you don't wish to display
+            },
+          },
+        },
+      })
     end,
   })
 
@@ -291,7 +312,6 @@ packer.startup(function(use)
 
   -- Display
   use("hlucco/nvim-eswpoch")
-  use("itchyny/lightline.vim")
   use("echasnovski/mini.starter")
   use("MunifTanjim/nui.nvim")
   use({

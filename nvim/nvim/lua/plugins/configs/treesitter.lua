@@ -1,15 +1,17 @@
-local present, treesitterconfig = pcall(require, "nvim-treesitter.configs")
+local present, treesitter = pcall(require, "nvim-treesitter")
 if not present then
-  return
+	return
 end
 
-treesitterconfig.setup({
-  ensure_installed = { "cpp", "go", "lua" },
-  sync_install = false,
-  auto_install = false,
-  ignore_install = { "javascript" },
-  highlight = {
-    enable = true,
-    additional_vim_regex_highlighting = false,
-  },
+treesitter.setup({
+	install_dir = vim.fn.stdpath("data") .. "/site",
+})
+
+treesitter.install({ "cpp", "go", "lua" })
+
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = { "c", "cpp", "go", "lua" },
+	callback = function(args)
+		pcall(vim.treesitter.start, args.buf)
+	end,
 })
