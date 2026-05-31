@@ -34,6 +34,17 @@ overseer.setup({
 		render = function(task)
 			return require("overseer.render").format_standard(task)
 		end,
+		keymaps = {
+			["i"] = { "<Nop>", mode = "n" },
+			["I"] = { "<Nop>", mode = "n" },
+			["a"] = { "<Nop>", mode = "n" },
+			["A"] = { "<Nop>", mode = "n" },
+			["O"] = { "<Nop>", mode = "n" },
+			["c"] = { "<Nop>", mode = "n" },
+			["C"] = { "<Nop>", mode = "n" },
+			["s"] = { "<Nop>", mode = "n" },
+			["S"] = { "<Nop>", mode = "n" },
+		},
 	},
 	-- -- Custom actions for tasks. See :help overseer-actions
 	-- actions = {},
@@ -103,4 +114,24 @@ overseer.setup({
 	-- 		return true
 	-- 	end,
 	-- },
+})
+
+local overseer_no_insert_group = vim.api.nvim_create_augroup("custom_overseer_no_insert", { clear = true })
+
+vim.api.nvim_create_autocmd("FileType", {
+	group = overseer_no_insert_group,
+	pattern = { "OverseerList", "OverseerOutput" },
+	callback = function(args)
+		local no_insert_keys = { "i", "I", "a", "A", "O", "c", "C", "s", "S" }
+
+		if vim.bo[args.buf].filetype == "OverseerOutput" then
+			table.insert(no_insert_keys, "o")
+		end
+
+		for _, key in ipairs(no_insert_keys) do
+			vim.keymap.set("n", key, "<Nop>", { buffer = args.buf, silent = true })
+		end
+
+		vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { buffer = args.buf, silent = true })
+	end,
 })

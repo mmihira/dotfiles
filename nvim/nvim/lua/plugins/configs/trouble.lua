@@ -48,6 +48,9 @@ trouble.setup({
     },
     qf_stack = {
       mode = "qflist",
+      groups = {
+        { "filename", format = "{file_icon} {basename} {count}" },
+      },
       sort = {},
     },
   },

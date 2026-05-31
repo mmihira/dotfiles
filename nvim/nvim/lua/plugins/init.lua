@@ -2,355 +2,330 @@ local fn = vim.fn
 -- Automatically install packer on initial startup
 local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 if fn.empty(fn.glob(install_path)) > 0 then
-  Packer_Bootstrap = fn.system({
-    "git",
-    "clone",
-    "--depth",
-    "1",
-    "https://github.com/wbthomason/packer.nvim",
-    install_path,
-  })
-  print("---------------------------------------------------------")
-  print("Press Enter to install packer and plugins.")
-  print("After install -- close and reopen Neovim to load configs!")
-  print("---------------------------------------------------------")
-  vim.cmd([[packadd packer.nvim]])
+	Packer_Bootstrap = fn.system({
+		"git",
+		"clone",
+		"--depth",
+		"1",
+		"https://github.com/wbthomason/packer.nvim",
+		install_path,
+	})
+	print("---------------------------------------------------------")
+	print("Press Enter to install packer and plugins.")
+	print("After install -- close and reopen Neovim to load configs!")
+	print("---------------------------------------------------------")
+	vim.cmd([[packadd packer.nvim]])
 end
 
 -- Use a protected call
 local present, packer = pcall(require, "packer")
 
 if not present then
-  return
+	return
 end
 
 packer.startup(function(use)
-  -- Util
-  use("wbthomason/packer.nvim")
-  use("nvim-lua/plenary.nvim")
-  use("nvim-lua/popup.nvim")
+	-- Util
+	use("wbthomason/packer.nvim")
+	use("nvim-lua/plenary.nvim")
+	use("nvim-lua/popup.nvim")
 
-  -- Terminal
-  use({
-    "akinsho/toggleterm.nvim",
-    tag = "*",
-  })
-  use("stevearc/overseer.nvim")
-  use({
-    "nvim-lualine/lualine.nvim",
-    config = function()
-      local overseer = require("overseer")
-      require("lualine").setup({
-        sections = {
-          lualine_x = {
-            {
-              "overseer",
-              label = "", -- Prefix for task counts
-              colored = true, -- Color the task icons and counts
-              symbols = {
-                [overseer.STATUS.FAILURE] = "F:",
-                [overseer.STATUS.CANCELED] = "C:",
-                [overseer.STATUS.SUCCESS] = "S:",
-                [overseer.STATUS.RUNNING] = "R:",
-              },
-              unique = false, -- Unique-ify non-running task count by name
-              status = nil, -- List of task statuses to display
-              filter = nil, -- Function to filter out tasks you don't wish to display
-            },
-          },
-        },
-      })
-    end,
-  })
+	-- Terminal
+	use({
+		"akinsho/toggleterm.nvim",
+		tag = "*",
+	})
+	use("stevearc/overseer.nvim")
+	use("nvim-lualine/lualine.nvim")
 
-  -- LSP
-  use({
-    "nvim-treesitter/nvim-treesitter",
-    run = function()
-      require("nvim-treesitter.install").update({ with_sync = true })
-    end,
-  })
-  use({
-    "gruvw/strudel.nvim",
-    run = "cd js && npm ci",
-    config = function()
-      require("strudel").setup()
-    end,
-  })
-  use("williamboman/mason.nvim")
-  use("williamboman/mason-lspconfig.nvim")
-  use("neovim/nvim-lspconfig")
-  use("folke/trouble.nvim")
-  use("mfussenegger/nvim-jdtls")
-  use("nvim-pack/nvim-spectre")
+	-- LSP
+	use({
+		"nvim-treesitter/nvim-treesitter",
+		run = function()
+			require("nvim-treesitter.install").update({ with_sync = true })
+		end,
+	})
+	use({
+		"gruvw/strudel.nvim",
+		run = "cd js && npm ci",
+		config = function()
+			require("strudel").setup()
+		end,
+	})
+	use("williamboman/mason.nvim")
+	use("williamboman/mason-lspconfig.nvim")
+	use("neovim/nvim-lspconfig")
+	use("folke/trouble.nvim")
+	use("mfussenegger/nvim-jdtls")
+	use("nvim-pack/nvim-spectre")
 
-  use({
-    "rachartier/tiny-inline-diagnostic.nvim",
-    config = function()
-      require("tiny-inline-diagnostic").setup()
-      vim.diagnostic.config({ virtual_text = false }) -- Disable Neovim's default virtual text diagnostics
-    end,
-  })
+	use({
+		"rachartier/tiny-inline-diagnostic.nvim",
+		config = function()
+			require("tiny-inline-diagnostic").setup()
+			vim.diagnostic.config({ virtual_text = false }) -- Disable Neovim's default virtual text diagnostics
+		end,
+	})
 
-  use({
-    "j-hui/fidget.nvim", -- for nicely displaying lsp startup progress
-    config = function()
-      require("fidget").setup({
-        notification = {
-          window = {
-            normal_hl = "NormalFloat",
-            winblend = 0,
-          },
-        },
-      })
-    end,
-  })
-  use({ "rmagatti/goto-preview" })
-  use({
-    "milanglacier/minuet-ai.nvim",
-    config = function()
-      -- require("minuet").setup({
-      -- 	-- request_timeout = 10,
-      -- 	-- We use the FIM (Fill-In-The-Middle) provider for the best autocomplete experience
-      -- 	-- provider = "openai_fim_compatible",
-      -- 	-- provider_options = {
-      -- 	-- 	openai_fim_compatible = {
-      -- 	-- 		api_key = "TERM", -- Ollama doesn't use this, but the API expects a non-empty string
-      -- 	-- 		name = "Ollama",
-      -- 	-- 		end_point = "http://localhost:11434/v1/completions",
-      -- 	-- 		model = "qwen2.5-coder:7b",
-      -- 	-- 		optional = {
-      -- 	-- 			max_tokens = 256,
-      -- 	-- 			top_p = 0.9,
-      -- 	-- 		},
-      -- 	-- 	},
-      -- 	-- },
-      -- 	n_completions = 1, -- recommend for local model for resource saving
-      -- 	-- I recommend beginning with a small context window size and incrementally
-      -- 	-- expanding it, depending on your local computing power. A context window
-      -- 	-- of 512, serves as an good starting point to estimate your computing
-      -- 	-- power. Once you have a reliable estimate of your local computing power,
-      -- 	-- you should adjust the context window to a larger value.
-      -- 	context_window = 512,
-      -- 	provider_options = {
-      -- 		openai_fim_compatible = {
-      -- 			-- For Windows users, TERM may not be present in environment variables.
-      -- 			-- Consider using APPDATA instead.
-      -- 			api_key = "TERM",
-      -- 			name = "Ollama",
-      -- 			end_point = "http://localhost:11434/v1/completions",
-      -- 			model = "qwen2.5-coder:7b",
-      -- 			optional = {
-      -- 				max_tokens = 56,
-      -- 				top_p = 0.5,
-      -- 			},
-      -- 		},
-      -- 	},
-      -- 	virtualtext = {
-      -- 		-- Autotrigger completion specifically for your primary languages
-      -- 		auto_trigger_ft = { "cpp", "lua" },
-      -- 		keymap = {
-      -- 			accept = "<A-A>", -- Alt+Shift+A accepts the whole block
-      -- 			accept_line = "<A-a>", -- Alt+a accepts a single line
-      -- 			accept_n_lines = "<A-z>", -- Alt+z prompts you for how many lines to accept
-      -- 			prev = "<A-[>",
-      -- 			next = "<A-]>",
-      -- 			dismiss = "<A-e>",
-      -- 		},
-      -- 	},
-      -- })
-    end,
-  })
-  use({
-    "CopilotC-Nvim/CopilotChat.nvim",
-    config = function()
-      -- Adjust chat display settings
-      require("CopilotChat").setup({
-        highlight_headers = false,
-        separator = "---",
-        error_header = "> [!ERROR] Error",
-        window = {
-          layout = "float",
-          width = 80,    -- Fixed width in columns
-          height = 20,   -- Fixed height in rows
-          border = "rounded", -- 'single', 'double', 'rounded', 'solid'
-          title = "🤖 AI Assistant",
-          zindex = 100,  -- Ensure window stays on top
-        },
-      })
-    end,
-  })
-  use({
-    "zbirenbaum/copilot.lua",
-    cmd = "Copilot",
-    event = "InsertEnter",
-    config = function()
-      require("copilot").setup({
-        suggestion = { enabled = false },
-        panel = { enabled = false },
-      })
-    end,
-  })
-  use({
-    "zbirenbaum/copilot-cmp",
-    after = { "copilot.lua" },
-    config = function()
-      require("copilot_cmp").setup()
-    end,
-  })
-  use({ "Civitasv/cmake-tools.nvim" })
-  use({ "folke/sidekick.nvim" })
-  use({
-    "hedyhli/markdown-toc.nvim",
-    config = function()
-      require("mtoc").setup()
-    end,
-  })
+	use({
+		"j-hui/fidget.nvim", -- for nicely displaying lsp startup progress
+		config = function()
+			require("fidget").setup({
+				notification = {
+					window = {
+						normal_hl = "NormalFloat",
+						winblend = 0,
+					},
+				},
+			})
+		end,
+	})
+	use({ "rmagatti/goto-preview" })
+	use({
+		"milanglacier/minuet-ai.nvim",
+		config = function()
+			-- require("minuet").setup({
+			-- 	-- request_timeout = 10,
+			-- 	-- We use the FIM (Fill-In-The-Middle) provider for the best autocomplete experience
+			-- 	-- provider = "openai_fim_compatible",
+			-- 	-- provider_options = {
+			-- 	-- 	openai_fim_compatible = {
+			-- 	-- 		api_key = "TERM", -- Ollama doesn't use this, but the API expects a non-empty string
+			-- 	-- 		name = "Ollama",
+			-- 	-- 		end_point = "http://localhost:11434/v1/completions",
+			-- 	-- 		model = "qwen2.5-coder:7b",
+			-- 	-- 		optional = {
+			-- 	-- 			max_tokens = 256,
+			-- 	-- 			top_p = 0.9,
+			-- 	-- 		},
+			-- 	-- 	},
+			-- 	-- },
+			-- 	n_completions = 1, -- recommend for local model for resource saving
+			-- 	-- I recommend beginning with a small context window size and incrementally
+			-- 	-- expanding it, depending on your local computing power. A context window
+			-- 	-- of 512, serves as an good starting point to estimate your computing
+			-- 	-- power. Once you have a reliable estimate of your local computing power,
+			-- 	-- you should adjust the context window to a larger value.
+			-- 	context_window = 512,
+			-- 	provider_options = {
+			-- 		openai_fim_compatible = {
+			-- 			-- For Windows users, TERM may not be present in environment variables.
+			-- 			-- Consider using APPDATA instead.
+			-- 			api_key = "TERM",
+			-- 			name = "Ollama",
+			-- 			end_point = "http://localhost:11434/v1/completions",
+			-- 			model = "qwen2.5-coder:7b",
+			-- 			optional = {
+			-- 				max_tokens = 56,
+			-- 				top_p = 0.5,
+			-- 			},
+			-- 		},
+			-- 	},
+			-- 	virtualtext = {
+			-- 		-- Autotrigger completion specifically for your primary languages
+			-- 		auto_trigger_ft = { "cpp", "lua" },
+			-- 		keymap = {
+			-- 			accept = "<A-A>", -- Alt+Shift+A accepts the whole block
+			-- 			accept_line = "<A-a>", -- Alt+a accepts a single line
+			-- 			accept_n_lines = "<A-z>", -- Alt+z prompts you for how many lines to accept
+			-- 			prev = "<A-[>",
+			-- 			next = "<A-]>",
+			-- 			dismiss = "<A-e>",
+			-- 		},
+			-- 	},
+			-- })
+		end,
+	})
+	use({
+		"CopilotC-Nvim/CopilotChat.nvim",
+		config = function()
+			-- Adjust chat display settings
+			require("CopilotChat").setup({
+				highlight_headers = false,
+				separator = "---",
+				error_header = "> [!ERROR] Error",
+				window = {
+					layout = "float",
+					width = 80, -- Fixed width in columns
+					height = 20, -- Fixed height in rows
+					border = "rounded", -- 'single', 'double', 'rounded', 'solid'
+					title = "🤖 AI Assistant",
+					zindex = 100, -- Ensure window stays on top
+				},
+			})
+		end,
+	})
+	use({
+		"zbirenbaum/copilot.lua",
+		cmd = "Copilot",
+		event = "InsertEnter",
+		config = function()
+			require("copilot").setup({
+				suggestion = { enabled = false },
+				panel = { enabled = false },
+			})
+		end,
+	})
+	use({
+		"zbirenbaum/copilot-cmp",
+		after = { "copilot.lua" },
+		config = function()
+			require("copilot_cmp").setup()
+		end,
+	})
+	use({ "Civitasv/cmake-tools.nvim" })
+	use({ "folke/sidekick.nvim" })
+	use({
+		"hedyhli/markdown-toc.nvim",
+		config = function()
+			require("mtoc").setup()
+		end,
+	})
 
-  -- Syntax
-  use("jake-stewart/multicursor.nvim")
-  use("euclidianAce/BetterLua.vim")
-  use("tpope/vim-commentary")
-  use({ "kylechui/nvim-surround", tag = "*" })
-  use({
-    "nvimtools/none-ls.nvim",
-    requires = { "nvimtools/none-ls-extras.nvim" },
-  })
-  use("cohama/lexima.vim")
-  use("mechatroner/rainbow_csv")
-  -- For splitting joning nodes
-  use({
-    "Wansmer/treesj",
-    requires = { "nvim-treesitter/nvim-treesitter" },
-  })
-  use({
-    "MeanderingProgrammer/render-markdown.nvim",
-    after = { "nvim-treesitter" },
-    requires = { "echasnovski/mini.icons", opt = true }, -- if you use standalone mini plugins
-    -- requires = { 'nvim-tree/nvim-web-devicons', opt = true }, -- if you prefer nvim-web-devicons
-    config = function()
-      require("render-markdown").setup({
-        link = {},
-        file_types = { "markdown", "copilot-chat" },
-      })
-    end,
-  })
+	-- Syntax
+	use("jake-stewart/multicursor.nvim")
+	use("euclidianAce/BetterLua.vim")
+	use("tpope/vim-commentary")
+	use({ "kylechui/nvim-surround", tag = "*" })
+	use({
+		"nvimtools/none-ls.nvim",
+		requires = { "nvimtools/none-ls-extras.nvim" },
+	})
+	use("cohama/lexima.vim")
+	use("mechatroner/rainbow_csv")
+	-- For splitting joning nodes
+	use({
+		"Wansmer/treesj",
+		requires = { "nvim-treesitter/nvim-treesitter" },
+	})
+	use({
+		"MeanderingProgrammer/render-markdown.nvim",
+		after = { "nvim-treesitter" },
+		requires = { "echasnovski/mini.icons", opt = true }, -- if you use standalone mini plugins
+		-- requires = { 'nvim-tree/nvim-web-devicons', opt = true }, -- if you prefer nvim-web-devicons
+		config = function()
+			require("render-markdown").setup({
+				link = {},
+				file_types = { "markdown", "copilot-chat" },
+			})
+		end,
+	})
 
-  -- Debug
-  use("mfussenegger/nvim-dap")
-  use("theHamsta/nvim-dap-virtual-text")
-  use({
-    "leoluz/nvim-dap-go",
-    ft = "go",
-    config = function()
-      require("dap-go").setup()
-    end,
-  })
-  use({
-    "igorlfs/nvim-dap-view",
-  })
-  use({
-    "julianolf/nvim-dap-lldb",
-    requires = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
-  })
+	-- Debug
+	use("mfussenegger/nvim-dap")
+	use("theHamsta/nvim-dap-virtual-text")
+	use({
+		"leoluz/nvim-dap-go",
+		ft = "go",
+		config = function()
+			require("dap-go").setup()
+		end,
+	})
+	use({
+		"igorlfs/nvim-dap-view",
+	})
+	use({
+		"julianolf/nvim-dap-lldb",
+		requires = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
+	})
 
-  -- Completion
-  use("hrsh7th/nvim-cmp")
-  use("hrsh7th/cmp-buffer")
-  use("hrsh7th/cmp-path")
-  use("hrsh7th/cmp-cmdline")
-  use("hrsh7th/cmp-nvim-lsp")
-  use("L3MON4D3/LuaSnip")
-  use("saadparwaiz1/cmp_luasnip")
-  use("rafamadriz/friendly-snippets")
+	-- Completion
+	use("hrsh7th/nvim-cmp")
+	use("hrsh7th/cmp-buffer")
+	use("hrsh7th/cmp-path")
+	use("hrsh7th/cmp-cmdline")
+	use("hrsh7th/cmp-nvim-lsp")
+	use("L3MON4D3/LuaSnip")
+	use("saadparwaiz1/cmp_luasnip")
+	use("rafamadriz/friendly-snippets")
 
-  -- Testing
-  use("janko-m/vim-test")
+	-- Testing
+	use("janko-m/vim-test")
 
-  -- Git
-  use("itchyny/vim-gitbranch")
-  use("sindrets/diffview.nvim")
-  use({
-    "lewis6991/gitsigns.nvim",
-    config = function()
-      require("gitsigns").setup()
-    end,
-  })
-  use({
-    "radyz/telescope-gitsigns",
-    requires = {
-      "lewis6991/gitsigns.nvim",
-      "nvim-telescope/telescope.nvim",
-    },
-    config = function()
-      require("telescope").load_extension("git_signs")
-    end,
-  })
+	-- Git
+	use("itchyny/vim-gitbranch")
+	use("sindrets/diffview.nvim")
+	use({
+		"lewis6991/gitsigns.nvim",
+		config = function()
+			require("gitsigns").setup()
+		end,
+	})
+	use({
+		"radyz/telescope-gitsigns",
+		requires = {
+			"lewis6991/gitsigns.nvim",
+			"nvim-telescope/telescope.nvim",
+		},
+		config = function()
+			require("telescope").load_extension("git_signs")
+		end,
+	})
 
-  -- Finders
-  use("nvim-telescope/telescope.nvim") -- finder, requires fzf and ripgrep
-  use("nvim-telescope/telescope-ui-select.nvim")
-  use("crispgm/telescope-heading.nvim")
+	-- Finders
+	use("nvim-telescope/telescope.nvim") -- finder, requires fzf and ripgrep
+	use("nvim-telescope/telescope-ui-select.nvim")
+	use("crispgm/telescope-heading.nvim")
 
-  -- Navigation
-  use("kwkarlwang/bufjump.nvim")
-  use({ "bloznelis/before.nvim" })
-  use({ "nvchad/volt" })
-  use({ "nvchad/menu" })
-  use({ "yochem/jq-playground.nvim" })
+	-- Navigation
+	use("kwkarlwang/bufjump.nvim")
+	use({ "bloznelis/before.nvim" })
+	use({ "nvchad/volt" })
+	use({ "nvchad/menu" })
+	use({ "yochem/jq-playground.nvim" })
 
-  -- Tree
-  use({
-    "nvim-neo-tree/neo-tree.nvim",
-    branch = "v2.x",
-    requires = {
-      "nvim-lua/plenary.nvim",
-      "nvim-tree/nvim-web-devicons",
-      "MunifTanjim/nui.nvim",
-    },
-  })
+	-- Tree
+	use({
+		"nvim-neo-tree/neo-tree.nvim",
+		branch = "v2.x",
+		requires = {
+			"nvim-lua/plenary.nvim",
+			"nvim-tree/nvim-web-devicons",
+			"MunifTanjim/nui.nvim",
+		},
+	})
 
-  -- Display
-  use("hlucco/nvim-eswpoch")
-  use("echasnovski/mini.starter")
-  use("MunifTanjim/nui.nvim")
-  use({
-    "b0o/incline.nvim",
-    config = function()
-      require("incline").setup()
-    end,
-  }) -- floating status line
-  use({
-    "rcarriga/nvim-notify",
-    config = function()
-      require("notify").setup({
-        stages = "fade",
-        timeout = 2000,
-        background_colour = "#000000",
-      })
-      -- vim.notify = require("notify")
-    end,
-  })
+	-- Display
+	use("hlucco/nvim-eswpoch")
+	use("echasnovski/mini.starter")
+	use("MunifTanjim/nui.nvim")
+	use({
+		"b0o/incline.nvim",
+		config = function()
+			require("incline").setup()
+		end,
+	}) -- floating status line
+	use({
+		"rcarriga/nvim-notify",
+		config = function()
+			require("notify").setup({
+				stages = "fade",
+				timeout = 2000,
+				background_colour = "#000000",
+			})
+			vim.notify = require("notify")
+		end,
+	})
 
-  -- Color Schemes
-  use("ellisonleao/gruvbox.nvim")
-  use("sainnhe/gruvbox-material")
-  use({
-    "catppuccin/nvim",
-    as = "catppuccin",
-    config = function()
-      require("catppuccin").setup({})
-    end,
-  })
-  use({
-    "zaldih/themery.nvim",
-    config = function()
-      require("plugins.configs.themery")
-    end,
-  })
+	-- Color Schemes
+	use("ellisonleao/gruvbox.nvim")
+	use("sainnhe/gruvbox-material")
+	use({
+		"catppuccin/nvim",
+		as = "catppuccin",
+		config = function()
+			require("catppuccin").setup({})
+		end,
+	})
+	use({
+		"zaldih/themery.nvim",
+		config = function()
+			require("plugins.configs.themery")
+		end,
+	})
 
-  -- Automatically set up your configuration after cloning packer.nvim
-  if Packer_Bootstrap then
-    require("packer").sync()
-  end
+	-- Automatically set up your configuration after cloning packer.nvim
+	if Packer_Bootstrap then
+		require("packer").sync()
+	end
 end)
