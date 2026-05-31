@@ -7,9 +7,6 @@ plugins=(git)
 source $ZSH/oh-my-zsh.sh
 eval $(/opt/homebrew/bin/brew shellenv)
 
-# FASD
-eval "$(fasd --init auto)"
-
 # Bash completion
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /tmp/mc mc
@@ -18,11 +15,7 @@ complete -o nospace -C /tmp/mc mc
 # https://github.com/junegunn/fzf
 export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ -f ~/.fzf.zsh ] && source <(fzf --zsh)
 
 export CODE_DIR="$HOME/c"
 export GOPATH="$HOME/c/go"
@@ -39,8 +32,9 @@ export PATH="$(python3 -m site --user-base)/bin:$PATH"
 # For nvim,vim
 export XDG_CONFIG_HOME="$HOME/.config"
 
-# Lombok
-export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion#
 
 alias vim=nvim
 alias mux="tmuxinator"
@@ -68,3 +62,4 @@ export CLAUDE_CODE_ATTRIBUTION_HEADER=false
 # >>> xmake >>>
 test -f "/Users/mihira/.xmake/profile" && source "/Users/mihira/.xmake/profile"
 # <<< xmake <<<
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

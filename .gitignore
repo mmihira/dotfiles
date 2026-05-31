@@ -1,3 +1,4 @@
 nvim/nvim/plugin
 .luarc.json
 .nvimlog
+nvim.log

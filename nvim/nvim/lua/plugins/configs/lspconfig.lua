@@ -163,9 +163,9 @@ end
 vim.lsp.config("clangd", cppconfig)
 vim.lsp.enable("clangd")
 
--- Hide the dianostic virtual text
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-	virtual_text = false,
+-- Hide the diagnostic virtual text
+vim.diagnostic.config({
+	virtual_text = { current_line = true },
 	signs = true,
 	update_in_insert = false,
 	underline = false,
@@ -174,5 +174,4 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagn
 -- Show diagnostics on hover (disabled in favour of tiny-inline-diagnostic)
 -- vim.api.nvim_command("autocmd CursorHold * lua vim.diagnostic.open_float(nil, {focusable = false})")
 
-vim.diagnostic.config({ virtual_text = { current_line = true } })
 vim.o.winborder = "single"
