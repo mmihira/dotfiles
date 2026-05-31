@@ -1,7 +1,6 @@
 return {
-	name = "xmake_build",
+	name = "odin_build",
 	builder = function()
-		local xmake = require("scripts.run.xmake")
 		local errorformat = table.concat({
 			"%Eerror: %f:%l:%c: %m",
 			"%Wwarning: %f:%l:%c: %m",
@@ -25,27 +24,21 @@ return {
 			{ "on_complete_close_overseer", success_delay_ms = 1500, failure_delay_ms = 0 },
 			"default",
 		}
-
 		local file_full_path = vim.api.nvim_buf_get_name(0)
-		local build, err = xmake.resolve_build_target(file_full_path)
+		local cwd = vim.fs.dirname(file_full_path)
 
-		if not build then
-			vim.notify(err, vim.log.levels.ERROR)
-			return
-		end
-
-		if not build.target then
-			vim.notify("Could not find xmake target for " .. build.rel, vim.log.levels.WARN)
+		if not cwd or cwd == "" then
+			vim.notify("Could not resolve Odin working directory", vim.log.levels.ERROR)
 			return
 		end
 
 		return {
-			cmd = { "xmake", "build", build.target },
-			cwd = build.root,
+			cmd = { "odin", "run", "." },
+			cwd = cwd,
 			components = components,
 		}
 	end,
 	condition = {
-		filetype = { "cpp" },
+		filetype = { "odin" },
 	},
 }

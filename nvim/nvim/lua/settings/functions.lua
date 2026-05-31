@@ -15,7 +15,14 @@ vim.api.nvim_create_user_command("Run", function(opts)
 		{
 			name = "Build target",
 			cmd = function()
-				vim.api.nvim_command(":OverseerRun xmake_build")
+				local template = "xmake_build"
+				local file_full_path = vim.api.nvim_buf_get_name(0)
+
+				if vim.bo.filetype == "odin" or file_full_path:match("%.odin$") then
+					template = "odin_build"
+				end
+
+				vim.api.nvim_command(":OverseerRun " .. template)
 			end,
 			rtxt = ";",
 		},
@@ -76,11 +83,35 @@ vim.api.nvim_create_user_command("Run", function(opts)
 			rtxt = "oo",
 		},
 		{
+			name = "Overseer recent term",
+			cmd = function()
+				local overseer = require("overseer")
+				local task_list = require("overseer.task_list")
+				local tasks = overseer.list_tasks({
+					status = {
+						overseer.STATUS.SUCCESS,
+						overseer.STATUS.FAILURE,
+						overseer.STATUS.CANCELED,
+					},
+					include_ephemeral = true,
+					sort = task_list.sort_finished_recently,
+				})
+
+				if vim.tbl_isempty(tasks) then
+					vim.notify("No completed tasks found", vim.log.levels.WARN)
+					return
+				end
+
+				tasks[1]:open_output("float")
+			end,
+			rtxt = "oo",
+		},
+		{
 			name = "Overseer actions",
 			cmd = function()
 				vim.api.nvim_command("OverseerTaskAction")
 			end,
-			rtxt = "oa",
+			rtxt = "on",
 		},
 		{
 			name = "Game logs",
