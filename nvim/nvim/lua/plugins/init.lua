@@ -303,13 +303,27 @@ packer.startup(function(use)
 				timeout = 2000,
 				background_colour = "#000000",
 			})
-			vim.notify = require("notify")
+			-- vim.notify = require("notify")
 		end,
 	})
 
 	-- Color Schemes
 	use("ellisonleao/gruvbox.nvim")
 	use("sainnhe/gruvbox-material")
+	use("rebelot/kanagawa.nvim")
+	use("vague-theme/vague.nvim")
+	use("folke/tokyonight.nvim")
+	use({
+		"rose-pine/neovim",
+		config = function()
+			require("rose-pine").setup({
+				styles = {
+					italic = false,
+				},
+			})
+		end,
+	})
+
 	use({
 		"catppuccin/nvim",
 		as = "catppuccin",

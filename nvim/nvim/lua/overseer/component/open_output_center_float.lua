@@ -1,8 +1,9 @@
 local layout = require("overseer.layout")
 local render = require("overseer.render")
 local util = require("overseer.util")
+local STATUS = require("overseer.constants").STATUS
 
-local SUMMARY_NS = vim.api.nvim_create_namespace("overseer_right_float_summary")
+local SUMMARY_NS = vim.api.nvim_create_namespace("overseer_center_float_summary")
 
 local function close_win(winid)
 	if winid and vim.api.nvim_win_is_valid(winid) then
@@ -12,7 +13,7 @@ end
 
 ---@type overseer.ComponentFileDefinition
 return {
-	desc = "Open task output in a right-aligned floating window",
+	desc = "Open task output in a centered floating window",
 	params = {
 		width_fraction = {
 			desc = "Fraction of editor width to use",
@@ -48,6 +49,7 @@ return {
 			resize_augroup = nil,
 			update_augroup = nil,
 			timer = nil,
+			completed_status = nil,
 			close = function(self)
 				if self.timer then
 					self.timer:stop()
@@ -74,14 +76,16 @@ return {
 				local height = math.max(4, math.floor(editor_height * params.height_fraction / 100))
 				local summary_height = math.min(5, math.max(3, math.floor(height * 0.2)))
 				local output_height = math.max(1, height - summary_height)
+				local row = math.floor((editor_height - height) / 2)
+				local col = math.floor((editor_width - width) / 2)
 
 				return {
-					row = editor_height - height,
-					col = editor_width - width,
+					row = row,
+					col = col,
 					width = width,
 					height = height,
 					summary_height = summary_height,
-					output_row = editor_height - output_height,
+					output_row = row + summary_height,
 					output_height = output_height,
 				}
 			end,
@@ -104,7 +108,7 @@ return {
 				if not self.bufnr or not vim.api.nvim_buf_is_valid(self.bufnr) then
 					self.bufnr = vim.api.nvim_create_buf(false, true)
 					vim.bo[self.bufnr].bufhidden = "wipe"
-					vim.bo[self.bufnr].filetype = "OverseerRightFloat"
+					vim.bo[self.bufnr].filetype = "OverseerCenterFloat"
 				end
 				self:update_summary(task)
 
@@ -135,13 +139,13 @@ return {
 					vim.api.nvim_set_option_value("wrap", false, { scope = "local", win = winid })
 				end
 
-				self.resize_augroup = vim.api.nvim_create_augroup("OverseerRightFloat" .. task.id, { clear = true })
+				self.resize_augroup = vim.api.nvim_create_augroup("OverseerCenterFloat" .. task.id, { clear = true })
 				self.update_augroup =
-					vim.api.nvim_create_augroup("OverseerRightFloatSummary" .. task.id, { clear = true })
+					vim.api.nvim_create_augroup("OverseerCenterFloatSummary" .. task.id, { clear = true })
 
 				vim.api.nvim_create_autocmd("VimResized", {
 					group = self.resize_augroup,
-					desc = "Resize right floating Overseer output",
+					desc = "Resize centered floating Overseer output",
 					callback = function()
 						if
 							not self.winid
@@ -177,7 +181,7 @@ return {
 				vim.api.nvim_create_autocmd("User", {
 					group = self.update_augroup,
 					pattern = "OverseerListUpdate",
-					desc = "Update right floating Overseer summary",
+					desc = "Update centered floating Overseer summary",
 					callback = function()
 						self:update_summary(task)
 					end,
@@ -192,7 +196,8 @@ return {
 			on_result = function(self, task)
 				self:update_summary(task)
 			end,
-			on_complete = function(self)
+			on_complete = function(self, task, status)
+				self.completed_status = status
 				if params.close_on_complete then
 					if params.close_delay_ms <= 0 then
 						self:close()
@@ -200,14 +205,16 @@ return {
 					end
 
 					self.timer = vim.uv.new_timer()
-					self.timer:start(params.close_delay_ms, 0, vim.schedule_wrap(function()
-						self:close()
-					end))
+					self.timer:start(
+						params.close_delay_ms,
+						0,
+						vim.schedule_wrap(function()
+							self:close()
+						end)
+					)
 				end
 			end,
-			on_dispose = function(self)
-				self:close()
-			end,
+			on_dispose = function(self) end,
 		}
 	end,
 }

@@ -29,6 +29,7 @@ return {
 			),
 			cwd = build.root,
 			components = {
+				"close_trouble_on_start",
 				{
 					"on_output_quickfix",
 					errorformat = errorformat,
@@ -37,10 +38,18 @@ return {
 					close = true,
 					tail = false,
 				},
-				{ "open_output", on_start = "always", direction = "dock" },
+				{
+					"open_output_center_float",
+					width_fraction = 80,
+					height_fraction = 60,
+					focus = false,
+					close_delay_ms = 500,
+				},
 				{ "on_result_trouble_qflist", mode = "qf_stack", close = true },
-				{ "on_complete_close_overseer", success_delay_ms = 1500, failure_delay_ms = 0 },
-				"default",
+				"on_exit_set_status",
+				{ "on_complete_notify", statuses = { "FAILURE" } },
+				"on_complete_notify_duration",
+				{ "on_complete_dispose", require_view = { "SUCCESS", "FAILURE" } },
 			},
 		}
 	end,

@@ -17,6 +17,7 @@ return {
 		end
 
 		local components = {
+			"close_trouble_on_start",
 			{
 				"on_output_quickfix",
 				errorformat = errorformat,
@@ -27,11 +28,11 @@ return {
 				tail = false,
 			},
 			{
-				"open_output_right_float",
-				width_fraction = 30,
+				"open_output_center_float",
+				width_fraction = 80,
 				height_fraction = 60,
 				focus = false,
-				close_delay_ms = 1800,
+				close_delay_ms = 500,
 			},
 			"on_exit_set_status",
 			{ "on_complete_notify", statuses = { "FAILURE" } },

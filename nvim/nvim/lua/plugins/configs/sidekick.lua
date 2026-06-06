@@ -20,7 +20,7 @@ sidekick.setup({
 		},
 		tools = {
 			claude = {
-				cmd = { "/Users/mihira/.local/bin/claude" },
+				cmd = { "/opt/homebrew/bin/claude" },
 				url = "https://github.com/anthropics/claude-code",
 			},
 			codex = {

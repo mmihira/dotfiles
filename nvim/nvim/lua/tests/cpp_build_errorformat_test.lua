@@ -50,4 +50,38 @@ assert_equal(item.col, 37, "column")
 assert_equal(item.text, "no member named 'graphics' in namespace 'cmp'", "message")
 assert_equal(vim.api.nvim_buf_get_name(item.bufnr), root .. "/src/entities/projector/projectorBuilder.cpp", "filename")
 
+local wrapped_items = parse({
+	"src/ui/playerview/playerviewhotbar.cpp:110:64: warning: ISO C++ requires field designators to be specified in declaration order; field 'attachTo' wil",
+	"l be initialized after field 'pointerCaptureMode' [-Wreorder-init-list]",
+	"  110 |                                          .pointerCaptureMode = CLAY_POINTER_CAPTURE_MODE_PASSTHROUGH,",
+	"      |                                          ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+	"src/clay/clay.h:143:149: note: expanded from macro 'CLAY'",
+	"  143 |             CLAY__ELEMENT_DEFINITION_LATCH = (Clay__OpenElementWithId(id), Clay__ConfigureOpenElement(CLAY__CONFIG_WRAPPER(Clay_ElementDeclaration, __VA_ARGS__)), 0); \\",
+	"      |                                                                                                                                                     ^~~~~~~~~~~",
+	"src/ui/playerview/playerviewhotbar.cpp:109:54: note: previous initialization for field 'attachTo' is here",
+	"  107 |                                          .offset = {64 - 20, 64 - 18},",
+	"      |                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+	"      |                                          .offset = {64 - 20, 64 - 18}",
+	"  108 |                                          .zIndex = 100,",
+	"      |                                          ~~~~~~~~~~~~~",
+	"      |                                          .zIndex = 100",
+}, root)
+
+assert_equal(#wrapped_items, 3, "wrapped valid item count")
+
+local wrapped_warning = wrapped_items[1]
+assert_equal(wrapped_warning.type, "W", "wrapped type")
+assert_equal(wrapped_warning.lnum, 110, "wrapped line")
+assert_equal(wrapped_warning.col, 64, "wrapped column")
+assert_equal(
+	wrapped_warning.text,
+	"ISO C++ requires field designators to be specified in declaration order; field 'attachTo' wil\nl be initialized after field 'pointerCaptureMode' [-Wreorder-init-list]",
+	"wrapped message"
+)
+assert_equal(
+	vim.api.nvim_buf_get_name(wrapped_warning.bufnr),
+	root .. "/src/ui/playerview/playerviewhotbar.cpp",
+	"wrapped filename"
+)
+
 print("cpp_build_errorformat_test ok")

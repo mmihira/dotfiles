@@ -44,23 +44,69 @@ vim.api.nvim_create_user_command("Run", function(opts)
 		{
 			name = "Reload game",
 			cmd = function()
-				local job_id = vim.fn.jobstart({ "pm2", "restart", "ove" }, {
+				local function restart_ove()
+					local job_id = vim.fn.jobstart({ "pm2", "restart", "ove" }, {
+						stdout_buffered = true,
+						stderr_buffered = true,
+						on_exit = function(_, code)
+							vim.schedule(function()
+								if code ~= 0 then
+									vim.notify("pm2 restart ove failed", vim.log.levels.ERROR)
+								end
+							end)
+						end,
+					})
+
+					if job_id <= 0 then
+						vim.notify("failed to start pm2 restart ove", vim.log.levels.ERROR)
+					end
+				end
+
+				local function start_ove()
+					local xmake = require("scripts.run.xmake")
+					local root = xmake.find_root(vim.api.nvim_buf_get_name(0))
+					if not root then
+						vim.notify("No xmake.lua root found", vim.log.levels.ERROR)
+						return
+					end
+
+					local job_id = vim.fn.jobstart({ "pm2", "start", "xmake run-refresh", "--name", "ove" }, {
+						cwd = root,
+						stdout_buffered = true,
+						stderr_buffered = true,
+						on_exit = function(_, code)
+							vim.schedule(function()
+								if code ~= 0 then
+									vim.notify("pm2 start ove failed", vim.log.levels.ERROR)
+								end
+							end)
+						end,
+					})
+
+					if job_id <= 0 then
+						vim.notify("failed to start pm2 start ove", vim.log.levels.ERROR)
+					end
+				end
+
+				local job_id = vim.fn.jobstart({ "pm2", "describe", "ove" }, {
 					stdout_buffered = true,
 					stderr_buffered = true,
 					on_exit = function(_, code)
 						vim.schedule(function()
-							if code ~= 0 then
-								vim.notify("pm2 restart ove failed", vim.log.levels.ERROR)
+							if code == 0 then
+								restart_ove()
+							else
+								start_ove()
 							end
 						end)
 					end,
 				})
 
 				if job_id <= 0 then
-					vim.notify("failed to start pm2 restart ove", vim.log.levels.ERROR)
+					vim.notify("failed to check pm2 ove", vim.log.levels.ERROR)
 				end
 			end,
-			rtxt = "r",
+			rtxt = "rg",
 		},
 		{
 			name = "Stop game",
@@ -399,7 +445,15 @@ vim.api.nvim_create_user_command("LspMn", function(opts)
 		{
 			name = "LSP Logs",
 			cmd = function()
-				vim.api.nvim_command(":CpplspLogs")
+				local overseer = require("overseer")
+				for _, task in ipairs(overseer.list_tasks()) do
+					if task.name == "pm2_lsp_logs" and task:is_running() then
+						task:open_output("vertical")
+						return
+					end
+				end
+
+				overseer.run_task({ name = "pm2_lsp_logs" })
 			end,
 			rtxt = "g",
 		},

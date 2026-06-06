@@ -1,4 +1,4 @@
 local opts = { noremap = true, silent = true }
 local keymap = vim.api.nvim_set_keymap
 
-keymap("n", "<c-a>", ":ClangdSwitchSourceHeader<CR>", opts)
+keymap("n", "<c-a>", ":CpplspSwitchSourceHeader<CR>", opts)
