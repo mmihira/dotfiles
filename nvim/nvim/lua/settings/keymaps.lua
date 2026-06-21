@@ -115,6 +115,19 @@ keymap("n", "<leader>mm", ":ToggleTerm<CR>", opts)
 keymap("t", "<leader>mm", "<C-\\><C-n>:ToggleTerm<CR>", opts)
 keymap("t", "<leader>qq", "<C-\\><C-n><CR>", opts)
 
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "sidekick_terminal",
+	callback = function(args)
+		vim.keymap.set("t", "<Space>", "<Space>", {
+			buffer = args.buf,
+			nowait = true,
+			noremap = true,
+			silent = true,
+			desc = "Send literal space in Sidekick terminal",
+		})
+	end,
+})
+
 keymap("n", "<leader>q", ":close<CR>", opts)
 keymap("n", "0", ':lua require("gitsigns").next_hunk()<CR>', opts)
 

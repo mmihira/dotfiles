@@ -71,9 +71,9 @@ dapui.setup({
 		threads = {
 			format = function(name, lnum, path)
 				return {
-					{ part = name, separator = " " },
-					{ part = path, hl = "FileName", separator = ":" },
-					{ part = lnum, hl = "LineNumber" },
+					{ text = name, separator = " " },
+					{ text = path, hl = "FileName", separator = ":" },
+					{ text = lnum, hl = "LineNumber" },
 				}
 			end,
 			align = false,
@@ -81,9 +81,9 @@ dapui.setup({
 		breakpoints = {
 			format = function(line, lnum, path)
 				return {
-					{ part = path, hl = "FileName" },
-					{ part = lnum, hl = "LineNumber" },
-					{ part = line, hl = true },
+					{ text = path, hl = "FileName" },
+					{ text = lnum, hl = "LineNumber" },
+					{ text = line, hl = true },
 				}
 			end,
 			align = false,
@@ -104,6 +104,10 @@ local cfg = {
 				request = "launch",
 				cwd = "${workspaceFolder}",
 				initCommands = vim.g.dap_lldb_init_commands,
+				preRunCommands = {
+					"process handle SIGSEGV --stop true --pass true --notify true",
+					"process handle SIGBUS --stop true --pass true --notify true",
+				},
 				program = function()
 					-- Build with debug symbols
 					local out = vim.fn.system({ "cd", "./out/debug" }, { "make", "build -j 8" })

@@ -77,6 +77,13 @@ export module {};
     })
   ),
   ls.s(
+    { trig = "svcrenderer", name = "Get renderer svc", dscr = "game::getRendererSvc(registry)" },
+    fmt("auto &{} = game::getRendererSvc({});", {
+      ls.i(1, "rendererSvc"),
+      ls.i(2, "registry"),
+    })
+  ),
+  ls.s(
     { trig = "svcentitydefinition", name = "Get entity definition svc", dscr = "game::getEntityDefinitionSvc(registry)" },
     fmt("auto &{} = game::getEntityDefinitionSvc({});", {
       ls.i(1, "entityDefinitionSvc"),
@@ -101,6 +108,13 @@ export module {};
     { trig = "svcentitybuilder", name = "Get entity builder svc", dscr = "game::getEntityBuilderSvc(registry)" },
     fmt("auto &{} = game::getEntityBuilderSvc({});", {
       ls.i(1, "entityBuilderSvc"),
+      ls.i(2, "registry"),
+    })
+  ),
+  ls.s(
+    { trig = "svcdynamictextureatlas", name = "Get dynamic texture atlas svc", dscr = "renderer::getDynamicTextureAtlasSvc(registry)" },
+    fmt("auto &{} = renderer::getDynamicTextureAtlasSvc({});", {
+      ls.i(1, "dynamicTextureAtlasSvc"),
       ls.i(2, "registry"),
     })
   ),
@@ -155,9 +169,9 @@ export module {};
     })
   ),
   ls.s(
-    { trig = "svcsysdll", name = "Get sys dll registry from ctx", dscr = "game::getSysDllRegistryFromCtx(registry)" },
-    fmt("auto &{} = game::getSysDllRegistryFromCtx({});", {
-      ls.i(1, "sysDllRegistrySvc"),
+    { trig = "svcsysdll", name = "Get sys registry from ctx", dscr = "game::getSysRegistryFromCtx(registry)" },
+    fmt("auto &{} = game::getSysRegistryFromCtx({});", {
+      ls.i(1, "sysRegistrySvc"),
       ls.i(2, "registry"),
     })
   ),

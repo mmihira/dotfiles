@@ -10,6 +10,10 @@ sidekick.setup({
 		end,
 	},
 	cli = {
+		mux = {
+			enabled = true,
+			backend = "tmux",
+		},
 		win = {
 			layout = "float",
 			keys = {
@@ -20,7 +24,7 @@ sidekick.setup({
 		},
 		tools = {
 			claude = {
-				cmd = { "/opt/homebrew/bin/claude" },
+				cmd = { "/Users/mihira/.local/bin/claude"},
 				url = "https://github.com/anthropics/claude-code",
 			},
 			codex = {

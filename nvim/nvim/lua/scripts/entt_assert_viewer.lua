@@ -1,5 +1,5 @@
--- entt_assert_viewer.lua — render the most recent ENTT_ASSERT block from a log
--- file in a single nui popup with every frame inlined.
+-- entt_assert_viewer.lua — render the most recent ENTT_ASSERT/DEBUG_ASSERT
+-- block from a log file in a single nui popup with every frame inlined.
 --
 -- Companion to src/wrappers/entt_assert_override.h in projects that override
 -- ENTT_ASSERT to print a cpptrace dump on failure. Parses the cpptrace dump
@@ -7,7 +7,7 @@
 -- the latest crash by default.
 --
 -- Usage:
---   :EnttAssertView [path]   open the most recent assert (default: ./logs)
+--   :EnttAssertView [path]   open the most recent assert (default: ./logs.txt)
 --   :EnttAssertList [path]   pick among all assert blocks in the file
 --   :EnttAssertClose         tear down the viewer
 
@@ -57,7 +57,7 @@ vim.api.nvim_create_autocmd("ColorScheme", { callback = set_highlights })
 ----------------------------------------------------------------------
 
 local function find_logs()
-	local found = vim.fs.find("logs", {
+	local found = vim.fs.find("logs.txt", {
 		upward = true,
 		path = vim.fn.getcwd(),
 		stop = vim.uv.os_homedir(),
@@ -82,10 +82,10 @@ end
 -- Parser
 ----------------------------------------------------------------------
 
-local ASSERT_HEADER = "^ENTT_ASSERT failed: (.*)$"
+local ENTT_ASSERT_HEADER = "^ENTT_ASSERT failed: (.*)$"
+local DEBUG_ASSERT_HEADER = "^Debug Assertion failed at (.-):(%d+):%s*(.*)$"
 local ASSERT_CONDITION = "^  condition: (.*)$"
 local ASSERT_SOURCE = "^  (/.+):(%d+)$"
-local FRAME_HEADER = "^#(%d+)%s+in%s+(.*)$"
 local FRAME_AT_WITH_COL = "^%s*at%s+(.-):(%d+):(%d+)%s*$"
 local FRAME_AT_WITH_LINE = "^%s*at%s+(.-):(%d+)%s*$"
 local FRAME_AT_PLAIN = "^%s*at%s+(.+)%s*$"
@@ -95,33 +95,95 @@ local FATAL_SIGNAL = "^=== FATAL SIGNAL"
 local END_DELIMITER = "^=== ENTT_ASSERT END ==="
 local LOG_TIMESTAMP = "^%[%d%d%d%d%-"
 
+local function trim(s)
+	return (s:gsub("^%s+", ""):gsub("%s+$", ""))
+end
+
+local function parse_assert_start(line)
+	local message = line:match(ENTT_ASSERT_HEADER)
+	if message then
+		return {
+			kind = "ENTT_ASSERT",
+			message = message,
+		}, "entt"
+	end
+
+	local source_file, source_line, debug_message = line:match(DEBUG_ASSERT_HEADER)
+	if source_file then
+		local header = {
+			kind = "DEBUG_ASSERT",
+			message = debug_message or "",
+			source_file = source_file,
+			source_line = tonumber(source_line),
+		}
+		return header, "debug"
+	end
+end
+
+local function is_assert_start(line)
+	return line:match(ENTT_ASSERT_HEADER) or line:match(DEBUG_ASSERT_HEADER)
+end
+
+local function parse_debug_condition(line)
+	local call = line:match("^%s*DEBUG_ASSERT%((.*)%)%;?%s*$")
+	if not call then
+		return nil
+	end
+	return trim(call:match("^(.-),%s*%.%.%.$") or call)
+end
+
+local function parse_frame_header(line)
+	local n, symbol = line:match("^#%s*(%d+)%s+in%s+(.*)$")
+	if not n then
+		n, symbol = line:match("^#%s*(%d+)%s+(.+)$")
+	end
+	if n then
+		return tonumber(n), trim(symbol)
+	end
+end
+
 -- A block ends at any of these so the parser is robust to the missing
 -- end-delimiter that older builds produce.
 local function is_block_end(line)
-	return line:match(ASSERT_HEADER)
-		or line:match(FATAL_SIGNAL)
-		or line:match(END_DELIMITER)
-		or line:match(LOG_TIMESTAMP)
+	return is_assert_start(line) or line:match(FATAL_SIGNAL) or line:match(END_DELIMITER) or line:match(LOG_TIMESTAMP)
 end
 
 local function parse_block(lines, start_lnum)
-	local header = { message = lines[start_lnum]:match(ASSERT_HEADER) or "" }
+	local header, kind = parse_assert_start(lines[start_lnum])
+	header = header or { kind = "ASSERT", message = "" }
 	local i = start_lnum + 1
 
-	if lines[i] then
-		header.condition = lines[i]:match(ASSERT_CONDITION) or ""
-		i = i + 1
-	end
-	if lines[i] then
-		local src, srcline = lines[i]:match(ASSERT_SOURCE)
-		header.source_file = src or lines[i]:gsub("^%s+", "")
-		header.source_line = tonumber(srcline)
-		i = i + 1
-	end
+	if kind == "entt" then
+		if lines[i] then
+			header.condition = lines[i]:match(ASSERT_CONDITION) or ""
+			i = i + 1
+		end
+		if lines[i] then
+			local src, srcline = lines[i]:match(ASSERT_SOURCE)
+			header.source_file = src or lines[i]:gsub("^%s+", "")
+			header.source_line = tonumber(srcline)
+			i = i + 1
+		end
 
-	-- Skip the "EnTT assert stack trace..." banner line if present.
-	if lines[i] and lines[i]:match("^EnTT assert stack trace") then
-		i = i + 1
+		-- Skip the "EnTT assert stack trace..." banner line if present.
+		if lines[i] and lines[i]:match("^EnTT assert stack trace") then
+			i = i + 1
+		end
+	elseif kind == "debug" then
+		if lines[i] then
+			local condition = parse_debug_condition(lines[i])
+			if condition then
+				header.condition = condition
+				i = i + 1
+			end
+		end
+
+		while lines[i] do
+			if parse_frame_header(lines[i]) or is_block_end(lines[i]) then
+				break
+			end
+			i = i + 1
+		end
 	end
 
 	local frames = {}
@@ -133,13 +195,13 @@ local function parse_block(lines, start_lnum)
 			break
 		end
 
-		local n, symbol = line:match(FRAME_HEADER)
+		local n, symbol = parse_frame_header(line)
 		if n then
 			if current then
 				frames[#frames + 1] = current
 			end
 			current = {
-				n = tonumber(n),
+				n = n,
 				symbol = symbol,
 				file = nil,
 				line = nil,
@@ -197,7 +259,7 @@ end
 local function find_assert_blocks(lines)
 	local starts = {}
 	for i = #lines, 1, -1 do
-		if lines[i]:match(ASSERT_HEADER) then
+		if is_assert_start(lines[i]) then
 			starts[#starts + 1] = i
 		end
 	end
@@ -384,13 +446,14 @@ local function render_all(block, visible_frames)
 	end
 
 	-- Banner: every row on a dark red bg so the assert info reads as one block.
+	local assert_kind = block.header.kind or "ASSERT"
 	local header_target = block.header.source_file
 			and {
 				file = block.header.source_file,
 				line = block.header.source_line,
 			}
 		or nil
-	add(" ENTT_ASSERT  " .. (block.header.message or ""), "EnttAssertBanner", header_target)
+	add(" " .. assert_kind .. "  " .. (block.header.message or ""), "EnttAssertBanner", header_target)
 	if block.header.condition and block.header.condition ~= "" then
 		add("   condition: " .. block.header.condition, "EnttAssertBanner", header_target)
 	end
@@ -593,8 +656,9 @@ local function refresh_view()
 	paint_active_box()
 
 	local hint = "<CR>/gf jump · J/U next/prev frame · c copy · u user-only · q close"
+	local assert_kind = block.header.kind or "ASSERT"
 	local title =
-		string.format(" ENTT_ASSERT [%d/%d]  logs:%d   %s ", state.block_idx, #state.blocks, block.start_lnum, hint)
+		string.format(" %s [%d/%d]  logs:%d   %s ", assert_kind, state.block_idx, #state.blocks, block.start_lnum, hint)
 	vim.api.nvim_set_option_value("winbar", title, { win = state.winid })
 
 	pcall(vim.api.nvim_win_set_cursor, state.winid, { 1, 0 })
@@ -769,7 +833,7 @@ local function load_blocks(path)
 	end
 	local blocks = find_assert_blocks(lines)
 	if #blocks == 0 then
-		vim.notify("entt_assert: no ENTT_ASSERT blocks in " .. path, vim.log.levels.INFO)
+		vim.notify("entt_assert: no assert blocks in " .. path, vim.log.levels.INFO)
 		return nil, nil
 	end
 	return blocks, path
@@ -802,7 +866,7 @@ function M.list(path)
 		size = { width = math.min(120, vim.o.columns - 8), height = math.min(#items + 2, 20) },
 		border = {
 			style = "rounded",
-			text = { top = string.format(" ENTT_ASSERT blocks in %s ", p), top_align = "center" },
+			text = { top = string.format(" Assert blocks in %s ", p), top_align = "center" },
 		},
 		win_options = { cursorline = true },
 	}, {
