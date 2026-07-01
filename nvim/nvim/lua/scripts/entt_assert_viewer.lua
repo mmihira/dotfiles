@@ -1,5 +1,6 @@
--- entt_assert_viewer.lua — render the most recent ENTT_ASSERT/DEBUG_ASSERT
--- block from a log file in a single nui popup with every frame inlined.
+-- entt_assert_viewer.lua — render the most recent ENTT_ASSERT/DEBUG_ASSERT/
+-- uncaught exception block from a log file in a single nui popup with every
+-- frame inlined.
 --
 -- Companion to src/wrappers/entt_assert_override.h in projects that override
 -- ENTT_ASSERT to print a cpptrace dump on failure. Parses the cpptrace dump
@@ -7,8 +8,8 @@
 -- the latest crash by default.
 --
 -- Usage:
---   :EnttAssertView [path]   open the most recent assert (default: ./logs.txt)
---   :EnttAssertList [path]   pick among all assert blocks in the file
+--   :EnttAssertView [path]   open the most recent assert/exception (default: ./logs.txt)
+--   :EnttAssertList [path]   pick among all assert/exception blocks in the file
 --   :EnttAssertClose         tear down the viewer
 
 local Menu = require("nui.menu")
@@ -84,6 +85,8 @@ end
 
 local ENTT_ASSERT_HEADER = "^ENTT_ASSERT failed: (.*)$"
 local DEBUG_ASSERT_HEADER = "^Debug Assertion failed at (.-):(%d+):%s*(.*)$"
+local UNCAUGHT_EXCEPTION_HEADER = "^=== UNCAUGHT EXCEPTION ===$"
+local UNCAUGHT_EXCEPTION_WHAT = "^what%(%):%s*(.*)$"
 local ASSERT_CONDITION = "^  condition: (.*)$"
 local ASSERT_SOURCE = "^  (/.+):(%d+)$"
 local FRAME_AT_WITH_COL = "^%s*at%s+(.-):(%d+):(%d+)%s*$"
@@ -93,6 +96,7 @@ local SNIPPET_LINE = "^(%s*[>%s])%s*(%d+):%s?(.*)$"
 local CARET_LINE = "^%s*%^%s*$"
 local FATAL_SIGNAL = "^=== FATAL SIGNAL"
 local END_DELIMITER = "^=== ENTT_ASSERT END ==="
+local UNCAUGHT_EXCEPTION_END = "^=== UNCAUGHT EXCEPTION END ==="
 local LOG_TIMESTAMP = "^%[%d%d%d%d%-"
 
 local function trim(s)
@@ -100,6 +104,13 @@ local function trim(s)
 end
 
 local function parse_assert_start(line)
+	if line:match(UNCAUGHT_EXCEPTION_HEADER) then
+		return {
+			kind = "UNCAUGHT EXCEPTION",
+			message = "",
+		}, "exception"
+	end
+
 	local message = line:match(ENTT_ASSERT_HEADER)
 	if message then
 		return {
@@ -121,7 +132,9 @@ local function parse_assert_start(line)
 end
 
 local function is_assert_start(line)
-	return line:match(ENTT_ASSERT_HEADER) or line:match(DEBUG_ASSERT_HEADER)
+	return line:match(ENTT_ASSERT_HEADER)
+		or line:match(DEBUG_ASSERT_HEADER)
+		or line:match(UNCAUGHT_EXCEPTION_HEADER)
 end
 
 local function parse_debug_condition(line)
@@ -145,7 +158,11 @@ end
 -- A block ends at any of these so the parser is robust to the missing
 -- end-delimiter that older builds produce.
 local function is_block_end(line)
-	return is_assert_start(line) or line:match(FATAL_SIGNAL) or line:match(END_DELIMITER) or line:match(LOG_TIMESTAMP)
+	return is_assert_start(line)
+		or line:match(FATAL_SIGNAL)
+		or line:match(END_DELIMITER)
+		or line:match(UNCAUGHT_EXCEPTION_END)
+		or line:match(LOG_TIMESTAMP)
 end
 
 local function parse_block(lines, start_lnum)
@@ -181,6 +198,24 @@ local function parse_block(lines, start_lnum)
 		while lines[i] do
 			if parse_frame_header(lines[i]) or is_block_end(lines[i]) then
 				break
+			end
+			i = i + 1
+		end
+	elseif kind == "exception" then
+		while lines[i] do
+			if parse_frame_header(lines[i]) or is_block_end(lines[i]) then
+				break
+			end
+
+			local what = lines[i]:match(UNCAUGHT_EXCEPTION_WHAT)
+			local message = trim(lines[i])
+			local is_trace_header = lines[i]:match("^Uncaught exception stack trace")
+			if what then
+				header.message = "what(): " .. what
+			elseif lines[i]:match("^unknown exception") then
+				header.message = lines[i]
+			elseif not is_trace_header and message ~= "" and header.message == "" then
+				header.message = message
 			end
 			i = i + 1
 		end
@@ -833,7 +868,7 @@ local function load_blocks(path)
 	end
 	local blocks = find_assert_blocks(lines)
 	if #blocks == 0 then
-		vim.notify("entt_assert: no assert blocks in " .. path, vim.log.levels.INFO)
+		vim.notify("entt_assert: no assert or exception blocks in " .. path, vim.log.levels.INFO)
 		return nil, nil
 	end
 	return blocks, path
@@ -866,7 +901,7 @@ function M.list(path)
 		size = { width = math.min(120, vim.o.columns - 8), height = math.min(#items + 2, 20) },
 		border = {
 			style = "rounded",
-			text = { top = string.format(" Assert blocks in %s ", p), top_align = "center" },
+			text = { top = string.format(" Assert/exception blocks in %s ", p), top_align = "center" },
 		},
 		win_options = { cursorline = true },
 	}, {

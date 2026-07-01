@@ -273,6 +273,7 @@ packer.startup(function(use)
 	use({ "nvchad/volt" })
 	use({ "nvchad/menu" })
 	use({ "yochem/jq-playground.nvim" })
+  use({ "mmihira/jsonfly.nvim" })
 
 	-- Tree
 	use({
