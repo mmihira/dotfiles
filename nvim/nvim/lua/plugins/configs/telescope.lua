@@ -18,8 +18,8 @@ telescope.setup({
     mappings = {
       n = {
         ["<leader>q"] = "close",
-        ["<C-d>"] = actions.results_scrolling_down,
-        ["<C-u>"] = actions.results_scrolling_up,
+        ["<C-d>"] = actions.preview_scrolling_down,
+        ["<C-u>"] = actions.preview_scrolling_up,
         ["<C-t>"] = actions.smart_send_to_qflist + actions.open_qflist,
       },
     },
